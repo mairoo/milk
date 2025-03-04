@@ -1,15 +1,11 @@
 import type {Metadata} from "next";
-import {Geist, Geist_Mono} from "next/font/google";
+import {Nanum_Gothic} from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-    variable: "--font-geist-sans",
-    subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-    variable: "--font-geist-mono",
-    subsets: ["latin"],
+const nanum = Nanum_Gothic({
+    weight: ['400', '700', '800'],
+    subsets: ['latin'],
+    variable: "--font-nanum-gothic",
 });
 
 export const metadata: Metadata = {
@@ -25,10 +21,10 @@ export default function RootLayout({
     return (
         <html lang="en">
         <body
-            className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+            className={`${nanum.variable} antialiased`}
         >
-        <h1 className="text-3xl font-bold underline text-red-600">
-            Hello world!
+        <h1 className="text-3xl font-bold text-red-600">
+            안녕하세요.
         </h1>
         {children}
         </body>
