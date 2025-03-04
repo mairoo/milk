@@ -1,11 +1,17 @@
 import type {Metadata} from "next";
-import {Nanum_Gothic} from "next/font/google";
+import {Nanum_Gothic, Nanum_Gothic_Coding} from "next/font/google";
 import "./globals.css";
 
 const nanum = Nanum_Gothic({
     weight: ['400', '700', '800'],
     subsets: ['latin'],
     variable: "--font-nanum-gothic",
+});
+
+const nanumCoding = Nanum_Gothic_Coding({
+    weight: ['400', '700'],
+    subsets: ['latin'],
+    variable: "--font-nanum-gothic-coding",
 });
 
 export const metadata: Metadata = {
@@ -21,11 +27,8 @@ export default function RootLayout({
     return (
         <html lang="en">
         <body
-            className={`${nanum.variable} antialiased`}
+            className={`${nanum.variable} ${nanumCoding.variable} antialiased`}
         >
-        <h1 className="text-3xl font-bold text-red-600">
-            안녕하세요.
-        </h1>
         {children}
         </body>
         </html>
