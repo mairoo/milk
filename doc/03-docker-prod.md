@@ -258,20 +258,20 @@ server {
 ### 운영 환경
 
 # 1. NextJS 프론트엔드
-sudo docker compose build frontend-1
-sudo docker compose up -d frontend-1 frontend-2
-sudo docker compose logs -f frontend-1 frontend-2
+docker compose build frontend-1
+docker compose up -d frontend-1 frontend-2
+docker compose logs -f frontend-1 frontend-2
 
 # 2. nginx 시작 (프론트엔드 로드밸런서)
-sudo docker compose up -d nginx
+docker compose up -d nginx
 
 # 3. 전체 상태 확인
-sudo docker compose ps
+docker compose ps
 ````
 
 ```shell
 # nginx 로드밸런서 재시작
-sudo docker compose restart nginx
+docker compose restart nginx
 ```
 
 ## 구동 스크립트
@@ -286,7 +286,7 @@ git pull
 cd ..
 
 echo "🔨 Building frontend image..."
-sudo docker compose build --no-cache frontend-1
+docker compose build --no-cache frontend-1
 ```
 
 ### `/opt/docker/pincoin/frontend/deploy.sh`
@@ -321,8 +321,8 @@ restart_service() {
     local service=$1
     echo "🔄 Restarting $service..."
 
-    sudo docker compose stop $service
-    sudo docker compose up -d $service
+    docker compose stop $service
+    docker compose up -d $service
 
     if check_health $service; then
         return 0
