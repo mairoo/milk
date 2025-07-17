@@ -297,15 +297,15 @@ docker compose build --no-cache frontend-1
 check_health() {
     local service=$1
     local port=""
-    if [ "$service" = "backend-1" ]; then
-        port="10011"
-    elif [ "$service" = "backend-2" ]; then
-        port="10012"
+    if [ "$service" = "frontend-1" ]; then
+        port="13001"
+    elif [ "$service" = "frontend-2" ]; then
+        port="13002"
     fi
 
     echo "⏳ Waiting for $service to be healthy..."
     for i in {1..36}; do  # 3분 대기 (5초 * 36)
-        if curl -f -s http://localhost:$port/health > /dev/null 2>&1; then
+        if curl -f -s http://localhost:$port > /dev/null 2>&1; then
             echo "✅ $service is healthy!"
             return 0
         fi
@@ -334,19 +334,19 @@ restart_service() {
 # 서비스 순차적 재시작
 echo "🔄 Rolling restart..."
 
-# backend-1 재시작
-if restart_service "backend-1"; then
-    echo "✅ backend-1 restarted successfully"
+# frontend-1 재시작
+if restart_service "frontend-1"; then
+    echo "✅ frontend-1 restarted successfully"
 else
-    echo "❌ backend-1 restart failed"
+    echo "❌ frontend-1 restart failed"
     exit 1
 fi
 
-# backend-2 재시작
-if restart_service "backend-2"; then
-    echo "✅ backend-2 restarted successfully"
+# frontend-2 재시작
+if restart_service "frontend-2"; then
+    echo "✅ frontend-2 restarted successfully"
 else
-    echo "❌ backend-2 restart failed"
+    echo "❌ frontend-2 restart failed"
     exit 1
 fi
 ```
