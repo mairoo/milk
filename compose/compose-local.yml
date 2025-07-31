@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile.local
     working_dir: /app
     volumes:
-      - ./repo:/app:cached
+      - ./repo:/app:cached # Hot reload 지원 (1)
       - node-modules-cache:/app/node_modules
     ports:
       - "3000:3000"
@@ -16,7 +16,7 @@ services:
     environment:
       - TZ=Asia/Seoul
       - NODE_ENV=development
-      - WATCHPACK_POLLING=true # Hot reload
+      - WATCHPACK_POLLING=true # Hot reload 지원 (2)
     logging:
       driver: "json-file"
       options:
