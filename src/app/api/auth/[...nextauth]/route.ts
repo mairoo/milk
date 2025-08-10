@@ -16,20 +16,7 @@ export const authOptions: NextAuthOptions = {
         KeycloakProvider({
             clientId: process.env.KEYCLOAK_CLIENT_ID!,
             clientSecret: process.env.KEYCLOAK_CLIENT_SECRET!,
-
-            // 브라우저 리디렉션용 - 외부 URL
             issuer: process.env.KEYCLOAK_ISSUER!,
-
-            // 서버 내부 통신용 - 모든 엔드포인트를 내부 URL로 재정의
-            authorization: `${process.env.KEYCLOAK_ISSUER}/protocol/openid-connect/auth`,
-            token: `${process.env.KEYCLOAK_ISSUER_INTERNAL}/protocol/openid-connect/token`,
-            userinfo: `${process.env.KEYCLOAK_ISSUER_INTERNAL}/protocol/openid-connect/userinfo`,
-
-            // OpenID Connect Discovery 비활성화하고 수동 설정
-            wellKnown: undefined,
-
-            // JWKS 엔드포인트 추가 (JWT 토큰 검증용)
-            jwks_endpoint: `${process.env.KEYCLOAK_ISSUER_INTERNAL}/protocol/openid-connect/certs`,
         })
     ],
 
@@ -163,7 +150,7 @@ export const authOptions: NextAuthOptions = {
 async function refreshAccessToken(token: JWT): Promise<JWT> {
     try {
         // 서버 내부 통신이므로 INTERNAL URL 사용
-        const issuerUrl = process.env.KEYCLOAK_ISSUER_INTERNAL!
+        const issuerUrl = process.env.KEYCLOAK_ISSUER!
         const refreshUrl = `${issuerUrl}/protocol/openid-connect/token`
 
         const response = await fetch(refreshUrl, {
