@@ -43,6 +43,21 @@ export const authOptions: NextAuthOptions = {
         async jwt({ token, account, profile }) {
             // 초기 로그인 시 Keycloak 토큰 정보 저장
             if (account?.access_token) {
+                console.log('=== 초기 로그인 토큰 정보 ===')
+                console.log('Account issuer:', account.issuer)
+                console.log('Environment KEYCLOAK_ISSUER:', process.env.KEYCLOAK_ISSUER)
+                console.log('Access token (first 50 chars):', account.access_token?.substring(0, 50))
+
+                // JWT 토큰 디코딩해서 issuer 확인
+                try {
+                    const payload = JSON.parse(Buffer.from(account.access_token!.split('.')[1], 'base64').toString())
+                    console.log('Token payload issuer:', payload.iss)
+                    console.log('Token payload audience:', payload.aud)
+                    console.log('Token payload expires:', new Date(payload.exp * 1000).toISOString())
+                } catch (e) {
+                    console.log('토큰 디코딩 실패:', e)
+                }
+
                 token.accessToken = account.access_token
                 token.refreshToken = account.refresh_token || ''
                 token.idToken = account.id_token || ''
@@ -63,6 +78,11 @@ export const authOptions: NextAuthOptions = {
             if (Date.now() < token.accessTokenExpires) {
                 return token
             }
+
+            console.log('=== 토큰 갱신 시도 ===')
+            console.log('Current time:', new Date().toISOString())
+            console.log('Token expires at:', new Date(token.accessTokenExpires).toISOString())
+            console.log('Refresh token (first 20 chars):', token.refreshToken?.toString().substring(0, 20))
 
             // 액세스 토큰 만료 시 리프레시 토큰으로 갱신
             return await refreshAccessToken(token)
@@ -149,33 +169,55 @@ export const authOptions: NextAuthOptions = {
  */
 async function refreshAccessToken(token: JWT): Promise<JWT> {
     try {
-        // 서버 내부 통신이므로 INTERNAL URL 사용
+        console.log('=== 토큰 갱신 요청 시작 ===')
+
+        // 서버 내부 통신이므로 환경변수 URL 사용
         const issuerUrl = process.env.KEYCLOAK_ISSUER!
         const refreshUrl = `${issuerUrl}/protocol/openid-connect/token`
+
+        console.log('Refresh URL:', refreshUrl)
+        console.log('Client ID:', process.env.KEYCLOAK_CLIENT_ID)
+
+        const requestBody = new URLSearchParams({
+            client_id: process.env.KEYCLOAK_CLIENT_ID!,
+            client_secret: process.env.KEYCLOAK_CLIENT_SECRET!,
+            grant_type: 'refresh_token',
+            refresh_token: token.refreshToken,
+        })
+
+        console.log('Request body (without secrets):', {
+            client_id: process.env.KEYCLOAK_CLIENT_ID,
+            grant_type: 'refresh_token',
+            refresh_token_length: token.refreshToken?.toString().length
+        })
 
         const response = await fetch(refreshUrl, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
             },
-            body: new URLSearchParams({
-                client_id: process.env.KEYCLOAK_CLIENT_ID!,
-                client_secret: process.env.KEYCLOAK_CLIENT_SECRET!,
-                grant_type: 'refresh_token',
-                refresh_token: token.refreshToken,
-            }),
+            body: requestBody,
         })
+
+        console.log('Response status:', response.status)
+        console.log('Response headers:', Object.fromEntries(response.headers.entries()))
 
         const refreshedTokens = await response.json()
 
         if (!response.ok) {
             console.error('Token refresh failed:', refreshedTokens)
+            console.error('Response status:', response.status)
+
             // 에러를 던지지 않고 직접 에러 토큰 반환
             return {
                 ...token,
                 error: 'RefreshAccessTokenError',
             }
         }
+
+        console.log('토큰 갱신 성공!')
+        console.log('New access token length:', refreshedTokens.access_token?.length)
+        console.log('New expires_in:', refreshedTokens.expires_in)
 
         return {
             ...token,
