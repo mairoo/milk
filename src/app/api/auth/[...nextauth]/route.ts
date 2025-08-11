@@ -87,11 +87,6 @@ export const authOptions: NextAuthOptions = {
         }
     },
 
-    pages: {
-        signIn: '/auth/sign-in',
-        error: '/auth/error',
-    },
-
     events: {
         async signOut({token}) {
             // Keycloak 로그아웃 처리
