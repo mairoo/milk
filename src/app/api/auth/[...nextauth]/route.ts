@@ -13,27 +13,16 @@ export const authOptions: NextAuthOptions = {
 
     session: {
         strategy: 'jwt',
-        maxAge: 30 * 24 * 60 * 60, // 30일
+        maxAge: 30 * 24 * 60 * 60, // 30일 (NextAuth 세션)
     },
 
     callbacks: {
         async jwt({token, account, profile}) {
             // 초기 로그인 시 Keycloak 토큰 정보 저장
             if (account?.access_token) {
-                console.log('=== 초기 로그인 토큰 정보 ===')
-                console.log('Account issuer:', account.issuer)
-                console.log('Environment KEYCLOAK_ISSUER:', process.env.KEYCLOAK_ISSUER)
-                console.log('Access token (first 50 chars):', account.access_token?.substring(0, 50))
-
-                // JWT 토큰 디코딩해서 issuer 확인
-                try {
-                    const payload = JSON.parse(Buffer.from(account.access_token!.split('.')[1], 'base64').toString())
-                    console.log('Token payload issuer:', payload.iss)
-                    console.log('Token payload audience:', payload.aud)
-                    console.log('Token payload expires:', new Date(payload.exp * 1000).toISOString())
-                } catch (e) {
-                    console.log('토큰 디코딩 실패:', e)
-                }
+                console.log('=== 초기 로그인 ===')
+                console.log('Access token expires in:', account.expires_at ?
+                    new Date(account.expires_at * 1000).toISOString() : 'unknown')
 
                 token.accessToken = account.access_token
                 token.refreshToken = account.refresh_token || ''
@@ -42,7 +31,7 @@ export const authOptions: NextAuthOptions = {
                 token.refreshTokenExpires = account.refresh_expires_in
                     ? Date.now() + (account.refresh_expires_in * 1000)
                     : 0
-                token.error = undefined // 초기화
+                token.error = undefined
             }
 
             // 프로필 정보 저장
@@ -52,40 +41,40 @@ export const authOptions: NextAuthOptions = {
                 token.preferred_username = profile.preferred_username || ''
             }
 
-            // 이전에 토큰 갱신 오류가 발생했다면 세션 완전 무효화
+            // 이전 토큰 갱신 오류가 있으면 세션 무효화
             if (token.error === 'RefreshTokenExpired' || token.error === 'RefreshAccessTokenError') {
-                console.log('이전 토큰 갱신 실패 - 세션 완전 무효화')
-                // null을 반환하면 NextAuth가 자동으로 세션 쿠키를 삭제함
+                console.log('토큰 갱신 실패로 세션 무효화')
                 return null as unknown as JWT
             }
 
-            // 액세스 토큰이 만료되지 않았으면 기존 토큰 반환
+            // 액세스 토큰이 아직 유효하면 기존 토큰 반환
             if (Date.now() < token.accessTokenExpires) {
                 return token
             }
 
-            console.log('=== 토큰 갱신 시도 ===')
-            console.log('Current time:', new Date().toISOString())
-            console.log('Token expires at:', new Date(token.accessTokenExpires).toISOString())
-            console.log('Refresh token (first 20 chars):', token.refreshToken?.toString().substring(0, 20))
-
-            // 액세스 토큰 만료 시 리프레시 토큰으로 갱신
+            // 액세스 토큰 만료 시 갱신 시도
+            console.log('=== 토큰 갱신 (5분 경과) ===')
             const refreshedToken = await refreshAccessToken(token)
 
-            // 토큰 갱신에 실패했다면 세션 완전 무효화
             if (refreshedToken.error) {
-                console.log('토큰 갱신 실패 - 세션 완전 무효화:', refreshedToken.error)
-                return null as unknown as JWT // NextAuth가 자동으로 쿠키를 삭제함
+                console.log('토큰 갱신 실패 - Keycloak에서 로그아웃된 것으로 판단')
+                return null as unknown as JWT
             }
 
             return refreshedToken
         },
 
         async session({session, token}) {
-            // token이 null이면 (JWT 콜백에서 null 반환) 여기까지 오지 않음
-            // NextAuth가 자동으로 세션을 무효화하고 쿠키를 삭제함
+            if (!token) {
+                return {
+                    ...session,
+                    user: undefined,
+                    accessToken: undefined,
+                    expires: new Date(0).toISOString()
+                }
+            }
 
-            // 정상 상태일 때만 모든 정보 제공
+            // 세션 정보 설정
             if (session.user) {
                 session.user.id = token.sub!
                 session.user.roles = token.roles || []
@@ -93,9 +82,7 @@ export const authOptions: NextAuthOptions = {
                 session.user.preferred_username = token.preferred_username || ''
             }
 
-            // 백엔드 API 호출용 액세스 토큰
             session.accessToken = token.accessToken
-
             return session
         }
     },
@@ -118,6 +105,7 @@ export const authOptions: NextAuthOptions = {
                     })
 
                     await fetch(`${logoutUrl}?${params.toString()}`)
+                    console.log('Keycloak 로그아웃 완료')
                 } catch (error) {
                     console.error('Keycloak logout error:', error)
                 }
@@ -128,30 +116,18 @@ export const authOptions: NextAuthOptions = {
 
 async function refreshAccessToken(token: JWT): Promise<JWT> {
     try {
-        console.log('=== 토큰 갱신 요청 시작 ===')
-
         const issuerUrl = process.env.KEYCLOAK_ISSUER!
         const refreshUrl = `${issuerUrl}/protocol/openid-connect/token`
 
-        console.log('Refresh URL:', refreshUrl)
-        console.log('Client ID:', process.env.KEYCLOAK_CLIENT_ID)
-
-        // 리프레시 토큰 유효성 검사
+        // 리프레시 토큰 기본 검증
         if (!token.refreshToken) {
             console.error('리프레시 토큰이 없습니다.')
-            return {
-                ...token,
-                error: 'RefreshAccessTokenError',
-            }
+            return {...token, error: 'RefreshAccessTokenError'}
         }
 
-        // 리프레시 토큰 만료 검사
         if (token.refreshTokenExpires && Date.now() >= token.refreshTokenExpires) {
             console.error('리프레시 토큰이 만료되었습니다.')
-            return {
-                ...token,
-                error: 'RefreshTokenExpired',
-            }
+            return {...token, error: 'RefreshTokenExpired'}
         }
 
         const requestBody = new URLSearchParams({
@@ -159,12 +135,6 @@ async function refreshAccessToken(token: JWT): Promise<JWT> {
             client_secret: process.env.KEYCLOAK_CLIENT_SECRET!,
             grant_type: 'refresh_token',
             refresh_token: token.refreshToken,
-        })
-
-        console.log('Request body (without secrets):', {
-            client_id: process.env.KEYCLOAK_CLIENT_ID,
-            grant_type: 'refresh_token',
-            refresh_token_length: token.refreshToken?.toString().length
         })
 
         const response = await fetch(refreshUrl, {
@@ -175,36 +145,21 @@ async function refreshAccessToken(token: JWT): Promise<JWT> {
             body: requestBody,
         })
 
-        console.log('Response status:', response.status)
-        console.log('Response headers:', Object.fromEntries(response.headers.entries()))
-
         const refreshedTokens = await response.json()
 
         if (!response.ok) {
-            console.error('Token refresh failed:', refreshedTokens)
-            console.error('Response status:', response.status)
-            console.error('Error details:', refreshedTokens.error_description || refreshedTokens.error)
+            console.error('토큰 갱신 실패:', refreshedTokens.error)
 
-            // 특정 오류에 따른 처리
-            if (response.status === 400) {
-                if (refreshedTokens.error === 'invalid_grant') {
-                    console.error('리프레시 토큰이 만료되었거나 무효합니다.')
-                    return {
-                        ...token,
-                        error: 'RefreshTokenExpired',
-                    }
-                }
+            // Keycloak에서 세션이 무효화된 경우
+            if (response.status === 400 && refreshedTokens.error === 'invalid_grant') {
+                console.error('Keycloak 세션이 무효화됨 (로그아웃됨)')
+                return {...token, error: 'RefreshTokenExpired'}
             }
 
-            return {
-                ...token,
-                error: 'RefreshAccessTokenError',
-            }
+            return {...token, error: 'RefreshAccessTokenError'}
         }
 
-        console.log('토큰 갱신 성공!')
-        console.log('New access token length:', refreshedTokens.access_token?.length)
-        console.log('New expires_in:', refreshedTokens.expires_in)
+        console.log('토큰 갱신 성공 - 다음 갱신:', new Date(Date.now() + refreshedTokens.expires_in * 1000).toISOString())
 
         return {
             ...token,
@@ -214,26 +169,13 @@ async function refreshAccessToken(token: JWT): Promise<JWT> {
             refreshTokenExpires: refreshedTokens.refresh_expires_in
                 ? Date.now() + (refreshedTokens.refresh_expires_in * 1000)
                 : token.refreshTokenExpires,
-            error: undefined, // 오류 상태 초기화
+            error: undefined,
         }
     } catch (error) {
-        console.error('Error refreshing access token:', error)
-
-        if (error instanceof TypeError && error.message.includes('fetch failed')) {
-            console.error('Keycloak 서버에 연결할 수 없습니다.')
-            return {
-                ...token,
-                error: 'KeycloakConnectionError',
-            }
-        }
-
-        return {
-            ...token,
-            error: 'RefreshAccessTokenError',
-        }
+        console.error('토큰 갱신 중 예외 발생:', error)
+        return {...token, error: 'RefreshAccessTokenError'}
     }
 }
 
 const handler = NextAuth(authOptions)
-
 export {handler as GET, handler as POST}
