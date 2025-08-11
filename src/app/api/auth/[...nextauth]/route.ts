@@ -20,14 +20,12 @@ export const authOptions: NextAuthOptions = {
         async jwt({token, account, profile}) {
             // 초기 로그인 시 Keycloak 토큰 정보 저장
             if (account?.access_token) {
-                console.log('=== 초기 로그인 ===')
-                console.log('Access token expires in:', account.expires_at ?
-                    new Date(account.expires_at * 1000).toISOString() : 'unknown')
-
                 token.accessToken = account.access_token
                 token.refreshToken = account.refresh_token || ''
                 token.idToken = account.id_token || ''
-                token.accessTokenExpires = account.expires_at ? account.expires_at * 1000 : 0
+                token.accessTokenExpires = account.expires_at
+                    ? account.expires_at * 1000
+                    : 0
                 token.refreshTokenExpires = account.refresh_expires_in
                     ? Date.now() + (account.refresh_expires_in * 1000)
                     : 0
@@ -43,7 +41,6 @@ export const authOptions: NextAuthOptions = {
 
             // 이전 토큰 갱신 오류가 있으면 세션 무효화
             if (token.error === 'RefreshTokenExpired' || token.error === 'RefreshAccessTokenError') {
-                console.log('토큰 갱신 실패로 세션 무효화')
                 return null as unknown as JWT
             }
 
@@ -53,11 +50,9 @@ export const authOptions: NextAuthOptions = {
             }
 
             // 액세스 토큰 만료 시 갱신 시도
-            console.log('=== 토큰 갱신 (5분 경과) ===')
             const refreshedToken = await refreshAccessToken(token)
 
             if (refreshedToken.error) {
-                console.log('토큰 갱신 실패 - Keycloak에서 로그아웃된 것으로 판단')
                 return null as unknown as JWT
             }
 
@@ -100,7 +95,6 @@ export const authOptions: NextAuthOptions = {
                     })
 
                     await fetch(`${logoutUrl}?${params.toString()}`)
-                    console.log('Keycloak 로그아웃 완료')
                 } catch (error) {
                     console.error('Keycloak logout error:', error)
                 }
@@ -153,8 +147,6 @@ async function refreshAccessToken(token: JWT): Promise<JWT> {
 
             return {...token, error: 'RefreshAccessTokenError'}
         }
-
-        console.log('토큰 갱신 성공 - 다음 갱신:', new Date(Date.now() + refreshedTokens.expires_in * 1000).toISOString())
 
         return {
             ...token,
