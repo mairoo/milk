@@ -41,28 +41,6 @@ export default function Home() {
                                 </ul>
                             </div>
 
-                            {session.user?.roles && session.user.roles.length > 0 && (
-                                <div style={{marginTop: '15px'}}>
-                                    <h3>권한 (Roles)</h3>
-                                    <ul>
-                                        {session.user.roles.map((role: string, index: number) => (
-                                            <li key={index}>{role}</li>
-                                        ))}
-                                    </ul>
-                                </div>
-                            )}
-
-                            {session.user?.groups && session.user.groups.length > 0 && (
-                                <div style={{marginTop: '15px'}}>
-                                    <h3>그룹 (Groups)</h3>
-                                    <ul>
-                                        {session.user.groups.map((group: string, index: number) => (
-                                            <li key={index}>{group}</li>
-                                        ))}
-                                    </ul>
-                                </div>
-                            )}
-
                             <div style={{marginTop: '20px'}}>
                                 <button
                                     onClick={() => signOut({callbackUrl: '/'})}
