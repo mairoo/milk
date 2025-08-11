@@ -18,19 +18,17 @@ declare module "next-auth" {
      * 클라이언트에서 useSession()으로 접근하는 세션 객체의 타입을 정의
      *
      * - session 콜백에서 반환하는 객체 타입
-     * - 클라이언트에서 session.user.roles 등으로 접근 가능
-     * - 보안상 accessToken은 서버 사이드에서만 사용
+     * - 클라이언트에서 session.user.preferred_username으로 접근 가능
+     * - 권한 정보(roles, groups)는 Spring Backend에서 독립적으로 관리
+     * - accessToken은 API 호출 시에만 사용
      */
     interface Session {
         user: {
             id: string
-            roles: string[]
-            groups: string[]
             preferred_username: string
         } & DefaultSession["user"]
-        accessToken?: string  // undefined 허용으로 수정
+        accessToken?: string
         error?: string
-        errorMessage?: string // 추가
     }
 
     /**
@@ -41,8 +39,6 @@ declare module "next-auth" {
      * - 현재 직접 사용하지 않지만 타입 시스템 완성도를 위해 정의
      */
     interface User extends DefaultUser {
-        roles: string[]
-        groups: string[]
         preferred_username: string
     }
 
@@ -102,7 +98,8 @@ declare module "next-auth/jwt" {
      * - jwt 콜백에서 관리하는 토큰 객체 타입
      * - refreshAccessToken 함수의 매개변수/반환값 타입
      * - 민감한 토큰 정보(accessToken, refreshToken)는 서버에서만 관리
-     * - 토큰 만료 시간 추가로 자동 갱신 지원
+     * - 사용자 식별 정보(preferred_username)만 포함
+     * - 권한 정보는 Spring Backend에서 Keycloak JWT로부터 직접 추출
      */
     interface JWT extends DefaultJWT {
         accessToken: string
@@ -110,8 +107,6 @@ declare module "next-auth/jwt" {
         idToken: string
         accessTokenExpires: number
         refreshTokenExpires: number
-        roles: string[]
-        groups: string[]
         preferred_username: string
         error?: string
     }
