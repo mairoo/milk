@@ -1,5 +1,5 @@
-import { DefaultSession, DefaultUser } from "next-auth"
-import { DefaultJWT } from "next-auth/jwt"
+import {DefaultSession, DefaultUser} from "next-auth"
+import {DefaultJWT} from "next-auth/jwt"
 
 /**
  * NextAuth.js 타입 확장
@@ -47,24 +47,23 @@ declare module "next-auth" {
     }
 
     /**
-     * 프로필 인터페이스 확장
-     * Keycloak에서 반환하는 OpenID Connect 프로필 정보의 타입을 정의
+     * Keycloak OpenID Connect 프로필 정보 타입 정의
      *
-     * - jwt 콜백의 profile 매개변수 타입
-     * - Keycloak 사용자 정보 및 역할/그룹 정보 포함
-     * - realm_access.roles로 Keycloak 역할 정보 접근
+     * ## 설계 원칙: 인증과 인가의 분리
+     * - Keycloak: 순수 인증 서버 (사용자 식별 정보만 제공)
+     * - 백엔드: 독립적 권한 관리 (KeycloakJwtAuthenticationConverter에서 처리)
+     *
+     * ## 제외된 필드
+     * - realm_access.roles: 비즈니스 로직 종속성 제거
+     * - groups: 서비스별 독립적 권한 체계 구축
      */
     interface Profile {
-        sub: string
-        email_verified: boolean
-        preferred_username: string
-        given_name: string
-        family_name: string
-        email: string
-        realm_access?: {
-            roles: string[]
-        }
-        groups?: string[]
+        sub: string // 사용자 고유 ID
+        email_verified: boolean // 이메일 인증 상태
+        preferred_username: string // 사용자명 (이메일)
+        given_name: string // 이름
+        family_name: string // 성
+        email: string // 이메일
     }
 
     /**

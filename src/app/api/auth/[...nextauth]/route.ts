@@ -34,8 +34,6 @@ export const authOptions: NextAuthOptions = {
 
             // 프로필 정보 저장
             if (profile) {
-                token.roles = profile.realm_access?.roles || []
-                token.groups = profile.groups || []
                 token.preferred_username = profile.preferred_username || ''
             }
 
