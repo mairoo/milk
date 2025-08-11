@@ -52,14 +52,11 @@ export const authOptions: NextAuthOptions = {
                 token.preferred_username = profile.preferred_username || ''
             }
 
-            // 이전에 토큰 갱신 오류가 발생했다면 만료된 상태로 유지
+            // 이전에 토큰 갱신 오류가 발생했다면 세션 완전 무효화
             if (token.error === 'RefreshTokenExpired' || token.error === 'RefreshAccessTokenError') {
-                console.log('이전 토큰 갱신 실패 - 만료된 상태로 유지')
-                // 토큰을 완전히 무효화하여 API 호출 불가능하게 만듦
-                token.accessToken = ''
-                token.refreshToken = ''
-                token.accessTokenExpires = 0
-                return token
+                console.log('이전 토큰 갱신 실패 - 세션 완전 무효화')
+                // null을 반환하면 NextAuth가 자동으로 세션 쿠키를 삭제함
+                return null as unknown as JWT
             }
 
             // 액세스 토큰이 만료되지 않았으면 기존 토큰 반환
@@ -75,33 +72,18 @@ export const authOptions: NextAuthOptions = {
             // 액세스 토큰 만료 시 리프레시 토큰으로 갱신
             const refreshedToken = await refreshAccessToken(token)
 
-            // 토큰 갱신에 실패했다면 토큰을 무효화
+            // 토큰 갱신에 실패했다면 세션 완전 무효화
             if (refreshedToken.error) {
-                console.log('토큰 갱신 실패 - 토큰 무효화:', refreshedToken.error)
-                refreshedToken.accessToken = ''
-                refreshedToken.refreshToken = ''
-                refreshedToken.accessTokenExpires = 0
+                console.log('토큰 갱신 실패 - 세션 완전 무효화:', refreshedToken.error)
+                return null as unknown as JWT // NextAuth가 자동으로 쿠키를 삭제함
             }
 
             return refreshedToken
         },
 
         async session({session, token}) {
-            // 토큰이 무효화된 상태면 session.error 설정
-            if (token.error === 'RefreshTokenExpired' || token.error === 'RefreshAccessTokenError'
-                || !token.accessToken || token.accessTokenExpires <= 0) {
-                session.error = token.error || 'TokenExpired'
-                session.accessToken = undefined // API 호출 불가능하게 설정
-
-                // 사용자 정보는 최소한으로만 유지
-                if (session.user) {
-                    session.user.id = token.sub!
-                    session.user.roles = []
-                    session.user.groups = []
-                    session.user.preferred_username = token.preferred_username || ''
-                }
-                return session
-            }
+            // token이 null이면 (JWT 콜백에서 null 반환) 여기까지 오지 않음
+            // NextAuth가 자동으로 세션을 무효화하고 쿠키를 삭제함
 
             // 정상 상태일 때만 모든 정보 제공
             if (session.user) {
