@@ -28,8 +28,9 @@ declare module "next-auth" {
             groups: string[]
             preferred_username: string
         } & DefaultSession["user"]
-        accessToken: string
+        accessToken?: string  // undefined 허용으로 수정
         error?: string
+        errorMessage?: string // 추가
     }
 
     /**
@@ -102,7 +103,7 @@ declare module "next-auth/jwt" {
      * - jwt 콜백에서 관리하는 토큰 객체 타입
      * - refreshAccessToken 함수의 매개변수/반환값 타입
      * - 민감한 토큰 정보(accessToken, refreshToken)는 서버에서만 관리
-     * - 토큰 만료 시간 추적으로 자동 갱신 지원
+     * - 토큰 만료 시간 추가로 자동 갱신 지원
      */
     interface JWT extends DefaultJWT {
         accessToken: string

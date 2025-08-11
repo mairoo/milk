@@ -7,12 +7,10 @@ import {useEffect, useState} from 'react'
 /**
  * 로그인 페이지 컴포넌트
  *
- * @description
  * NextAuth.js와 Keycloak을 연동한 로그인 페이지입니다.
  * 이미 로그인된 사용자는 자동으로 리디렉션하고,
  * 미로그인 사용자에게는 Keycloak 로그인 버튼을 제공합니다.
  *
- * @features
  * - 로그인 상태 자동 확인
  * - 로그인 후 원래 페이지로 리디렉션
  * - 로그인 오류 처리
@@ -130,10 +128,10 @@ export default function SignInPage() {
  * 이 페이지는 다음과 같은 시나리오에서 사용됩니다:
  *
  * 1. 직접 접근:
- *    http://localhost:3000/auth/signin
+ *    http://localhost:3000/auth/sign-in
  *
  * 2. 보호된 페이지에서 리디렉션:
- *    http://localhost:3000/auth/signin?callbackUrl=/dashboard
+ *    http://localhost:3000/auth/sign-in?callbackUrl=/dashboard
  *
  * 3. 미들웨어에서 자동 리디렉션:
  *    middleware.ts에서 미인증 사용자를 이 페이지로 보냄
