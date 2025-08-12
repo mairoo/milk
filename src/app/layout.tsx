@@ -3,6 +3,7 @@ import SessionProvider from '@/components/providers/SessionProvider'
 import './globals.css'
 import React from "react";
 import {Nanum_Gothic} from 'next/font/google'
+import {ReduxProvider} from "@/components/providers/ReduxProvider";
 
 const nanumGothic = Nanum_Gothic({
     weight: ['400', '700', '800'],
@@ -55,7 +56,9 @@ export default function RootLayout({children}: RootLayoutProps) {
         <html lang="ko">
         <body className={`${nanumGothic.className} font-sans antialiased`}>
         <SessionProvider>
-            {children}
+            <ReduxProvider>
+                {children}
+            </ReduxProvider>
         </SessionProvider>
         </body>
         </html>
