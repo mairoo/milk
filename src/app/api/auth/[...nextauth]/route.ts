@@ -22,7 +22,6 @@ export const authOptions: NextAuthOptions = {
      * - Next.js 서버 또는 백엔드에는 세션 데이터 저장 없음
      * - 관리자 강제 로그아웃 조치 불가 = 토큰 탈취되어도 토큰 만료까지 유효
      */
-
     session: {
         strategy: 'jwt',
         maxAge: 30 * 24 * 60 * 60, // 30일 (NextAuth 세션)
@@ -115,7 +114,15 @@ export const authOptions: NextAuthOptions = {
                         post_logout_redirect_uri: process.env.NEXTAUTH_URL!
                     })
 
-                    await fetch(`${logoutUrl}?${params.toString()}`)
+                    // 타임아웃 설정
+                    const controller = new AbortController()
+                    const timeoutId = setTimeout(() => controller.abort(), 5000)
+
+                    await fetch(`${logoutUrl}?${params.toString()}`, {
+                        signal: controller.signal
+                    })
+
+                    clearTimeout(timeoutId)
                 } catch (error) {
                     console.error('Keycloak logout error:', error)
                 }
@@ -147,27 +154,43 @@ async function refreshAccessToken(token: JWT): Promise<JWT> {
             refresh_token: token.refreshToken,
         })
 
+        // 타임아웃 설정
+        const controller = new AbortController()
+        const timeoutId = setTimeout(() => controller.abort(), 10000) // 10초
+
         const response = await fetch(refreshUrl, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
             },
             body: requestBody,
+            signal: controller.signal
         })
 
-        const refreshedTokens = await response.json()
+        clearTimeout(timeoutId)
 
         if (!response.ok) {
-            console.error('토큰 갱신 실패:', refreshedTokens.error)
+            // 응답 본문 읽기 시도
+            let errorDetails
+            try {
+                errorDetails = await response.json()
+            } catch {
+                errorDetails = await response.text()
+            }
+
+            console.error(`토큰 갱신 실패 (${response.status}):`, errorDetails)
 
             // Keycloak에서 세션이 무효화된 경우
-            if (response.status === 400 && refreshedTokens.error === 'invalid_grant') {
+            if (response.status === 400 &&
+                (typeof errorDetails === 'object' && errorDetails.error === 'invalid_grant')) {
                 console.error('Keycloak 세션이 무효화됨 (로그아웃됨)')
                 return {...token, error: 'RefreshTokenExpired'}
             }
 
             return {...token, error: 'RefreshAccessTokenError'}
         }
+
+        const refreshedTokens = await response.json()
 
         return {
             ...token,
@@ -180,7 +203,11 @@ async function refreshAccessToken(token: JWT): Promise<JWT> {
             error: undefined,
         }
     } catch (error) {
-        console.error('토큰 갱신 중 예외 발생:', error)
+        if (error instanceof Error && error.name === 'AbortError') {
+            console.error('토큰 갱신 타임아웃')
+        } else {
+            console.error('토큰 갱신 중 예외 발생:', error)
+        }
         return {...token, error: 'RefreshAccessTokenError'}
     }
 }
