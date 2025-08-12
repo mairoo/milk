@@ -11,19 +11,33 @@ export const authOptions: NextAuthOptions = {
         })
     ],
 
+    /**
+     * NextAuth 세션 전략
+     * 1. jwt
+     * 2. database
+     *
+     * jwt 장단점
+     *
+     * - 클라이언트 브라우저에 HttpOnly 쿠키 형태로 암호화된 세션 데이터 저장
+     * - Next.js 서버 또는 백엔드에는 세션 데이터 저장 없음
+     * - 관리자 강제 로그아웃 조치 불가 = 토큰 탈취되어도 토큰 만료까지 유효
+     */
+
     session: {
         strategy: 'jwt',
         maxAge: 30 * 24 * 60 * 60, // 30일 (NextAuth 세션)
     },
 
+    /**
+     * 콜백: 무엇을 저장하고 반환할까?
+     *
+     * - 인증 과정에서 데이터를 변형/검증하고 반환
+     * - NextAuth가 결과를 기다림 (동기적 처리)
+     */
     callbacks: {
         async jwt({token, account, profile}) {
             // 초기 로그인 시 Keycloak 토큰 정보 저장
             if (account?.access_token) {
-                console.log('=== 초기 로그인 ===')
-                console.log('Access token expires in:', account.expires_at ?
-                    new Date(account.expires_at * 1000).toISOString() : 'unknown')
-
                 token.accessToken = account.access_token
                 token.refreshToken = account.refresh_token || ''
                 token.idToken = account.id_token || ''
@@ -43,7 +57,6 @@ export const authOptions: NextAuthOptions = {
 
             // 이전 토큰 갱신 오류가 있으면 세션 무효화
             if (token.error === 'RefreshTokenExpired' || token.error === 'RefreshAccessTokenError') {
-                console.log('토큰 갱신 실패로 세션 무효화')
                 return null as unknown as JWT
             }
 
@@ -52,12 +65,10 @@ export const authOptions: NextAuthOptions = {
                 return token
             }
 
-            // 액세스 토큰 만료 시 갱신 시도
-            console.log('=== 토큰 갱신 (5분 경과) ===')
+            // 액세스 토큰 만료 이후 갱신 시도
             const refreshedToken = await refreshAccessToken(token)
 
             if (refreshedToken.error) {
-                console.log('토큰 갱신 실패 - Keycloak에서 로그아웃된 것으로 판단')
                 return null as unknown as JWT
             }
 
@@ -85,6 +96,13 @@ export const authOptions: NextAuthOptions = {
         }
     },
 
+    /**
+     * 이벤트: 추가로 어떤 작업을 더 처리할까?
+     *
+     * - 인증 이벤트 발생 시 추가 작업 수행
+     * - NextAuth는 결과를 기다리지 않음 (비동기적 처리)
+     * - 반환값 무시, 로깅/알림/외부 API 호출 등
+     */
     events: {
         async signOut({token}) {
             // Keycloak 로그아웃 처리
@@ -98,7 +116,6 @@ export const authOptions: NextAuthOptions = {
                     })
 
                     await fetch(`${logoutUrl}?${params.toString()}`)
-                    console.log('Keycloak 로그아웃 완료')
                 } catch (error) {
                     console.error('Keycloak logout error:', error)
                 }
@@ -151,8 +168,6 @@ async function refreshAccessToken(token: JWT): Promise<JWT> {
 
             return {...token, error: 'RefreshAccessTokenError'}
         }
-
-        console.log('토큰 갱신 성공 - 다음 갱신:', new Date(Date.now() + refreshedTokens.expires_in * 1000).toISOString())
 
         return {
             ...token,
