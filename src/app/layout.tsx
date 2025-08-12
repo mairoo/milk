@@ -8,37 +8,11 @@ export const metadata: Metadata = {
         template: '%s | Pincoin App',
         default: 'Pincoin App',
     },
-    description: 'NextAuth.js와 Keycloak 연동 애플리케이션',
+    description: '대한민국 1등 상품권 쇼핑몰 핀코인',
     keywords: ['Next.js', 'NextAuth', 'Keycloak', 'Authentication'],
-    authors: [{name: 'Pincoin Team'}],
+    authors: [{name: '주식회사 핀코인'}],
     creator: 'Pincoin Team',
     publisher: 'Pincoin',
-
-    openGraph: {
-        title: 'Pincoin App',
-        description: 'NextAuth.js와 Keycloak 연동 애플리케이션',
-        url: 'https://pincoin.co.kr',
-        siteName: 'Pincoin App',
-        locale: 'ko_KR',
-        type: 'website',
-        images: [
-            {
-                url: '/og-image.png',
-                width: 1200,
-                height: 630,
-                alt: 'Pincoin App',
-            },
-        ],
-    },
-
-    twitter: {
-        card: 'summary_large_image',
-        title: 'Pincoin App',
-        description: 'NextAuth.js와 Keycloak 연동 애플리케이션',
-        images: ['/og-image.png'],
-    },
-
-    manifest: '/manifest.json',
 
     icons: {
         icon: '/favicon.ico',
@@ -57,8 +31,6 @@ export const metadata: Metadata = {
             'max-snippet': -1,
         },
     },
-
-    category: 'technology',
 }
 
 export const viewport: Viewport = {
