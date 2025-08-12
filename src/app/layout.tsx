@@ -2,6 +2,13 @@ import type {Metadata, Viewport} from 'next'
 import SessionProvider from '@/components/providers/SessionProvider'
 import './globals.css'
 import React from "react";
+import {Nanum_Gothic} from 'next/font/google'
+
+const nanumGothic = Nanum_Gothic({
+    weight: ['400', '700', '800'],
+    subsets: ['latin'],
+    display: 'swap',
+})
 
 export const metadata: Metadata = {
     title: {
@@ -36,7 +43,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
     width: 'device-width',
     initialScale: 1,
-    maximumScale: 1,
+    // maximumScale: 1, - 접근성을 위해 사용자 확대/축소 허용
 }
 
 interface RootLayoutProps {
@@ -46,7 +53,7 @@ interface RootLayoutProps {
 export default function RootLayout({children}: RootLayoutProps) {
     return (
         <html lang="ko">
-        <body className="font-sans antialiased">
+        <body className={`${nanumGothic.className} font-sans antialiased`}>
         <SessionProvider>
             {children}
         </SessionProvider>

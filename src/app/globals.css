@@ -4,3 +4,11 @@
 html {
     scrollbar-gutter: stable;
 }
+
+/* Tailwind v4 font family */
+@theme {
+    --font-family-nanum-gothic: "Nanum Gothic", system-ui, sans-serif;
+
+    /* 기본 sans-serif도 나눔고딕으로 설정하려면 아래 주석 해제 */
+    /* --font-family-sans: "Nanum Gothic", system-ui, sans-serif; */
+}
