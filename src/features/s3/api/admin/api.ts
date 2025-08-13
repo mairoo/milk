@@ -1,5 +1,6 @@
 import axios from 'axios'
-import {HealthCheckResponse} from "@/features/s3/types/admin/dto";
+import {ApiResponse} from '@/global/types/dto'
+import {HealthCheckResponse} from '@/features/s3/types/admin/dto'
 
 /**
  * S3 헬스체크 API 클라이언트
@@ -13,14 +14,14 @@ class Api {
      */
     async quickHealthCheck(token?: string): Promise<HealthCheckResponse> {
         try {
-            const response = await axios.get(this.baseUrl, {
+            const response = await axios.get<ApiResponse<HealthCheckResponse>>(this.baseUrl, {
                 headers: {
                     'Content-Type': 'application/json',
                     ...(token && {'Authorization': `Bearer ${token}`}),
                 },
             })
 
-            return response.data.data // ApiResponse<HealthCheckResponse> 구조에서 data 추출
+            return response.data.data
         } catch (error) {
             if (axios.isAxiosError(error)) {
                 throw new Error(`헬스체크 실패: ${error.response?.status} ${error.response?.statusText}`)
@@ -35,7 +36,7 @@ class Api {
      */
     async fullHealthCheck(token?: string): Promise<HealthCheckResponse> {
         try {
-            const response = await axios.get(`${this.baseUrl}/full`, {
+            const response = await axios.get<ApiResponse<HealthCheckResponse>>(`${this.baseUrl}/full`, {
                 headers: {
                     'Content-Type': 'application/json',
                     ...(token && {'Authorization': `Bearer ${token}`}),
