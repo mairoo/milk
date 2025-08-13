@@ -50,7 +50,7 @@ const slice = createSlice({
             })
             .addCase(quickHealthCheckThunk.rejected, (state, action) => {
                 state.loading = false
-                state.error = action.error.message || '헬스체크 중 오류가 발생했습니다'
+                state.error = action.payload || '헬스체크 중 오류가 발생했습니다'
             })
 
         // 전체 헬스체크
@@ -66,7 +66,7 @@ const slice = createSlice({
             })
             .addCase(fullHealthCheckThunk.rejected, (state, action) => {
                 state.loading = false
-                state.error = action.error.message || '전체 헬스체크 중 오류가 발생했습니다'
+                state.error = action.payload || '전체 헬스체크 중 오류가 발생했습니다'
             })
     },
 })
