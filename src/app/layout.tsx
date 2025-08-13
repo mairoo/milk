@@ -19,13 +19,12 @@ export const metadata: Metadata = {
     description: '대한민국 1등 상품권 쇼핑몰 핀코인',
     keywords: ['Next.js', 'NextAuth', 'Keycloak', 'Authentication'],
     authors: [{name: '주식회사 핀코인'}],
-    creator: 'Pincoin Team',
-    publisher: 'Pincoin',
+    creator: '핀코인 개발팀',
+    publisher: '핀코인',
 
     icons: {
-        icon: '/favicon.ico',
-        shortcut: '/favicon-16x16.png',
-        apple: '/apple-touch-icon.png',
+        icon: '/favicon.ico', // 32x32px
+        apple: '/apple-touch-icon.png', // 180x180px
     },
 
     robots: {
