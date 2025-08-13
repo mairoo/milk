@@ -2,7 +2,7 @@ import NextAuth, {NextAuthOptions} from 'next-auth'
 import KeycloakProvider from 'next-auth/providers/keycloak'
 import {JWT} from 'next-auth/jwt'
 
-export const authOptions: NextAuthOptions = {
+const authOptions: NextAuthOptions = {
     providers: [
         KeycloakProvider({
             clientId: process.env.KEYCLOAK_CLIENT_ID!,
