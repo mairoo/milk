@@ -1,9 +1,9 @@
 import type {Metadata, Viewport} from 'next'
-import SessionProvider from '@/components/providers/SessionProvider'
+import SessionProvider from '@/global/providers/SessionProvider'
 import './globals.css'
 import React from "react";
 import {Nanum_Gothic} from 'next/font/google'
-import {ReduxProvider} from "@/components/providers/ReduxProvider";
+import {ReduxProvider} from "@/global/providers/ReduxProvider";
 
 const nanumGothic = Nanum_Gothic({
     weight: ['400', '700', '800'],
