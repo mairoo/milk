@@ -1,4 +1,4 @@
-import {HealthCheckResponse} from "@/features/s3/types/admin/dto";
+import {HealthCheckResponse} from "@/features/s3/admin/response";
 
 export interface HealthCheckState {
     loading: boolean

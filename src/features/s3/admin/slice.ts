@@ -1,7 +1,7 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit'
-import {fullHealthCheckThunk, quickHealthCheckThunk} from "@/features/s3/thunks/admin/thunk";
-import {HealthCheckState} from "@/features/s3/types/admin/state";
-import {HealthCheckResponse} from "@/features/s3/types/admin/dto";
+import {fullHealthCheckThunk, quickHealthCheckThunk} from "@/features/s3/admin/thunk";
+import {HealthCheckState} from "@/features/s3/admin/state";
+import {HealthCheckResponse} from "@/features/s3/admin/response";
 
 /**
  * S3 헬스체크 초기 상태

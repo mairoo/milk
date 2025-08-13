@@ -1,7 +1,7 @@
 'use client'
 
 import {signIn, signOut, useSession} from 'next-auth/react'
-import {useS3HealthCheck} from "@/features/s3/hooks/admin/hooks";
+import {useS3HealthCheck} from "@/features/s3/admin/hooks";
 
 export default function Home() {
     const {data: session, status} = useSession()

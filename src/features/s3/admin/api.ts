@@ -1,6 +1,6 @@
 import axios from 'axios'
 import {ApiResponse} from '@/global/types/dto'
-import {HealthCheckResponse} from '@/features/s3/types/admin/dto'
+import {HealthCheckResponse} from "@/features/s3/admin/response";
 
 /**
  * S3 헬스체크 API 클라이언트

@@ -1,6 +1,6 @@
 import {createAsyncThunk} from '@reduxjs/toolkit'
-import {healthCheckAdminApi} from '../../api/admin/api'
-import {HealthCheckResponse} from "@/features/s3/types/admin/dto";
+import {healthCheckAdminApi} from './api'
+import {HealthCheckResponse} from "@/features/s3/admin/response";
 
 /**
  * S3 빠른 헬스체크 비동기 액션
