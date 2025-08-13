@@ -1,9 +1,19 @@
 'use client'
 
 import {signIn, signOut, useSession} from 'next-auth/react'
+import {useS3HealthCheck} from "@/domain/s3/hooks/useS3HealthCheck";
 
 export default function Home() {
     const {data: session, status} = useSession()
+
+    const {
+        loading,
+        isHealthy,
+        hasError,
+        error,
+        quickCheck,
+        fullCheck,
+    } = useS3HealthCheck()
 
     // 로딩 상태
     if (status === 'loading') {
@@ -168,6 +178,19 @@ export default function Home() {
                         </button>
                     </div>
                 </section>
+
+                <div>
+                    <button onClick={quickCheck} disabled={loading}>
+                        빠른 체크
+                    </button>
+                    <button onClick={fullCheck} disabled={loading}>
+                        전체 체크
+                    </button>
+
+                    {loading && <p>체크 중...</p>}
+                    {isHealthy && <p>✅ S3 연결 정상</p>}
+                    {hasError && <p>❌ 오류: {error}</p>}
+                </div>
 
                 {/* 보안 안내 섹션 */}
                 <section style={{

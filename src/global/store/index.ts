@@ -1,10 +1,11 @@
-import {configureStore} from '@reduxjs/toolkit'
-import counterReducer from './test/counterSlice'
+import {combineReducers, configureStore} from '@reduxjs/toolkit'
+import healthCheckAdminSlice from "@/infra/s3/slices/health-check.admin.slice";
 
 export const store = configureStore({
     reducer: {
-        counter: counterReducer,
-        // 다른 슬라이스들을 여기에 추가
+        s3: combineReducers({
+            healthCheckAdmin: healthCheckAdminSlice,
+        }),
     },
 })
 
