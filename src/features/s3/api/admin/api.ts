@@ -1,9 +1,9 @@
-import {HealthCheckResponse} from '../types/health-check.admin.types'
+import {HealthCheckResponse} from "@/features/s3/types/admin/dto";
 
 /**
  * S3 헬스체크 API 클라이언트
  */
-class HealthCheckAdminApi {
+class Api {
     private readonly baseUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8080'}/admin/s3/healthcheck`
 
     /**
@@ -51,4 +51,4 @@ class HealthCheckAdminApi {
     }
 }
 
-export const healthCheckAdminApi = new HealthCheckAdminApi()
+export const healthCheckAdminApi = new Api()

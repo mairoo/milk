@@ -1,6 +1,6 @@
-import { createAsyncThunk } from '@reduxjs/toolkit'
-import { healthCheckAdminApi } from '../api/health-check.admin.api'
-import { HealthCheckResponse } from '../types/health-check.admin.types'
+import {createAsyncThunk} from '@reduxjs/toolkit'
+import {healthCheckAdminApi} from '../../api/admin/api'
+import {HealthCheckResponse} from "@/features/s3/types/admin/dto";
 
 /**
  * S3 빠른 헬스체크 비동기 액션
@@ -11,7 +11,7 @@ export const quickHealthCheckThunk = createAsyncThunk<
     { rejectValue: string }
 >(
     'healthCheck/admin/quick',
-    async (token, { rejectWithValue }) => {
+    async (token, {rejectWithValue}) => {
         try {
             return await healthCheckAdminApi.quickHealthCheck(token)
         } catch (error) {
@@ -30,7 +30,7 @@ export const fullHealthCheckThunk = createAsyncThunk<
     { rejectValue: string }
 >(
     'healthCheck/admin/full',
-    async (token, { rejectWithValue }) => {
+    async (token, {rejectWithValue}) => {
         try {
             return await healthCheckAdminApi.fullHealthCheck(token)
         } catch (error) {

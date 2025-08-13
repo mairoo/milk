@@ -1,6 +1,7 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { HealthCheckState, HealthCheckResponse } from '../types/health-check.admin.types'
-import {fullHealthCheckThunk, quickHealthCheckThunk} from "@/infra/s3/thunks/health-check.admin.thunk";
+import {createSlice, PayloadAction} from '@reduxjs/toolkit'
+import {fullHealthCheckThunk, quickHealthCheckThunk} from "@/features/s3/thunks/admin/thunk";
+import {HealthCheckState} from "@/features/s3/types/admin/state";
+import {HealthCheckResponse} from "@/features/s3/types/admin/dto";
 
 /**
  * S3 헬스체크 초기 상태
@@ -15,7 +16,7 @@ const initialState: HealthCheckState = {
 /**
  * S3 헬스체크 Redux 슬라이스
  */
-const healthCheckAdminSlice = createSlice({
+const slice = createSlice({
     name: 'healthCheck/admin',
     initialState,
     reducers: {
@@ -70,5 +71,5 @@ const healthCheckAdminSlice = createSlice({
     },
 })
 
-export const { resetHealthCheck, clearError } = healthCheckAdminSlice.actions
-export default healthCheckAdminSlice.reducer
+export const {resetHealthCheck, clearError} = slice.actions
+export default slice.reducer

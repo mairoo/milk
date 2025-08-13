@@ -1,9 +1,9 @@
 import {useCallback} from 'react'
 import {useSession} from 'next-auth/react'
 import {useAppDispatch, useAppSelector} from '@/global/hooks/useRedux'
-import {fullHealthCheckThunk, quickHealthCheckThunk} from '@/infra/s3/thunks/health-check.admin.thunk'
-import {clearError, resetHealthCheck} from '@/infra/s3/slices/health-check.admin.slice'
-import {HealthCheckType} from '@/infra/s3/types/health-check.admin.types'
+import {fullHealthCheckThunk, quickHealthCheckThunk} from '@/features/s3/thunks/admin/thunk'
+import {clearError, resetHealthCheck} from '@/features/s3/slices/admin/slice'
+import {HealthCheckType} from "@/features/s3/types/shared/constants";
 
 /**
  * S3 헬스체크 비즈니스 로직 hook

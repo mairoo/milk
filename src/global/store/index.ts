@@ -1,5 +1,5 @@
 import {combineReducers, configureStore} from '@reduxjs/toolkit'
-import healthCheckAdminSlice from "@/infra/s3/slices/health-check.admin.slice";
+import healthCheckAdminSlice from "@/features/s3/slices/admin/slice";
 
 export const store = configureStore({
     reducer: {
