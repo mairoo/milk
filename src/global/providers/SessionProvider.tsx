@@ -1,13 +1,6 @@
 'use client'
 
-import {SessionProvider as NextAuthSessionProvider} from 'next-auth/react'
-import {ReactNode} from 'react'
-
-interface SessionProviderProps {
-    children: ReactNode
-    refetchInterval?: number
-    refetchOnWindowFocus?: boolean
-}
+import {SessionProvider as NextAuthSessionProvider, SessionProviderProps} from 'next-auth/react'
 
 /**
  * 5분 액세스 토큰에 최적화된 세션 프로바이더

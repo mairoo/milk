@@ -4,6 +4,7 @@ import './globals.css'
 import React from "react";
 import {Nanum_Gothic} from 'next/font/google'
 import {ReduxProvider} from "@/global/providers/ReduxProvider";
+import {RootLayoutProps} from "@/global/types/layout";
 
 const nanumGothic = Nanum_Gothic({
     weight: ['400', '700', '800'],
@@ -44,10 +45,6 @@ export const viewport: Viewport = {
     width: 'device-width',
     initialScale: 1,
     // maximumScale: 1, - 접근성을 위해 사용자 확대/축소 허용
-}
-
-interface RootLayoutProps {
-    children: React.ReactNode
 }
 
 export default function RootLayout({children}: RootLayoutProps) {
