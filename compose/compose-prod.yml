@@ -27,7 +27,7 @@ services:
     image: ${PREFIX}-frontend:latest
     build:
       context: ./repo
-      dockerfile: Dockerfile.prod
+      dockerfile: ../Dockerfile.prod
     restart: unless-stopped
     networks:
       - app-network
