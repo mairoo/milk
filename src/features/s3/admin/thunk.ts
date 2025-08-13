@@ -1,5 +1,5 @@
 import {createAsyncThunk} from '@reduxjs/toolkit'
-import {healthCheckAdminApi} from './api'
+import {s3AdminApi} from './api'
 import {HealthCheckResponse} from "@/features/s3/admin/response";
 
 /**
@@ -11,9 +11,9 @@ export const quickHealthCheckThunk = createAsyncThunk<
     { rejectValue: string }
 >(
     'healthCheck/admin/quick',
-    async (token, {rejectWithValue}) => {
+    async (token, {rejectWithValue, dispatch}) => {
         try {
-            return await healthCheckAdminApi.quickHealthCheck(token)
+            return await dispatch(s3AdminApi.endpoints.quickHealthCheck.initiate(token)).unwrap()
         } catch (error) {
             const errorMessage = error instanceof Error ? error.message : '알 수 없는 오류가 발생했습니다'
             return rejectWithValue(errorMessage)
@@ -30,9 +30,9 @@ export const fullHealthCheckThunk = createAsyncThunk<
     { rejectValue: string }
 >(
     'healthCheck/admin/full',
-    async (token, {rejectWithValue}) => {
+    async (token, {rejectWithValue, dispatch}) => {
         try {
-            return await healthCheckAdminApi.fullHealthCheck(token)
+            return await dispatch(s3AdminApi.endpoints.fullHealthCheck.initiate(token)).unwrap()
         } catch (error) {
             const errorMessage = error instanceof Error ? error.message : '알 수 없는 오류가 발생했습니다'
             return rejectWithValue(errorMessage)
