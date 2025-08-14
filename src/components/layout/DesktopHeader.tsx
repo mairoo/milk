@@ -3,6 +3,7 @@ import {ChevronDown, LogOut, MessageCircle, Package, User} from "lucide-react";
 import React from "react";
 import {NavLink} from "@/components/layout/NavLink";
 import {DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,} from "@/components/ui/dropdown-menu";
+import Link from "next/link";
 
 const categoryItems = [
     {
@@ -55,13 +56,15 @@ export default function DesktopHeader() {
             <div className="mx-auto container">
                 <div className="mx-auto container flex justify-between items-center px-4 sm:px-0 py-2">
                     <div>
-                        <Image
-                            src="/images/pincoin_www_260x50.png"
-                            alt="핀코인 로고"
-                            width={360}
-                            height={50}
-                            priority
-                        />
+                        <Link href="/">
+                            <Image
+                                src="/images/pincoin_www_260x50.png"
+                                alt="핀코인 로고"
+                                width={360}
+                                height={50}
+                                priority
+                            />
+                        </Link>
                     </div>
                     <nav className="space-x-4">
                         <NavLink href="/" icon={Package}>
@@ -81,17 +84,18 @@ export default function DesktopHeader() {
             </div>
             <div className="bg-green-50 text-green-950">
                 <div className="mx-auto container flex justify-between items-center px-4 sm:px-0 py-2">
-                    <div className="flex items-center space-x-6">
+                    <div className="flex items-center gap-x-1">
                         {categoryItems.map((category, index) => (
                             <DropdownMenu key={index}>
                                 <DropdownMenuTrigger
-                                    className="flex items-center space-x-1 hover:text-green-700 cursor-pointer">
+                                    className="flex items-center justify-center gap-x-1 hover:text-green-700 cursor-pointer w-52">
                                     <span>{category.title}</span>
                                     <ChevronDown className="h-4 w-4"/>
                                 </DropdownMenuTrigger>
-                                <DropdownMenuContent className="w-48">
+                                <DropdownMenuContent className="w-48 p-0 rounded-sm">
                                     {category.items.map((item, itemIndex) => (
-                                        <DropdownMenuItem key={itemIndex} asChild>
+                                        <DropdownMenuItem key={itemIndex} asChild
+                                                          className="px-4 py-2 hover:!bg-green-950 hover:!text-white rounded-none text-base">
                                             <a href={item.href} className="cursor-pointer">
                                                 {item.name}
                                             </a>
