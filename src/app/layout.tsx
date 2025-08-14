@@ -5,6 +5,7 @@ import React from "react";
 import {Nanum_Gothic} from 'next/font/google'
 import {ReduxProvider} from "@/global/providers/ReduxProvider";
 import {RootLayoutProps} from "@/global/types/layout";
+import Footer from "@/components/layout/Footer";
 
 const nanumGothic = Nanum_Gothic({
     weight: ['400', '700', '800'],
@@ -18,7 +19,7 @@ export const metadata: Metadata = {
         default: 'Pincoin App',
     },
     description: '대한민국 1등 상품권 쇼핑몰 핀코인',
-    keywords: ['Next.js', 'NextAuth', 'Keycloak', 'Authentication'],
+    keywords: ['컬쳐랜드', '넥슨카드', '구글기프트카드'],
     authors: [{name: '주식회사 핀코인'}],
     creator: '핀코인 개발팀',
     publisher: '핀코인',
@@ -54,18 +55,15 @@ export default function RootLayout({children}: RootLayoutProps) {
         <SessionProvider>
             <ReduxProvider>
                 <header className="sticky top-0">
-                    <div className="mx-auto container">
-                        헤더
-                    </div>
+                    <div>헤더1</div>
+                    <div>헤더2</div>
                 </header>
                 <main className="flex-1">
                     <div className="mx-auto container">
                         {children}
                     </div>
                 </main>
-                <footer>
-                    푸터
-                </footer>
+                <Footer/>
             </ReduxProvider>
         </SessionProvider>
         </body>
