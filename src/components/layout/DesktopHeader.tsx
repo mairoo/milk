@@ -88,14 +88,14 @@ export default function DesktopHeader() {
                         {categoryItems.map((category, index) => (
                             <DropdownMenu key={index}>
                                 <DropdownMenuTrigger
-                                    className="flex items-center justify-center gap-x-1 hover:text-green-700 cursor-pointer w-52">
+                                    className="flex items-center justify-center gap-x-1 cursor-pointer w-52 hover:text-green-700 focus:outline-none">
                                     <span>{category.title}</span>
                                     <ChevronDown className="h-4 w-4"/>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent className="w-48 p-0 rounded-sm">
                                     {category.items.map((item, itemIndex) => (
                                         <DropdownMenuItem key={itemIndex} asChild
-                                                          className="px-4 py-2 hover:!bg-green-950 hover:!text-white rounded-none text-base">
+                                                          className="px-4 py-2 rounded-none text-base hover:!bg-green-950 hover:!text-white">
                                             <a href={item.href} className="cursor-pointer">
                                                 {item.name}
                                             </a>
