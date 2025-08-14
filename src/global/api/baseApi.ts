@@ -6,7 +6,7 @@ import {ErrorResponse} from "@/global/types/dto";
 /// Axios 인스턴스 생성
 const axiosInstance = axios.create({
     baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8080',
-    timeout: 10000, // 10초 타임아웃
+    timeout: 30000, // 30초 타임아웃
     headers: {
         'Content-Type': 'application/json',
     },
@@ -126,7 +126,30 @@ const axiosBaseQuery =
 export const baseApi = createApi({
     reducerPath: 'api',
     baseQuery: axiosBaseQuery(),
-    tagTypes: ['HealthCheck'], // 캐시 태그 정의
+
+    /**
+     * tagTypes 사용법:
+     * - provideTags: 쿼리가 제공하는 데이터 태그 (예: ['User', { type: 'User', id: 1 }])
+     * - invalidatesTags: 뮤테이션 후 무효화할 캐시 태그 (예: ['User'] - 모든 User 캐시 삭제)
+     * - 자동 refetch: invalidatesTags로 지정된 태그의 모든 쿼리가 자동으로 다시 실행됨
+     */
+    tagTypes: ['HealthCheck'],
+
+    /**
+     * keepUnusedDataFor 옵션:
+     * - 숫자(초): 구독자가 없어진 후 지정된 시간만큼 캐시 보관 (디폴트 60초)
+     * - false: 즉시 삭제 (메모리 절약)
+     * - true: 무제한 보관 (메모리 누수 위험)
+     */
+    keepUnusedDataFor: 300, // 미사용 데이터 유지 (디폴트 60초 → 5분)
+
+    /**
+     * refetchOnMountOrArgChange 옵션:
+     * - false: 캐시된 데이터가 있으면 사용, 없으면 새로 요청 (디폴트, 네트워크 요청 최소화)
+     * - true: 컴포넌트 마운트시 항상 새로 요청 (데이터 신선도 우선)
+     * - 숫자(초): 캐시 데이터가 지정된 시간보다 오래되었을 때만 새로 요청 (예: 60)
+     */
+    refetchOnMountOrArgChange: false,
     endpoints: () => ({}),
 })
 
