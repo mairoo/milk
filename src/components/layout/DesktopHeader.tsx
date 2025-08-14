@@ -1,10 +1,9 @@
 import Image from "next/image";
-import Link from "next/link";
 import {LogOut, MessageCircle, Package, User} from "lucide-react";
 import React from "react";
+import {NavLink} from "@/components/layout/NavLink";
 
 export default function DesktopHeader() {
-
     return (
         <header className="sticky top-0">
             <div className="mx-auto container">
@@ -17,39 +16,20 @@ export default function DesktopHeader() {
                             height={50}
                         />
                     </div>
-                    <div className="space-x-4">
-                        <Link
-                            href=""
-                            className="inline-flex items-center gap-2 px-3 py-2 rounded-md  hover:bg-gray-100 hover:text-gray-900 hover:font-bold transition-colors"
-                        >
-                            <Package className="h-4 w-4"/>
+                    <nav className="space-x-4">
+                        <NavLink href="/" icon={Package}>
                             주문/발송
-                        </Link>
-
-                        <Link
-                            href=""
-                            className="inline-flex items-center gap-2 px-3 py-2 rounded-md  hover:bg-gray-100 hover:text-gray-900 hover:font-bold transition-colors"
-                        >
-                            <MessageCircle className="h-4 w-4"/>
+                        </NavLink>
+                        <NavLink href="/" icon={MessageCircle}>
                             고객센터
-                        </Link>
-
-                        <Link
-                            href=""
-                            className="inline-flex items-center gap-2 px-3 py-2 rounded-md  hover:bg-gray-100 hover:text-gray-900 hover:font-bold transition-colors"
-                        >
-                            <User className="h-4 w-4"/>
+                        </NavLink>
+                        <NavLink href="/" icon={User}>
                             마이페이지
-                        </Link>
-
-                        <Link
-                            href=""
-                            className="inline-flex items-center gap-2 px-3 py-2 rounded-md  hover:bg-gray-100 hover:text-gray-900 hover:font-bold transition-colors"
-                        >
-                            <LogOut className="h-4 w-4"/>
+                        </NavLink>
+                        <NavLink href="" icon={LogOut}>
                             로그아웃
-                        </Link>
-                    </div>
+                        </NavLink>
+                    </nav>
                 </div>
             </div>
             <div className="bg-green-50 text-green-950">
