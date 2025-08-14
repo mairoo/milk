@@ -17,7 +17,7 @@ export const store = configureStore({
 
         // 클라이언트 전용 상태
         // ui: uiSlice, // 전역 UI 상태 (모달, 토스트 등)
-        // auth: authSlice, // 인증 관련 클라이언트 상태
+        // lib: authSlice, // 인증 관련 클라이언트 상태
         // theme: themeSlice, // 테마, 다크모드 등
         // notification: notificationSlice, // 알림 상태
     },

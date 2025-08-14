@@ -11,7 +11,7 @@ import {SessionProvider as NextAuthSessionProvider, SessionProviderProps} from '
  * - 세션을 통해 **"사용자가 누구인지, 무엇을 할 수 있는지"를 지속적으로 추적하는 메커니즘
  *
  * ## JWT 세션 전략에서 useSession() 호출 시 동작 과정
- * 1. `/api/auth/session` API 호출
+ * 1. `/api/lib/session` API 호출
  * 2. **NextAuth.js 서버가 브라우저 httpOnly 쿠키 읽기** (클라이언트 측 js에서는 HttpOnly 쿠키 읽을 수 없음)
  * 3. JWT 복호화해서 세션 정보 반환
  *

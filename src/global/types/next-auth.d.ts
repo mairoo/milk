@@ -9,7 +9,7 @@ import {DefaultJWT} from "next-auth/jwt"
  */
 
 /**
- * next-auth 모듈 확장
+ * next-lib 모듈 확장
  * 세션, 사용자, 프로필, 계정 관련 타입을 확장
  */
 declare module "next-auth" {
@@ -82,7 +82,7 @@ declare module "next-auth" {
 }
 
 /**
- * next-auth/jwt 모듈 확장
+ * next-lib/jwt 모듈 확장
  * JWT 토큰 관련 타입을 확장
  *
  * next-auth와 별도 모듈로 분리된 이유:

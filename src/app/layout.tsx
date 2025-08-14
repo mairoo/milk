@@ -7,8 +7,8 @@ import {ReduxProvider} from "@/global/providers/ReduxProvider";
 import {RootLayoutProps} from "@/global/types/layout";
 import Footer from "@/components/layout/Footer";
 import DesktopHeader from "@/components/layout/DesktopHeader";
-import {authOptions} from "@/app/api/auth/[...nextauth]/route"
 import {getServerSession} from "next-auth";
+import {authOptions} from "@/global/lib/auth";
 
 const nanumGothic = Nanum_Gothic({
     weight: ['400', '700', '800'],
