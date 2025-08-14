@@ -6,10 +6,14 @@ import {baseApi} from '@/global/api/baseApi'
  */
 export const store = configureStore({
     reducer: {
-        // RTK Query API reducer
+        // RTK Query API reducer (라이브러리 자동 생성)
         [baseApi.reducerPath]: baseApi.reducer,
 
-        // ui: uiSlice,  // 클라이언트 전용 상태
+        // 클라이언트 전용 상태
+        // ui: uiSlice, // 전역 UI 상태 (모달, 토스트 등)
+        // auth: authSlice, // 인증 관련 클라이언트 상태
+        // theme: themeSlice, // 테마, 다크모드 등
+        // notification: notificationSlice, // 알림 상태
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({
@@ -23,8 +27,38 @@ export const store = configureStore({
     devTools: process.env.NODE_ENV !== 'production',
 })
 
+/**
+ * 사용자 경험 향상을 위해 상태를 영속화하는 전략
+ * - Store 구독 및 상태 변화 감지
+ * - 특정 상태 변화에 대한 부수 효과 처리
+ * - localStorage 동기화 등에 활용
+ *
+ * 예시
+ * - 즐겨찾기: 사용자가 설정한 즐겨찾기 목록 유지
+ * - 장바구니: 페이지 새로고침해도 담아둔 상품 보존
+ * - 필터 설정: 사용자가 마지막에 설정한 검색/필터 조건 복원
+ * - UI 설정: 다크모드, 언어 설정, 레이아웃 선호도 등
+ */
+
+store.subscribe(() => {
+})
+
+// 앱 시작 시 localStorage에서 즐겨찾기 복원 처리
+
+/**
+ * 타입 정의들
+ * - TypeScript와 완벽한 통합을 위한 타입들
+ * - 컴포넌트에서 타입 안전하게 사용 가능
+ */
+
+// 루트 상태 타입
 export type RootState = ReturnType<typeof store.getState>
+
+// Dispatch 타입
 export type AppDispatch = typeof store.dispatch
 
-// RTK Query를 위한 타입들
+// Store 타입
+export type AppStore = typeof store
+
+//  RTK Query 상태 타입 (필요시 사용)
 export type ApiState = ReturnType<typeof baseApi.reducer>
