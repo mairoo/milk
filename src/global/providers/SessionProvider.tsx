@@ -20,11 +20,13 @@ import {SessionProvider as NextAuthSessionProvider, SessionProviderProps} from '
  */
 export default function SessionProvider({
                                             children,
+                                            session, // 서버에서 전달받은 초기 세션 데이터
                                             refetchInterval = 240, // 4분마다 갱신 (5분 토큰보다 1분 빠르게)
-                                            refetchOnWindowFocus = true,
+                                            refetchOnWindowFocus = false, // 페이지 전환 시 깜박임 방지
                                         }: SessionProviderProps) {
     return (
         <NextAuthSessionProvider
+            session={session} // 초기 세션 데이터 전달로 하이드레이션 시 즉시 세션 정보 사용 가능
             refetchInterval={refetchInterval}
             refetchOnWindowFocus={refetchOnWindowFocus}
             basePath="/api/auth"

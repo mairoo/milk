@@ -107,25 +107,7 @@ export default function DesktopHeader() {
                         </Link>
                     </div>
                     <nav className="space-x-4">
-                        {session ? (
-                            <>
-                                <NavLink href="/orders" icon={Package}>
-                                    주문/발송
-                                </NavLink>
-                                <NavLink href="/cart" icon={ShoppingCart}>
-                                    장바구니
-                                </NavLink>
-                                <NavLink href="/customer-service" icon={MessageCircle}>
-                                    고객센터
-                                </NavLink>
-                                <NavLink href="/mypage" icon={User}>
-                                    마이페이지
-                                </NavLink>
-                                <NavLink href="" icon={LogOut} onClick={handleLogout}>
-                                    로그아웃
-                                </NavLink>
-                            </>
-                        ) : (
+                        {!session && (
                             <>
                                 <NavLink href="" icon={LogIn} onClick={handleLogin}>
                                     로그인
@@ -133,14 +115,24 @@ export default function DesktopHeader() {
                                 <NavLink href="/auth/register" icon={UserPlus}>
                                     회원가입
                                 </NavLink>
-                                <NavLink href="/orders" icon={Package}>
-                                    주문/발송
+                            </>
+                        )}
+                        <NavLink href="/orders" icon={Package}>
+                            주문/발송
+                        </NavLink>
+                        <NavLink href="/cart" icon={ShoppingCart}>
+                            장바구니
+                        </NavLink>
+                        <NavLink href="/customer-service" icon={MessageCircle}>
+                            고객센터
+                        </NavLink>
+                        {session && (
+                            <>
+                                <NavLink href="/mypage" icon={User}>
+                                    마이페이지
                                 </NavLink>
-                                <NavLink href="/cart" icon={ShoppingCart}>
-                                    장바구니
-                                </NavLink>
-                                <NavLink href="/customer-service" icon={MessageCircle}>
-                                    고객센터
+                                <NavLink href="" icon={LogOut} onClick={handleLogout}>
+                                    로그아웃
                                 </NavLink>
                             </>
                         )}

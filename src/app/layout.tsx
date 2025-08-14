@@ -7,6 +7,8 @@ import {ReduxProvider} from "@/global/providers/ReduxProvider";
 import {RootLayoutProps} from "@/global/types/layout";
 import Footer from "@/components/layout/Footer";
 import DesktopHeader from "@/components/layout/DesktopHeader";
+import {authOptions} from "@/app/api/auth/[...nextauth]/route"
+import {getServerSession} from "next-auth";
 
 const nanumGothic = Nanum_Gothic({
     weight: ['400', '700', '800'],
@@ -49,11 +51,13 @@ export const viewport: Viewport = {
     // maximumScale: 1, - 접근성을 위해 사용자 확대/축소 허용
 }
 
-export default function RootLayout({children}: RootLayoutProps) {
+export default async function RootLayout({children}: RootLayoutProps) {
+    const session = await getServerSession(authOptions)
+
     return (
         <html lang="ko">
         <body className={`${nanumGothic.className} font-sans antialiased min-h-screen flex flex-col`}>
-        <SessionProvider>
+        <SessionProvider session={session}>
             <ReduxProvider>
                 <DesktopHeader/>
                 <main className="flex-1">
