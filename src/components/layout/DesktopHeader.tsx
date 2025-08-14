@@ -1,5 +1,5 @@
 import Image from "next/image";
-import {ChevronDown, LogOut, MessageCircle, Package, User} from "lucide-react";
+import {ChevronDown, LogIn, LogOut, MessageCircle, Package, ShoppingCart, User, UserPlus} from "lucide-react";
 import React from "react";
 import {NavLink} from "@/components/layout/NavLink";
 import {DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,} from "@/components/ui/dropdown-menu";
@@ -67,8 +67,17 @@ export default function DesktopHeader() {
                         </Link>
                     </div>
                     <nav className="space-x-4">
+                        <NavLink href="/" icon={LogIn}>
+                            로그인
+                        </NavLink>
+                        <NavLink href="/" icon={UserPlus}>
+                            회원가입
+                        </NavLink>
                         <NavLink href="/" icon={Package}>
                             주문/발송
+                        </NavLink>
+                        <NavLink href="/" icon={ShoppingCart}>
+                            장바구니
                         </NavLink>
                         <NavLink href="/" icon={MessageCircle}>
                             고객센터

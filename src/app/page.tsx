@@ -114,46 +114,6 @@ export default function Home() {
                     </div>
 
                     <div>
-                        <h3>API 테스트</h3>
-                        <button
-                            onClick={async () => {
-                                if (!session?.accessToken) {
-                                    alert('로그인이 필요합니다.')
-                                    return
-                                }
-
-                                try {
-                                    // 백엔드 API 호출 예시
-                                    const response = await fetch('/api/test', {
-                                        headers: {
-                                            'Authorization': `Bearer ${session.accessToken}`
-                                        }
-                                    })
-
-                                    if (response.ok) {
-                                        const data = await response.text()
-                                        alert(`API 호출 성공: ${data}`)
-                                    } else {
-                                        alert(`API 호출 실패: ${response.status}`)
-                                    }
-                                } catch (error) {
-                                    alert(`API 호출 오류: ${error}`)
-                                }
-                            }}
-                            style={{
-                                padding: '10px 20px',
-                                backgroundColor: '#6c757d',
-                                color: 'white',
-                                border: 'none',
-                                borderRadius: '4px',
-                                cursor: 'pointer',
-                                marginRight: '10px'
-                            }}
-                            disabled={!session}
-                        >
-                            인증된 API 호출 테스트
-                        </button>
-
                         <button
                             onClick={() => {
                                 console.log('Current Session:', session)
