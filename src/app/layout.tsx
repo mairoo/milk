@@ -50,10 +50,22 @@ export const viewport: Viewport = {
 export default function RootLayout({children}: RootLayoutProps) {
     return (
         <html lang="ko">
-        <body className={`${nanumGothic.className} font-sans antialiased`}>
+        <body className={`${nanumGothic.className} font-sans antialiased min-h-screen flex flex-col`}>
         <SessionProvider>
             <ReduxProvider>
-                {children}
+                <header className="sticky top-0">
+                    <div className="mx-auto container">
+                        헤더
+                    </div>
+                </header>
+                <main className="flex-1">
+                    <div className="mx-auto container">
+                        {children}
+                    </div>
+                </main>
+                <footer>
+                    푸터
+                </footer>
             </ReduxProvider>
         </SessionProvider>
         </body>
