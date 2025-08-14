@@ -5,7 +5,7 @@ import {NavLink} from "@/components/layout/NavLink";
 
 export default function DesktopHeader() {
     return (
-        <header className="sticky top-0">
+        <header className="sticky top-0 bg-white">
             <div className="mx-auto container">
                 <div className="mx-auto container flex justify-between items-center px-4 sm:px-0 py-2">
                     <div>
