@@ -52,6 +52,10 @@ export const viewport: Viewport = {
 }
 
 export default async function RootLayout({children}: RootLayoutProps) {
+    // 브라우저 쿠키 읽기 (빠름)
+    // JWT 복호화 (CPU 연산 필요)
+    // 토큰 만료 검증 (빠름)
+    // 필요시 토큰 갱신 (외부 API 호출 - 지연 가능성)
     const session = await getServerSession(authOptions)
 
     return (
