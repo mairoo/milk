@@ -84,11 +84,11 @@ export default function DesktopHeader() {
             </div>
             <div className="bg-green-50 text-green-950">
                 <div className="mx-auto container flex justify-between items-center px-4 sm:px-0 py-2">
-                    <div className="flex items-center gap-x-1">
+                    <div className="flex items-center gap-x-12">
                         {categoryItems.map((category, index) => (
                             <DropdownMenu key={index}>
                                 <DropdownMenuTrigger
-                                    className="flex items-center justify-center gap-x-1 cursor-pointer w-52 hover:text-green-700 focus:outline-none">
+                                    className="flex items-center justify-start gap-x-1 cursor-pointer hover:text-green-700 focus:outline-none">
                                     <span>{category.title}</span>
                                     <ChevronDown className="h-4 w-4"/>
                                 </DropdownMenuTrigger>

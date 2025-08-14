@@ -186,20 +186,6 @@ export default function Home() {
                     {isHealthy && <p>✅ S3 연결 정상</p>}
                     {hasError && <p>❌ 오류: {error}</p>}
                 </div>
-
-                {/* 보안 안내 섹션 */}
-                <section style={{
-                    padding: '15px',
-                    backgroundColor: '#fff3cd',
-                    borderRadius: '8px',
-                    fontSize: '14px',
-                    color: '#856404'
-                }}>
-                    <p><strong>보안 안내:</strong></p>
-                    <p>• Keycloak에서 로그아웃하면 최대 5분 내에 이 애플리케이션 세션도 자동 무효화됩니다.</p>
-                    <p>• 토큰은 자동으로 갱신되며, 갱신 실패 시 자동으로 로그아웃됩니다.</p>
-                    <p>• 모든 API 호출에는 Bearer 토큰이 포함되어야 합니다.</p>
-                </section>
             </main>
         </div>
     )
