@@ -6,6 +6,7 @@ import {Nanum_Gothic} from 'next/font/google'
 import {ReduxProvider} from "@/global/providers/ReduxProvider";
 import {RootLayoutProps} from "@/global/types/layout";
 import Footer from "@/components/layout/Footer";
+import DesktopHeader from "@/components/layout/DesktopHeader";
 
 const nanumGothic = Nanum_Gothic({
     weight: ['400', '700', '800'],
@@ -54,10 +55,7 @@ export default function RootLayout({children}: RootLayoutProps) {
         <body className={`${nanumGothic.className} font-sans antialiased min-h-screen flex flex-col`}>
         <SessionProvider>
             <ReduxProvider>
-                <header className="sticky top-0">
-                    <div>헤더1</div>
-                    <div>헤더2</div>
-                </header>
+                <DesktopHeader/>
                 <main className="flex-1">
                     <div className="mx-auto container">
                         {children}

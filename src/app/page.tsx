@@ -27,11 +27,6 @@ export default function Home() {
 
     return (
         <div style={{maxWidth: '800px', margin: '0 auto', padding: '20px'}}>
-            <header style={{marginBottom: '30px', textAlign: 'center'}}>
-                <h1>Pincoin App</h1>
-                <p>NextAuth.js + Keycloak 인증 시스템</p>
-            </header>
-
             <main>
                 {/* 로그인 상태 섹션 */}
                 <section style={{marginBottom: '30px', padding: '20px', border: '1px solid #ddd', borderRadius: '8px'}}>

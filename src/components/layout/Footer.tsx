@@ -2,10 +2,10 @@ import React from "react";
 
 export default function Footer() {
     return (
-        <>
+        <footer className="text-sm">
             {/* 상단 섹션 - 링크들과 회사 정보 */}
             <div className="bg-green-50 text-green-950">
-                <div className="mx-auto container px-4 py-6 space-y-4">
+                <div className="mx-auto container px-4 sm:px-0 py-6 space-y-4">
                     <div className="flex flex-wrap gap-x-6 gap-y-0.5">
                         <span>이용안내</span>
                         <span>자주 묻는 질문</span>
@@ -26,7 +26,7 @@ export default function Footer() {
 
             {/* 하단 섹션 - 저작권 정보 */}
             <div className="bg-green-950 text-white">
-                <div className="mx-auto container px-4">
+                <div className="mx-auto container px-4 sm:px-0">
                     <div
                         className="flex flex-col sm:flex-row sm:justify-center sm:gap-16 items-center text-center py-4">
                         <span>Copyright © 2012-{new Date().getFullYear()} www.pincoin.co.kr</span>
@@ -34,6 +34,6 @@ export default function Footer() {
                     </div>
                 </div>
             </div>
-        </>
+        </footer>
     );
 }
