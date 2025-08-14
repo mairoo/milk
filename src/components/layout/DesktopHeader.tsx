@@ -92,7 +92,7 @@ export default function DesktopHeader() {
                                     <span>{category.title}</span>
                                     <ChevronDown className="h-4 w-4"/>
                                 </DropdownMenuTrigger>
-                                <DropdownMenuContent className="w-48 p-0 rounded-sm">
+                                <DropdownMenuContent className="w-48 p-0 rounded-sm" align="start">
                                     {category.items.map((item, itemIndex) => (
                                         <DropdownMenuItem key={itemIndex} asChild
                                                           className="px-4 py-2 rounded-none text-base hover:!bg-green-950 hover:!text-white">
