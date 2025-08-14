@@ -1,6 +1,6 @@
 'use client'
 
-import {signIn, signOut, useSession} from 'next-auth/react'
+import {useSession} from 'next-auth/react'
 import {useS3HealthCheck} from "@/features/s3/admin/hooks";
 
 export default function Home() {
@@ -32,72 +32,17 @@ export default function Home() {
                 <section style={{marginBottom: '30px', padding: '20px', border: '1px solid #ddd', borderRadius: '8px'}}>
                     <h2>현재 로그인 상태</h2>
 
-                    {session ? (
-                        <div>
-                            <p style={{color: 'green', fontWeight: 'bold'}}>✅ 로그인됨</p>
-
-                            <div style={{marginTop: '15px'}}>
-                                <h3>사용자 정보</h3>
-                                <ul style={{listStyle: 'none', padding: 0}}>
-                                    <li><strong>이름:</strong> {session.user?.name || 'N/A'}</li>
-                                    <li><strong>이메일:</strong> {session.user?.email || 'N/A'}</li>
-                                    <li><strong>사용자명:</strong> {session.user?.preferred_username || 'N/A'}</li>
-                                    <li><strong>사용자 ID:</strong> {session.user?.id || 'N/A'}</li>
-                                </ul>
-                            </div>
-
-                            <div style={{marginTop: '20px'}}>
-                                <button
-                                    onClick={() => signOut({callbackUrl: '/'})}
-                                    style={{
-                                        padding: '10px 20px',
-                                        backgroundColor: '#dc3545',
-                                        color: 'white',
-                                        border: 'none',
-                                        borderRadius: '4px',
-                                        cursor: 'pointer'
-                                    }}
-                                >
-                                    로그아웃
-                                </button>
-                            </div>
+                    {session &&
+                        <div style={{marginTop: '15px'}}>
+                            <h3>로그인 사용자 정보</h3>
+                            <ul style={{listStyle: 'none', padding: 0}}>
+                                <li><strong>이름:</strong> {session.user?.name || 'N/A'}</li>
+                                <li><strong>이메일:</strong> {session.user?.email || 'N/A'}</li>
+                                <li><strong>사용자명:</strong> {session.user?.preferred_username || 'N/A'}</li>
+                                <li><strong>사용자 ID:</strong> {session.user?.id || 'N/A'}</li>
+                            </ul>
                         </div>
-                    ) : (
-                        <div>
-                            <p style={{color: 'red', fontWeight: 'bold'}}>❌ 로그인되지 않음</p>
-                            <p>Keycloak을 통해 로그인하세요.</p>
-
-                            <div style={{marginTop: '20px'}}>
-                                <button
-                                    onClick={() => signIn('keycloak')}
-                                    style={{
-                                        padding: '10px 20px',
-                                        backgroundColor: '#007bff',
-                                        color: 'white',
-                                        border: 'none',
-                                        borderRadius: '4px',
-                                        cursor: 'pointer',
-                                        marginRight: '10px'
-                                    }}
-                                >
-                                    로그인
-                                </button>
-                            </div>
-                        </div>
-                    )}
-                </section>
-
-                {/* 시스템 정보 섹션 */}
-                <section
-                    style={{marginBottom: '30px', padding: '20px', backgroundColor: '#f8f9fa', borderRadius: '8px'}}>
-                    <h2>시스템 정보</h2>
-                    <ul style={{listStyle: 'none', padding: 0}}>
-                        <li>• Keycloak을 통한 안전한 인증</li>
-                        <li>• Single Sign-On (SSO) 지원</li>
-                        <li>• 5분 토큰으로 빠른 보안 검증</li>
-                        <li>• 자동 토큰 갱신</li>
-                        <li>• JWT 기반 세션 관리</li>
-                    </ul>
+                    }
                 </section>
 
                 {/* 테스트 기능 섹션 */}
