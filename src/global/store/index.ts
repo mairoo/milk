@@ -3,6 +3,12 @@ import {baseApi} from '@/global/api/baseApi'
 
 /**
  * Redux Store 설정
+ *
+ * 핵심 구성:
+ * - baseApi: RTK Query (서버 상태)
+ * - userSlice: 클라이언트 상태 (UI, 필터, 선택 등)
+ * - middleware: RTK Query 미들웨어 추가
+ * - devTools: 개발 환경에서만 활성화
  */
 export const store = configureStore({
     reducer: {
