@@ -54,9 +54,17 @@ export const authOptions: NextAuthOptions = {
                 token.preferred_username = profile.preferred_username || ''
             }
 
-            // 이전 토큰 갱신 오류가 있으면 세션 무효화
+            // 이전 토큰 갱신 오류가 있으면 오류 토큰 반환 (세션 무효화)
+            // null 대신 만료된 토큰 반환으로 타입 안정성 보장
             if (token.error === 'RefreshTokenExpired' || token.error === 'RefreshAccessTokenError') {
-                return null as unknown as JWT
+                return {
+                    ...token,
+                    error: token.error,
+                    accessToken: '',
+                    refreshToken: '',
+                    accessTokenExpires: 0,
+                    refreshTokenExpires: 0
+                }
             }
 
             // 액세스 토큰이 아직 유효하면 기존 토큰 반환
@@ -67,20 +75,34 @@ export const authOptions: NextAuthOptions = {
             // 액세스 토큰 만료 이후 갱신 시도
             const refreshedToken = await refreshAccessToken(token)
 
+            // 갱신 실패하면 오류 토큰 반환
+            // null 대신 만료된 토큰 반환으로 타입 안정성 보장
             if (refreshedToken.error) {
-                return null as unknown as JWT
+                return {
+                    ...token,
+                    error: refreshedToken.error,
+                    accessToken: '',
+                    refreshToken: '',
+                    accessTokenExpires: 0,
+                    refreshTokenExpires: 0
+                }
             }
 
             return refreshedToken
         },
 
         async session({session, token}) {
-            if (!token) {
+            // 토큰에 오류가 있거나 유효하지 않은 경우 세션 무효화
+            // !token: JWT 토큰 자체가 없음 (심각한 오류)
+            // token.error: 토큰 갱신 실패 오류
+            // !token.accessToken: 만료된 토큰 오류 (액세스 토큰이 빈 문자열)
+            if (!token || token.error || !token.accessToken) {
                 return {
                     ...session,
                     user: undefined,
                     accessToken: undefined,
-                    expires: new Date(0).toISOString()
+                    expires: new Date(0).toISOString(),
+                    error: token?.error, // "로그인 필요" vs "세션 만료로 인한 로그인 필요" 구분 가능
                 }
             }
 
@@ -128,7 +150,7 @@ export const authOptions: NextAuthOptions = {
                 }
             }
         }
-    }
+    },
 }
 
 async function refreshAccessToken(token: JWT): Promise<JWT> {
