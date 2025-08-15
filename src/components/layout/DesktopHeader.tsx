@@ -8,8 +8,13 @@ import {NavLink} from "@/components/layout/NavLink";
 import {DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,} from "@/components/ui/dropdown-menu";
 import Link from "next/link";
 import {categoryItems} from "@/global/types/constants";
+import {cn} from "@/lib/utils";
 
-export default function DesktopHeader() {
+interface DesktopHeaderProps {
+    className?: string;
+}
+
+export default function DesktopHeader({className}: DesktopHeaderProps) {
     const {data: session, status} = useSession();
 
     // 로그아웃 핸들러
@@ -24,9 +29,9 @@ export default function DesktopHeader() {
     // 로딩 중일 때는 기본 메뉴만 표시
     if (status === 'loading') {
         return (
-            <header className="sticky top-0 bg-white">
+            <header className={cn("sticky top-0 bg-white", className)}>
                 <div className="mx-auto container">
-                    <div className="mx-auto container flex justify-between items-center px-4 sm:px-0 py-2">
+                    <div className="mx-auto container flex justify-between items-center px-4 py-2">
                         <div>
                             <Link href="/">
                                 <Image
@@ -48,9 +53,9 @@ export default function DesktopHeader() {
     }
 
     return (
-        <header className="sticky top-0 bg-white">
+        <header className={cn("sticky top-0 bg-white", className)}>
             <div className="mx-auto container">
-                <div className="mx-auto container flex justify-between items-center px-4 sm:px-0 py-2">
+                <div className="mx-auto container flex justify-between items-center px-4 py-2">
                     <div>
                         <Link href="/">
                             <Image
@@ -96,7 +101,7 @@ export default function DesktopHeader() {
                 </div>
             </div>
             <div className="bg-green-50 text-green-950">
-                <div className="mx-auto container flex justify-between items-center px-4 sm:px-0 py-2">
+                <div className="mx-auto container flex justify-between items-center px-4 py-2">
                     <div className="flex items-center gap-x-12">
                         {categoryItems.map((category, index) => (
                             <DropdownMenu key={index}>
