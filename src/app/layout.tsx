@@ -9,6 +9,7 @@ import Footer from "@/components/layout/Footer";
 import DesktopHeader from "@/components/layout/DesktopHeader";
 import {getServerSession} from "next-auth";
 import {authOptions} from "@/global/lib/auth";
+import MobileHeader from "@/components/layout/MobileHeader";
 
 const nanumGothic = Nanum_Gothic({
     weight: ['400', '700', '800'],
@@ -69,6 +70,7 @@ export default async function RootLayout({children}: RootLayoutProps) {
         <SessionProvider session={session}>
             <ReduxProvider>
                 <DesktopHeader className="hidden md:block" />
+                <MobileHeader className="block md:hidden" />
                 <main className="flex-1">
                     <div className="mx-auto container">
                         {children}
