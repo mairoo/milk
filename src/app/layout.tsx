@@ -69,14 +69,19 @@ export default async function RootLayout({children}: RootLayoutProps) {
         <body className={`${nanumGothic.className} font-sans antialiased min-h-screen flex flex-col`}>
         <SessionProvider session={session}>
             <ReduxProvider>
-                <DesktopHeader className="hidden md:block" />
-                <MobileHeader className="block md:hidden" />
+                <DesktopHeader className="hidden md:block"/>
+                <MobileHeader className="block md:hidden"/>
                 <main className="flex-1">
                     <div className="mx-auto container">
                         {children}
                     </div>
                 </main>
                 <Footer/>
+                {/* 글로벌 오버레이 백드롭 (모달, 토스트 등) */}
+                {/* TODO: 모바일 좌측 메뉴 모달 */}
+                {/* TODO: 모바일 우측 메뉴 모달 */}
+                {/* TODO: 토스트 컨테이너 */}
+                {/* TODO: 기타 글로벌 모달들 */}
             </ReduxProvider>
         </SessionProvider>
         </body>

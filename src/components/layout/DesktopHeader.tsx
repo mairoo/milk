@@ -3,12 +3,13 @@
 import Image from "next/image";
 import {ChevronDown, LogIn, LogOut, MessageCircle, Package, ShoppingCart, User, UserPlus} from "lucide-react";
 import React from "react";
-import {signIn, signOut, useSession} from "next-auth/react";
+import {useSession} from "next-auth/react";
 import {NavLink} from "@/components/layout/NavLink";
 import {DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,} from "@/components/ui/dropdown-menu";
 import Link from "next/link";
 import {categoryItems} from "@/global/types/constants";
 import {cn} from "@/lib/utils";
+import {useAuth} from "@/features/auth/shared/hooks";
 
 interface DesktopHeaderProps {
     className?: string;
@@ -16,15 +17,7 @@ interface DesktopHeaderProps {
 
 export default function DesktopHeader({className}: DesktopHeaderProps) {
     const {data: session, status} = useSession();
-
-    // 로그아웃 핸들러
-    const handleLogout = () => {
-        signOut({callbackUrl: '/'});
-    };
-
-    const handleLogin = () => {
-        signIn('keycloak');
-    }
+    const {handleLogin, handleLogout} = useAuth();
 
     // 로딩 중일 때는 기본 메뉴만 표시
     if (status === 'loading') {
