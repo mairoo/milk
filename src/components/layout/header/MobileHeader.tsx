@@ -6,12 +6,15 @@ import Link from "next/link";
 import Image from "next/image";
 import {Button} from "@/components/ui/button";
 import {Menu, ShoppingCart} from "lucide-react";
+import {useDrawer} from "@/features/ui/drawer/hooks";
 
 interface MobileHeaderProps {
     className?: string;
 }
 
 export default function MobileHeader({className}: MobileHeaderProps) {
+    const {openMobileMenu, openMobileCart} = useDrawer();
+
     // sticky 요소가 동시에 flex container가 되면, flex 레이아웃 계산과 sticky positioning 계산이 서로 간섭
     // sticky position만 담당하는 요소와 가로 배치 div 요소 분리
     // 버튼 테두리는 variant="outline"
@@ -20,7 +23,12 @@ export default function MobileHeader({className}: MobileHeaderProps) {
         <header className={cn("sticky top-0 bg-white", className)}>
             <div className="flex items-center p-2">
                 <div>
-                    <Button variant="outline" size="icon" className="h-10 w-10">
+                    <Button
+                        variant="outline"
+                        size="icon"
+                        className="h-10 w-10"
+                        onClick={openMobileMenu}
+                    >
                         <Menu className="size-5"/>
                         <span className="sr-only">메뉴</span>
                     </Button>
@@ -37,7 +45,12 @@ export default function MobileHeader({className}: MobileHeaderProps) {
                     </Link>
                 </div>
                 <div>
-                    <Button variant="outline" size="icon" className="h-10 w-10">
+                    <Button
+                        variant="outline"
+                        size="icon"
+                        className="h-10 w-10"
+                        onClick={openMobileCart}
+                    >
                         <ShoppingCart className="size-5"/>
                         <span className="sr-only">장바구니</span>
                     </Button>

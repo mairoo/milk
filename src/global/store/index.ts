@@ -1,5 +1,6 @@
 import {configureStore} from '@reduxjs/toolkit'
 import {baseApi} from '@/global/api/baseApi'
+import drawerReducer from '@/features/ui/drawer/slice'
 
 /**
  * Redux Store 설정
@@ -17,6 +18,8 @@ export const store = configureStore({
 
         // 클라이언트 전용 상태
         // ui: uiSlice, // 전역 UI 상태 (모달, 토스트 등)
+        // 클라이언트 전용 상태
+        drawer: drawerReducer, // UI 서랍 상태 (모바일 메뉴, 장바구니 등)
         // lib: authSlice, // 인증 관련 클라이언트 상태
         // theme: themeSlice, // 테마, 다크모드 등
         // notification: notificationSlice, // 알림 상태

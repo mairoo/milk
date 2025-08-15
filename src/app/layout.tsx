@@ -10,6 +10,7 @@ import DesktopHeader from "@/components/layout/header/DesktopHeader";
 import {getServerSession} from "next-auth";
 import {authOptions} from "@/global/lib/auth";
 import MobileHeader from "@/components/layout/header/MobileHeader";
+import MobileDrawerSheet from "@/components/layout/drawer/MobileDrawerSheet";
 
 const nanumGothic = Nanum_Gothic({
     weight: ['400', '700', '800'],
@@ -78,7 +79,7 @@ export default async function RootLayout({children}: RootLayoutProps) {
                 </main>
                 <Footer/>
                 {/* 글로벌 오버레이 백드롭 (모달, 토스트 등) */}
-                {/* TODO: 모바일 서랍 메뉴 모달 */}
+                <MobileDrawerSheet/>
                 {/* TODO: 모바일 장바구니 메뉴 모달 */}
                 {/* TODO: 토스트 컨테이너 */}
                 {/* TODO: 확인/경고 다이얼로그 */}
