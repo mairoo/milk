@@ -71,7 +71,7 @@ export default async function RootLayout({children}: RootLayoutProps) {
             <ReduxProvider>
                 <DesktopHeader className="hidden md:block"/>
                 <MobileHeader className="block md:hidden"/>
-                <main className="flex-1">
+                <main className="flex-1 py-2 px-2 md:px-0">
                     <div className="mx-auto container">
                         {children}
                     </div>

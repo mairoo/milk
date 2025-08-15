@@ -25,7 +25,7 @@ export default function DesktopHeader({className}: DesktopHeaderProps) {
         return (
             <header className={cn("sticky top-0 bg-white", className)}>
                 <div className="mx-auto container">
-                    <div className="mx-auto container flex justify-between items-center px-4 py-2">
+                    <div className="mx-auto container flex justify-between items-center py-2">
                         <div>
                             <Link href="/public">
                                 <Image
@@ -49,7 +49,7 @@ export default function DesktopHeader({className}: DesktopHeaderProps) {
     return (
         <header className={cn("sticky top-0 bg-white", className)}>
             <div className="mx-auto container">
-                <div className="mx-auto container flex justify-between items-center px-4 py-2">
+                <div className="mx-auto container flex justify-between items-center py-4">
                     <div>
                         <Link href="/">
                             <Image
@@ -95,7 +95,7 @@ export default function DesktopHeader({className}: DesktopHeaderProps) {
                 </div>
             </div>
             <div className="bg-green-50 text-green-950">
-                <div className="mx-auto container flex justify-between items-center px-4 py-2">
+                <div className="mx-auto container flex justify-between items-center py-4">
                     <div className="flex items-center gap-x-12">
                         {categoryItems.map((category, index) => (
                             <DropdownMenu key={index} modal={false}>

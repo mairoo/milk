@@ -1,4 +1,3 @@
-import {Button} from "@/components/ui/button";
 import {cn} from "@/lib/utils";
 import {LucideIcon} from "lucide-react";
 import React from "react";
@@ -15,20 +14,19 @@ export function NavButton({
                               icon: Icon,
                               children,
                               onClick,
-                              variant = "ghost",
                               className
                           }: NavButtonProps) {
     return (
-        <Button
-            variant={variant}
+        <button
+            type="button"
             onClick={onClick}
             className={cn(
-                "inline-flex items-center gap-2 h-auto px-3 py-2 hover:bg-gray-100 hover:text-gray-900 hover:font-bold cursor-pointer",
+                "inline-flex items-center gap-2 px-3 py-2 border rounded-md hover:bg-gray-100 hover:text-gray-900 hover:font-bold transition-colors",
                 className
             )}
         >
             <Icon className="h-4 w-4"/>
             {children}
-        </Button>
+        </button>
     )
 }
