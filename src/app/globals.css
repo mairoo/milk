@@ -8,6 +8,12 @@ html {
     scrollbar-gutter: stable;
 }
 
+/* Radix UI 모달/드롭다운으로 인한 레이아웃 시프트 방지 */
+body[style*="overflow: hidden"] {
+    scrollbar-gutter: stable;
+    padding-right: 0 !important; /* Radix가 자동 추가하는 padding-right 제거 */
+}
+
 /* Tailwind v4 font family */
 @theme {
     --font-family-nanum-gothic: "Nanum Gothic", system-ui, sans-serif;

@@ -98,7 +98,7 @@ export default function DesktopHeader({className}: DesktopHeaderProps) {
                 <div className="mx-auto container flex justify-between items-center px-4 py-2">
                     <div className="flex items-center gap-x-12">
                         {categoryItems.map((category, index) => (
-                            <DropdownMenu key={index}>
+                            <DropdownMenu key={index} modal={false}>
                                 <DropdownMenuTrigger
                                     className="flex items-center justify-start gap-x-1 cursor-pointer hover:text-green-700 focus:outline-none">
                                     <span>{category.title}</span>
