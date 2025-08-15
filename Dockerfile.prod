@@ -8,6 +8,9 @@ COPY package.json package-lock.json ./
 # 의존성 설치
 RUN npm ci --only=production=false
 
+# 환경변수 파일 복사 (빌드 타임에 NEXT_PUBLIC_* 변수들이 번들에 포함됨)
+COPY .env.production .env.production
+
 # 소스 코드 복사
 COPY . .
 

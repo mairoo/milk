@@ -25,6 +25,9 @@ jobs:
           restore-keys: |
             npm-${{ runner.os }}-
 
+      - name: Copy production config
+        run: cp ${{ secrets.CONFIG_PATH }}/dotenv .env.production
+
       - name: Install dependencies
         run: npm ci
 
@@ -33,10 +36,13 @@ jobs:
 
       - name: Build Docker image
         run: |
-          echo "🔨 Building frontend Docker image with GitHub Dockerfile..."
+          echo "🔨 Building frontend Docker image..."
           docker build -f Dockerfile.prod -t ${{ secrets.PREFIX }}-frontend:latest .
 
       - name: Verify Docker image
         run: |
           echo "✅ Frontend Docker image built successfully"
           docker images ${{ secrets.PREFIX }}-frontend:latest
+
+      - name: Cleanup
+        run: rm -f .env.production
