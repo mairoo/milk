@@ -15,6 +15,16 @@ export default function Home() {
         fullCheck,
     } = useS3HealthCheck()
 
+    // 세션 에러가 있는 경우 사용자에게 안내
+    if (session?.error) {
+        return (
+            <div style={{padding: '20px', textAlign: 'center'}}>
+                <h1>세션 문제 발생: {session.error}</h1>
+                <p>로그인 세션에 문제가 있습니다. 다시 로그인해주세요.</p>
+            </div>
+        )
+    }
+
     // 로딩 상태
     if (status === 'loading') {
         return (
