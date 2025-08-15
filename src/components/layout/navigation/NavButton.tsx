@@ -21,7 +21,7 @@ export function NavButton({
             type="button"
             onClick={onClick}
             className={cn(
-                "inline-flex items-center gap-2 px-3 py-2 border rounded-md hover:bg-gray-100 hover:text-gray-900 hover:font-bold transition-colors",
+                "inline-flex items-center gap-2 px-3 py-2 border rounded-md hover:bg-gray-100 hover:text-gray-900 hover:font-bold transition-colors cursor-pointer",
                 className
             )}
         >

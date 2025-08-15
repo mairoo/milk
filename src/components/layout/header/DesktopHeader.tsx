@@ -1,7 +1,7 @@
 'use client'
 
 import Image from "next/image";
-import {ChevronDown, LogIn, LogOut, MessageCircle, Package, ShoppingCart, User, UserPlus} from "lucide-react";
+import {ChevronDown, LogIn, LogOut, MessageCircle, Package, Search, ShoppingCart, User, UserPlus} from "lucide-react";
 import React from "react";
 import {useSession} from "next-auth/react";
 import {NavLink} from "@/components/layout/navigation/NavLink";
@@ -11,6 +11,8 @@ import {categoryItems} from "@/global/types/constants";
 import {cn} from "@/lib/utils";
 import {useAuth} from "@/features/auth/shared/hooks";
 import {NavButton} from "@/components/layout/navigation/NavButton";
+import {Button} from "@/components/ui/button";
+import {Input} from "@/components/ui/input";
 
 interface DesktopHeaderProps {
     className?: string;
@@ -95,7 +97,7 @@ export default function DesktopHeader({className}: DesktopHeaderProps) {
                 </div>
             </div>
             <div className="bg-green-50 text-green-950">
-                <div className="mx-auto container flex justify-between items-center py-4">
+                <div className="mx-auto container flex justify-between items-center py-2">
                     <div className="flex items-center gap-x-12">
                         {categoryItems.map((category, index) => (
                             <DropdownMenu key={index} modal={false}>
@@ -118,7 +120,19 @@ export default function DesktopHeader({className}: DesktopHeaderProps) {
                         ))}
                     </div>
                     <div>
-                        검색창
+                        <div className="flex items-center gap-2">
+                            <Input
+                                type="text"
+                                placeholder="상품을 검색하세요"
+                                className="w-64 h-9 bg-white border-gray-200 focus:border-green-500 focus:ring-green-200"
+                            />
+                            <Button
+                                size="sm"
+                                className="h-9 px-3 bg-green-600 hover:bg-green-700 text-white"
+                            >
+                                <Search className="h-4 w-4"/>
+                            </Button>
+                        </div>
                     </div>
                 </div>
             </div>
