@@ -6,10 +6,10 @@ import {Nanum_Gothic} from 'next/font/google'
 import {ReduxProvider} from "@/global/providers/ReduxProvider";
 import {RootLayoutProps} from "@/global/types/layout";
 import Footer from "@/components/layout/Footer";
-import DesktopHeader from "@/components/layout/DesktopHeader";
+import DesktopHeader from "@/components/layout/header/DesktopHeader";
 import {getServerSession} from "next-auth";
 import {authOptions} from "@/global/lib/auth";
-import MobileHeader from "@/components/layout/MobileHeader";
+import MobileHeader from "@/components/layout/header/MobileHeader";
 
 const nanumGothic = Nanum_Gothic({
     weight: ['400', '700', '800'],

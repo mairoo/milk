@@ -4,12 +4,13 @@ import Image from "next/image";
 import {ChevronDown, LogIn, LogOut, MessageCircle, Package, ShoppingCart, User, UserPlus} from "lucide-react";
 import React from "react";
 import {useSession} from "next-auth/react";
-import {NavLink} from "@/components/layout/NavLink";
+import {NavLink} from "@/components/layout/navigation/NavLink";
 import {DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,} from "@/components/ui/dropdown-menu";
 import Link from "next/link";
 import {categoryItems} from "@/global/types/constants";
 import {cn} from "@/lib/utils";
 import {useAuth} from "@/features/auth/shared/hooks";
+import {NavButton} from "@/components/layout/navigation/NavButton";
 
 interface DesktopHeaderProps {
     className?: string;
@@ -26,7 +27,7 @@ export default function DesktopHeader({className}: DesktopHeaderProps) {
                 <div className="mx-auto container">
                     <div className="mx-auto container flex justify-between items-center px-4 py-2">
                         <div>
-                            <Link href="/">
+                            <Link href="/public">
                                 <Image
                                     src="/images/pincoin_www_260x50.png"
                                     alt="핀코인 로고"
@@ -63,9 +64,9 @@ export default function DesktopHeader({className}: DesktopHeaderProps) {
                     <nav className="space-x-4">
                         {!session && (
                             <>
-                                <NavLink href="" icon={LogIn} onClick={handleLogin}>
+                                <NavButton icon={LogIn} onClick={handleLogin}>
                                     로그인
-                                </NavLink>
+                                </NavButton>
                                 <NavLink href="/auth/register" icon={UserPlus}>
                                     회원가입
                                 </NavLink>
@@ -85,9 +86,9 @@ export default function DesktopHeader({className}: DesktopHeaderProps) {
                                 <NavLink href="/mypage" icon={User}>
                                     마이페이지
                                 </NavLink>
-                                <NavLink href="" icon={LogOut} onClick={handleLogout}>
+                                <NavButton icon={LogOut} onClick={handleLogout}>
                                     로그아웃
-                                </NavLink>
+                                </NavButton>
                             </>
                         )}
                     </nav>
