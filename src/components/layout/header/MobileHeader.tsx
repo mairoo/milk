@@ -13,7 +13,7 @@ interface MobileHeaderProps {
 }
 
 export default function MobileHeader({className}: MobileHeaderProps) {
-    const {openMobileMenu, openMobileCart} = useDrawer();
+    const {openDrawerMenu, openCartDrawer} = useDrawer();
 
     // sticky 요소가 동시에 flex container가 되면, flex 레이아웃 계산과 sticky positioning 계산이 서로 간섭
     // sticky position만 담당하는 요소와 가로 배치 div 요소 분리
@@ -27,7 +27,7 @@ export default function MobileHeader({className}: MobileHeaderProps) {
                         variant="outline"
                         size="icon"
                         className="h-10 w-10"
-                        onClick={openMobileMenu}
+                        onClick={openDrawerMenu}
                     >
                         <Menu className="size-5"/>
                         <span className="sr-only">메뉴</span>
@@ -49,7 +49,7 @@ export default function MobileHeader({className}: MobileHeaderProps) {
                         variant="outline"
                         size="icon"
                         className="h-10 w-10"
-                        onClick={openMobileCart}
+                        onClick={openCartDrawer}
                     >
                         <ShoppingCart className="size-5"/>
                         <span className="sr-only">장바구니</span>

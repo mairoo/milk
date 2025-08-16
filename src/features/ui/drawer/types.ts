@@ -1,4 +1,4 @@
 export interface DrawerState {
-    mobileMenuOpen: boolean
-    mobileCartOpen: boolean
+    menuDrawerOpen: boolean
+    cartDrawerOpen: boolean
 }

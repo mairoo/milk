@@ -2,8 +2,8 @@ import {createSlice} from '@reduxjs/toolkit'
 import {DrawerState} from "@/features/ui/drawer/types";
 
 const initialState: DrawerState = {
-    mobileMenuOpen: false,
-    mobileCartOpen: false,
+    menuDrawerOpen: false,
+    cartDrawerOpen: false,
 }
 
 /**
@@ -18,34 +18,34 @@ const drawerSlice = createSlice({
     name: 'drawer',
     initialState,
     reducers: {
-        openMobileMenu: (state) => {
-            state.mobileMenuOpen = true
+        openMenuDrawer: (state) => {
+            state.menuDrawerOpen = true
             // 다른 서랍이 열려있으면 닫기
-            state.mobileCartOpen = false
+            state.cartDrawerOpen = false
         },
-        closeMobileMenu: (state) => {
-            state.mobileMenuOpen = false
+        closeMenuDrawer: (state) => {
+            state.menuDrawerOpen = false
         },
-        openMobileCart: (state) => {
-            state.mobileCartOpen = true
+        openCartDrawer: (state) => {
+            state.cartDrawerOpen = true
             // 다른 서랍이 열려있으면 닫기
-            state.mobileMenuOpen = false
+            state.menuDrawerOpen = false
         },
-        closeMobileCart: (state) => {
-            state.mobileCartOpen = false
+        closeCartDrawer: (state) => {
+            state.cartDrawerOpen = false
         },
         closeAllDrawers: (state) => {
-            state.mobileMenuOpen = false
-            state.mobileCartOpen = false
+            state.menuDrawerOpen = false
+            state.cartDrawerOpen = false
         },
     },
 })
 
 export const {
-    openMobileMenu,
-    closeMobileMenu,
-    openMobileCart,
-    closeMobileCart,
+    openMenuDrawer,
+    closeMenuDrawer,
+    openCartDrawer,
+    closeCartDrawer,
     closeAllDrawers,
 } = drawerSlice.actions
 
