@@ -136,6 +136,7 @@ export const baseApi = createApi({
     tagTypes: [
         'HealthCheck',
         'Category',
+        'Product',
     ],
 
     /**

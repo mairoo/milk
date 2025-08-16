@@ -1,6 +1,7 @@
 import {baseApi} from '@/global/api/baseApi'
 import type {ApiResponse} from '@/global/types/dto'
-import type {CategoryResponse} from './response'
+import type {CategoryResponse, ProductResponse} from './response'
+import type {ProductSearchRequest} from './request'
 
 /**
  * API 엔드포인트 정의
@@ -19,7 +20,21 @@ export const inventoryPublicApi = baseApi.injectEndpoints({
                 method: 'GET',
             }),
             transformResponse: (response: ApiResponse<CategoryResponse>) => response.data,
-            providesTags: ['Category'],
+            providesTags: (result, error, slug) => [
+                {type: 'Category' as const, id: slug}
+            ],
+        }),
+
+        getProductsByCategory: builder.query<ProductResponse[], { categoryId: number; params?: ProductSearchRequest }>({
+            query: ({categoryId, params = {}}) => ({
+                url: `/open/products/category/${categoryId}`,
+                method: 'GET',
+                params,
+            }),
+            transformResponse: (response: ApiResponse<ProductResponse[]>) => response.data,
+            providesTags: (result, error, {categoryId}) => [
+                {type: 'Product' as const, id: `category-${categoryId}`}
+            ],
         }),
     }),
 })
@@ -27,4 +42,6 @@ export const inventoryPublicApi = baseApi.injectEndpoints({
 export const {
     useGetCategoryBySlugQuery,
     useLazyGetCategoryBySlugQuery,
+    useGetProductsByCategoryQuery,
+    useLazyGetProductsByCategoryQuery,
 } = inventoryPublicApi

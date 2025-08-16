@@ -2,7 +2,7 @@
 
 import {useEffect, useState} from 'react'
 import {decode} from "@/global/lib/url"
-import {useGetCategoryBySlugQuery} from '@/features/inventory/public/api'
+import {useGetCategoryBySlugQuery, useGetProductsByCategoryQuery} from '@/features/inventory/public/api'
 
 interface CategoryPageProps {
     params: Promise<{
@@ -23,9 +23,26 @@ export default function CategoryPage({params}: CategoryPageProps) {
         void fetchSlug()
     }, [params])
 
-    const {data, isLoading, error, isFetching} = useGetCategoryBySlugQuery(slug, {
+    const {
+        data: categoryData,
+        isLoading: categoryLoading,
+        error: categoryError,
+        isFetching: categoryFetching
+    } = useGetCategoryBySlugQuery(slug, {
         skip: !slug,
     })
+
+    const {
+        data: productsData,
+        isLoading: productsLoading,
+        error: productsError,
+        isFetching: productsFetching
+    } = useGetProductsByCategoryQuery(
+        {categoryId: categoryData?.id || 0},
+        {
+            skip: !categoryData?.id,
+        }
+    )
 
     // slug가 아직 준비되지 않았을 때
     if (!slug) {
@@ -36,8 +53,8 @@ export default function CategoryPage({params}: CategoryPageProps) {
         )
     }
 
-    // 처음 로딩 중 (캐시된 데이터가 없는 상태)
-    if (isLoading) {
+    // 카테고리 처음 로딩 중
+    if (categoryLoading) {
         return (
             <div className="px-2 md:px-0 py-2">
                 <p>로딩 중...</p>
@@ -45,8 +62,8 @@ export default function CategoryPage({params}: CategoryPageProps) {
         )
     }
 
-    // 에러 발생시
-    if (error) {
+    // 카테고리 에러 발생시
+    if (categoryError) {
         return (
             <div className="px-2 md:px-0 py-2">
                 <p>카테고리를 불러오는데 실패했습니다.</p>
@@ -54,69 +71,165 @@ export default function CategoryPage({params}: CategoryPageProps) {
         )
     }
 
-    // 캐시된 데이터가 있으면 즉시 표시
-    if (data) {
+    // 카테고리 데이터가 있으면 표시
+    if (categoryData) {
         return (
             <div className="px-2 md:px-0 py-2">
-                {isFetching && (
+                {(categoryFetching || productsFetching) && (
                     <div className="mb-2 text-sm text-gray-500">
                         새로고침 중...
                     </div>
                 )}
-                <h1 className="text-3xl font-bold mb-6">카테고리: {data.title}</h1>
 
-                <div className="space-y-4">
+                <h1 className="text-3xl font-bold mb-6">카테고리: {categoryData.title}</h1>
+
+                <div className="space-y-4 mb-8">
                     <div>
-                        <strong>ID:</strong> {data.id}
+                        <strong>ID:</strong> {categoryData.id}
                     </div>
                     <div>
-                        <strong>생성일:</strong> {data.created}
+                        <strong>생성일:</strong> {categoryData.created}
                     </div>
                     <div>
-                        <strong>수정일:</strong> {data.modified}
+                        <strong>수정일:</strong> {categoryData.modified}
                     </div>
                     <div>
-                        <strong>제목:</strong> {data.title}
+                        <strong>제목:</strong> {categoryData.title}
                     </div>
                     <div>
-                        <strong>슬러그:</strong> {data.slug}
+                        <strong>슬러그:</strong> {categoryData.slug}
                     </div>
                     <div>
-                        <strong>썸네일:</strong> {data.thumbnail}
+                        <strong>썸네일:</strong> {categoryData.thumbnail}
                     </div>
                     <div>
                         <strong>설명:</strong>
                         <pre className="whitespace-pre-wrap mt-2 p-4 bg-gray-100 rounded">
-                            {data.description}
+                            {categoryData.description}
                         </pre>
                     </div>
                     <div>
                         <strong>상세 설명:</strong>
                         <pre className="whitespace-pre-wrap mt-2 p-4 bg-gray-100 rounded">
-                            {data.description1}
+                            {categoryData.description1}
                         </pre>
                     </div>
                     <div>
-                        <strong>레벨:</strong> {data.level}
+                        <strong>레벨:</strong> {categoryData.level}
                     </div>
                     <div>
-                        <strong>부모 ID:</strong> {data.parentId}
+                        <strong>부모 ID:</strong> {categoryData.parentId}
                     </div>
                     <div>
-                        <strong>할인율:</strong> {data.discountRate}%
+                        <strong>할인율:</strong> {categoryData.discountRate}%
                     </div>
                     <div>
-                        <strong>PG:</strong> {data.pg ? '예' : '아니오'}
+                        <strong>PG:</strong> {categoryData.pg ? '예' : '아니오'}
                     </div>
                     <div>
-                        <strong>PG 할인율:</strong> {data.pgDiscountRate}%
+                        <strong>PG 할인율:</strong> {categoryData.pgDiscountRate}%
                     </div>
+                </div>
+
+                {/* 상품 목록 섹션 */}
+                <div className="border-t pt-8">
+                    <h2 className="text-2xl font-bold mb-4">상품 목록</h2>
+
+                    {productsLoading && (
+                        <p>상품 목록 로딩 중...</p>
+                    )}
+
+                    {productsError && (
+                        <p>상품 목록을 불러오는데 실패했습니다.</p>
+                    )}
+
+                    {productsData && (
+                        <div className="space-y-6">
+                            {productsData.length === 0 ? (
+                                <p>등록된 상품이 없습니다.</p>
+                            ) : (
+                                productsData.map((product) => (
+                                    <div key={product.id} className="border p-4 rounded">
+                                        <div className="space-y-2">
+                                            <div>
+                                                <strong>ID:</strong> {product.id}
+                                            </div>
+                                            <div>
+                                                <strong>이름:</strong> {product.name}
+                                            </div>
+                                            {product.subtitle && (
+                                                <div>
+                                                    <strong>부제목:</strong> {product.subtitle}
+                                                </div>
+                                            )}
+                                            <div>
+                                                <strong>코드:</strong> {product.code}
+                                            </div>
+                                            <div>
+                                                <strong>정가:</strong> {product.listPrice.toLocaleString()}원
+                                            </div>
+                                            <div>
+                                                <strong>판매가:</strong> {product.sellingPrice.toLocaleString()}원
+                                            </div>
+                                            {product.description && (
+                                                <div>
+                                                    <strong>설명:</strong>
+                                                    <pre
+                                                        className="whitespace-pre-wrap mt-1 p-2 bg-gray-50 rounded text-sm">
+                                                        {product.description}
+                                                    </pre>
+                                                </div>
+                                            )}
+                                            <div>
+                                                <strong>재고:</strong> {product.stock}
+                                            </div>
+                                            <div>
+                                                <strong>상태:</strong> {product.status}
+                                            </div>
+                                            <div>
+                                                <strong>포지션:</strong> {product.position}
+                                            </div>
+                                            <div>
+                                                <strong>리뷰 수:</strong> {product.reviewCount}
+                                            </div>
+                                            <div>
+                                                <strong>네이버 파트너:</strong> {product.naverPartner ? '예' : '아니오'}
+                                            </div>
+                                            {product.naverPartnerTitle && (
+                                                <div>
+                                                    <strong>네이버 파트너 제목:</strong> {product.naverPartnerTitle}
+                                                </div>
+                                            )}
+                                            <div>
+                                                <strong>PG:</strong> {product.pg ? '예' : '아니오'}
+                                            </div>
+                                            <div>
+                                                <strong>PG 판매가:</strong> {product.pgSellingPrice.toLocaleString()}원
+                                            </div>
+                                            <div>
+                                                <strong>PG 리뷰 수:</strong> {product.reviewCountPg}
+                                            </div>
+                                            <div>
+                                                <strong>삭제됨:</strong> {product.isRemoved ? '예' : '아니오'}
+                                            </div>
+                                            <div>
+                                                <strong>생성일:</strong> {product.created || 'N/A'}
+                                            </div>
+                                            <div>
+                                                <strong>수정일:</strong> {product.modified || 'N/A'}
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))
+                            )}
+                        </div>
+                    )}
                 </div>
             </div>
         )
     }
 
-    // 예상치 못한 상태 (거의 발생하지 않음)
+    // 예상치 못한 상태
     return (
         <div className="px-2 md:px-0 py-2">
             <p>카테고리 데이터가 없습니다.</p>

@@ -13,3 +13,28 @@ export interface CategoryResponse {
     pg: boolean
     pgDiscountRate: number
 }
+
+export interface ProductResponse {
+    id: number
+    created: string | null
+    modified: string | null
+    isRemoved: boolean
+    name: string
+    subtitle: string | null
+    code: string
+    listPrice: number
+    sellingPrice: number
+    description: string | null
+    position: number
+    status: number
+    stock: number
+    categoryId: number
+    reviewCount: number
+    naverPartner: boolean
+    naverPartnerTitle: string | null
+    naverAttribute: string | null
+    naverPartnerTitlePg: string | null
+    pg: boolean
+    pgSellingPrice: number
+    reviewCountPg: number
+}
