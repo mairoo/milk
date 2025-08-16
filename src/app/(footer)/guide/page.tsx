@@ -71,7 +71,7 @@ export default function GuidePage() {
                         </div>
                         <div>
                             <p className="mb-2">저희 핀코인은 고객 여러분의 안전한 상품권 구매와 개인정보 보호 관리를 위해 노력합니다.</p>
-                            <ul className="list-disc list-inside ml-4 space-y-1">
+                            <ul className="list-disc list-inside ml-4 space-y-2">
                                 <li>고객 여러분께서 제출한 개인정보 사진은 어디에도 노출되지 않으며 암호화하여 파일을 저장합니다.</li>
                                 <li>제출한 사진은 개인정보보호 및 시스템 보안을 위해 마이페이지에서도 열람할 수 없습니다.</li>
                                 <li>제출한 사진은 경찰 등 수사기관의 요청이 없는 경우 3개월 이후 지체 없이 파기합니다.</li>
@@ -94,7 +94,7 @@ export default function GuidePage() {
                     <div className="space-y-4">
                         <div>
                             <p className="mb-2">핀코인 대표몰에서 다음 방법으로 결제 가능합니다.</p>
-                            <ul className="list-disc list-inside ml-4">
+                            <ul className="list-disc list-inside ml-4 space-y-2">
                                 <li>계좌이체 / 무통장입금</li>
                                 <li>국민은행 에스크로</li>
                                 <li>페이팔</li>
@@ -102,19 +102,22 @@ export default function GuidePage() {
                         </div>
                         <div>
                             <p className="mb-2">핀코인 대표몰에서 주문을 완료하시고 다음 은행으로 계좌이체 또는 무통장 입금 가능합니다.</p>
-                            <ul className="list-disc list-inside ml-4">
+                            <ul className="list-disc list-inside ml-4 space-y-2">
                                 <li>국민은행</li>
                                 <li>신한은행</li>
                                 <li>기업은행</li>
                                 <li>농협</li>
                             </ul>
                         </div>
-                        <ul className="list-disc list-inside ml-4 space-y-2">
-                            <li>계좌이체 또는 무통장 입금할 경우 주문자와 입금자의 실명이 반드시 일치해야 합니다.</li>
-                            <li>에스크로 결제는 국민은행 에스크로에 거래 대금을 예치하시면 됩니다.</li>
-                            <li>페이팔 결제는 USD로 결제됩니다.</li>
-                            <li>핀코인 카드몰에서 신용카드로 결제 가능합니다.</li>
-                        </ul>
+                        <div>
+                            <p className="mb-2">결제 시 주의사항은 다음과 같습니다.</p>
+                            <ul className="list-disc list-inside ml-4 space-y-2">
+                                <li>계좌이체 또는 무통장 입금할 경우 주문자와 입금자의 실명이 반드시 일치해야 합니다.</li>
+                                <li>에스크로 결제는 국민은행 에스크로에 거래 대금을 예치하시면 됩니다.</li>
+                                <li>페이팔 결제는 USD로 결제됩니다.</li>
+                                <li>핀코인 카드몰에서 신용카드로 결제 가능합니다.</li>
+                            </ul>
+                        </div>
                         <div>
                             <p className="mb-2 font-semibold">아래의 경우에는 페이팔 결제 무효 처리하고 12시간 이내 무조건 환불 처리됩니다.</p>
                             <ul className="list-disc list-inside ml-4 space-y-2">
