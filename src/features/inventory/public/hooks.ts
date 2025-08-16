@@ -1,7 +1,5 @@
 import {useCallback} from 'react'
 import {useDispatch} from 'react-redux'
-import {SerializedError} from '@reduxjs/toolkit'
-import {FetchBaseQueryError} from '@reduxjs/toolkit/query'
 import {
     inventoryPublicApi,
     useLazyGetCategoryBySlugQuery,
@@ -9,19 +7,7 @@ import {
     useLazyGetProductsByCategoryQuery
 } from './api'
 import type {ProductSearchRequest} from './request'
-
-// RTK Query 에러 타입 유틸리티
-const isFetchBaseQueryError = (
-    error: FetchBaseQueryError | SerializedError | undefined
-): error is FetchBaseQueryError => {
-    return typeof error === 'object' && error != null && 'status' in error
-}
-
-const isSerializedError = (
-    error: FetchBaseQueryError | SerializedError | undefined
-): error is SerializedError => {
-    return typeof error === 'object' && error != null && 'message' in error && !('status' in error)
-}
+import {getErrorMessage} from "@/global/lib/rtkQueryUtils";
 
 /**
  * 카테고리 조회 비즈니스 로직 hook (RTK Query 전용)
@@ -69,37 +55,12 @@ export const useCategory = () => {
         return new Date(lastFetched).toLocaleString('ko-KR')
     }, [lastFetched])
 
-    /**
-     * 에러 메시지 포맷팅 (RTK Query 타입 안전)
-     */
-    const getErrorMessage = useCallback(() => {
-        if (!error) return null
-
-        // FetchBaseQueryError (HTTP 에러)
-        if (isFetchBaseQueryError(error)) {
-            // 서버에서 반환한 에러 메시지
-            if (error.data && typeof error.data === 'object' && 'message' in error.data) {
-                return (error.data as { message: string }).message
-            }
-
-            // HTTP 상태 코드
-            return `HTTP ${error.status}: 서버 오류`
-        }
-
-        // SerializedError (네트워크 에러 등)
-        if (isSerializedError(error)) {
-            return error.message || '네트워크 오류가 발생했습니다'
-        }
-
-        // 기본 메시지
-        return '알 수 없는 오류가 발생했습니다'
-    }, [error])
 
     return {
         // 상태
         loading,
         data,
-        error: getErrorMessage(),
+        error: getErrorMessage(error),
         lastFetched,
         hasError,
 
@@ -166,37 +127,11 @@ export const useProducts = () => {
         return new Date(lastFetched).toLocaleString('ko-KR')
     }, [lastFetched])
 
-    /**
-     * 에러 메시지 포맷팅 (RTK Query 타입 안전)
-     */
-    const getErrorMessage = useCallback(() => {
-        if (!error) return null
-
-        // FetchBaseQueryError (HTTP 에러)
-        if (isFetchBaseQueryError(error)) {
-            // 서버에서 반환한 에러 메시지
-            if (error.data && typeof error.data === 'object' && 'message' in error.data) {
-                return (error.data as { message: string }).message
-            }
-
-            // HTTP 상태 코드
-            return `HTTP ${error.status}: 서버 오류`
-        }
-
-        // SerializedError (네트워크 에러 등)
-        if (isSerializedError(error)) {
-            return error.message || '네트워크 오류가 발생했습니다'
-        }
-
-        // 기본 메시지
-        return '알 수 없는 오류가 발생했습니다'
-    }, [error])
-
     return {
         // 상태
         loading,
         data,
-        error: getErrorMessage(),
+        error: getErrorMessage(error),
         lastFetched,
         hasError,
 
@@ -260,37 +195,11 @@ export const useProduct = () => {
         return new Date(lastFetched).toLocaleString('ko-KR')
     }, [lastFetched])
 
-    /**
-     * 에러 메시지 포맷팅 (RTK Query 타입 안전)
-     */
-    const getErrorMessage = useCallback(() => {
-        if (!error) return null
-
-        // FetchBaseQueryError (HTTP 에러)
-        if (isFetchBaseQueryError(error)) {
-            // 서버에서 반환한 에러 메시지
-            if (error.data && typeof error.data === 'object' && 'message' in error.data) {
-                return (error.data as { message: string }).message
-            }
-
-            // HTTP 상태 코드
-            return `HTTP ${error.status}: 서버 오류`
-        }
-
-        // SerializedError (네트워크 에러 등)
-        if (isSerializedError(error)) {
-            return error.message || '네트워크 오류가 발생했습니다'
-        }
-
-        // 기본 메시지
-        return '알 수 없는 오류가 발생했습니다'
-    }, [error])
-
     return {
         // 상태
         loading,
         data,
-        error: getErrorMessage(),
+        error: getErrorMessage(error),
         lastFetched,
         hasError,
 
