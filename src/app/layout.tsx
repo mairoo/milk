@@ -35,6 +35,10 @@ export const metadata: Metadata = {
         apple: '/apple-touch-icon.png', // 180x180px
     },
 
+    other: {
+        'themeColor': '#87b842', // 브라우저 UI 테마 색상
+    },
+
     robots: {
         index: true,
         follow: true,
