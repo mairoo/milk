@@ -59,27 +59,11 @@ export const useS3HealthCheck = () => {
     const hasError = !!error
     const isConnected = data?.status === 'UP'
 
-    /**
-     * 마지막 체크 시간
-     */
-    const lastChecked = latestResult.fulfilledTimeStamp
-        ? new Date(latestResult.fulfilledTimeStamp).toISOString()
-        : null
-
-    /**
-     * 마지막 체크 시간 포맷팅
-     */
-    const getLastCheckedFormatted = useCallback(() => {
-        if (!lastChecked) return null
-        return new Date(lastChecked).toLocaleString('ko-KR')
-    }, [lastChecked])
-
     return {
         // 상태
         loading,
         data,
         error: getErrorMessage(error),
-        lastChecked,
         isHealthy,
         hasError,
         isConnected,
@@ -89,16 +73,9 @@ export const useS3HealthCheck = () => {
         fullCheck,       // 전체 체크 실행
         reset,           // 캐시 초기화
 
-        // 유틸리티
-        getLastCheckedFormatted,
-
         // RTK Query 상태
         isFetching: quickCheckResult.isFetching || fullCheckResult.isFetching,
         isSuccess: !!data,
         isError: !!error,
-
-        // 개별 결과 (고급 사용)
-        quickCheckResult,
-        fullCheckResult,
     }
 }

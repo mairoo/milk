@@ -2,7 +2,7 @@
 
 import {useEffect, useState} from 'react'
 import {decode} from "@/global/lib/url"
-import {useGetCategoryBySlugQuery, useGetProductsByCategoryQuery} from '@/features/inventory/public/api'
+import {useCategory, useProducts} from '@/features/inventory/public/hooks'
 
 interface CategoryPageProps {
     params: Promise<{
@@ -12,6 +12,25 @@ interface CategoryPageProps {
 
 export default function CategoryPage({params}: CategoryPageProps) {
     const [slug, setSlug] = useState<string>('')
+
+    // 커스텀 hooks 사용
+    const {
+        loading: categoryLoading,
+        data: categoryData,
+        error: categoryError,
+        hasError: categoryHasError,
+        isFetching: categoryFetching,
+        getCategoryBySlug
+    } = useCategory()
+
+    const {
+        loading: productsLoading,
+        data: productsData,
+        error: productsError,
+        hasError: productsHasError,
+        isFetching: productsFetching,
+        getProductsByCategory
+    } = useProducts()
 
     useEffect(() => {
         const fetchSlug = async () => {
@@ -23,26 +42,19 @@ export default function CategoryPage({params}: CategoryPageProps) {
         void fetchSlug()
     }, [params])
 
-    const {
-        data: categoryData,
-        isLoading: categoryLoading,
-        error: categoryError,
-        isFetching: categoryFetching
-    } = useGetCategoryBySlugQuery(slug, {
-        skip: !slug,
-    })
-
-    const {
-        data: productsData,
-        isLoading: productsLoading,
-        error: productsError,
-        isFetching: productsFetching
-    } = useGetProductsByCategoryQuery(
-        {categoryId: categoryData?.id || 0},
-        {
-            skip: !categoryData?.id,
+    // slug가 준비되면 카테고리 조회
+    useEffect(() => {
+        if (slug) {
+            getCategoryBySlug(slug)
         }
-    )
+    }, [slug, getCategoryBySlug])
+
+    // 카테고리 데이터가 준비되면 상품 목록 조회
+    useEffect(() => {
+        if (categoryData?.id) {
+            getProductsByCategory(categoryData.id)
+        }
+    }, [categoryData?.id, getProductsByCategory])
 
     // slug가 아직 준비되지 않았을 때
     if (!slug) {
@@ -63,10 +75,13 @@ export default function CategoryPage({params}: CategoryPageProps) {
     }
 
     // 카테고리 에러 발생시
-    if (categoryError) {
+    if (categoryHasError) {
         return (
             <div className="px-2 md:px-0 py-2">
                 <p>카테고리를 불러오는데 실패했습니다.</p>
+                {categoryError && (
+                    <p className="text-sm text-red-500 mt-1">오류: {categoryError}</p>
+                )}
             </div>
         )
     }
@@ -139,8 +154,13 @@ export default function CategoryPage({params}: CategoryPageProps) {
                         <p>상품 목록 로딩 중...</p>
                     )}
 
-                    {productsError && (
-                        <p>상품 목록을 불러오는데 실패했습니다.</p>
+                    {productsHasError && (
+                        <div>
+                            <p>상품 목록을 불러오는데 실패했습니다.</p>
+                            {productsError && (
+                                <p className="text-sm text-red-500 mt-1">오류: {productsError}</p>
+                            )}
+                        </div>
                     )}
 
                     {productsData && (

@@ -1,7 +1,7 @@
 'use client'
 
 import {useEffect, useState} from 'react'
-import {useGetProductQuery} from '@/features/inventory/public/api'
+import {useProduct} from '@/features/inventory/public/hooks'
 
 interface ProductPageProps {
     params: Promise<{
@@ -13,6 +13,16 @@ interface ProductPageProps {
 export default function ProductPage({params}: ProductPageProps) {
     const [productId, setProductId] = useState<number>(0)
 
+    // 커스텀 hook 사용
+    const {
+        loading: productLoading,
+        data: productData,
+        error: productError,
+        hasError: productHasError,
+        isFetching: productFetching,
+        getProduct
+    } = useProduct()
+
     useEffect(() => {
         const fetchParams = async () => {
             const {id} = await params
@@ -22,14 +32,12 @@ export default function ProductPage({params}: ProductPageProps) {
         void fetchParams()
     }, [params])
 
-    const {
-        data: productData,
-        isLoading: productLoading,
-        error: productError,
-        isFetching: productFetching
-    } = useGetProductQuery(productId, {
-        skip: !productId || productId === 0,
-    })
+    // productId가 준비되면 상품 조회
+    useEffect(() => {
+        if (productId && productId > 0) {
+            getProduct(productId)
+        }
+    }, [productId, getProduct])
 
     // productId가 아직 준비되지 않았을 때
     if (!productId) {
@@ -50,10 +58,13 @@ export default function ProductPage({params}: ProductPageProps) {
     }
 
     // 상품 에러 발생시
-    if (productError) {
+    if (productHasError) {
         return (
             <div className="px-2 md:px-0 py-2">
                 <p>상품을 불러오는데 실패했습니다.</p>
+                {productError && (
+                    <p className="text-sm text-red-500 mt-1">오류: {productError}</p>
+                )}
             </div>
         )
     }
