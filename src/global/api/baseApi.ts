@@ -133,7 +133,10 @@ export const baseApi = createApi({
      * - invalidatesTags: 뮤테이션 후 무효화할 캐시 태그 (예: ['User'] - 모든 User 캐시 삭제)
      * - 자동 refetch: invalidatesTags로 지정된 태그의 모든 쿼리가 자동으로 다시 실행됨
      */
-    tagTypes: ['HealthCheck'],
+    tagTypes: [
+        'HealthCheck',
+        'Category',
+    ],
 
     /**
      * keepUnusedDataFor 옵션:

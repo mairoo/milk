@@ -110,9 +110,9 @@ export default function DesktopHeader({className}: DesktopHeaderProps) {
                                     {category.items.map((item, itemIndex) => (
                                         <DropdownMenuItem key={itemIndex} asChild
                                                           className="px-4 py-2 rounded-none text-base hover:!bg-green-950 hover:!text-white">
-                                            <a href={item.href} className="cursor-pointer">
+                                            <Link href={item.href} className="cursor-pointer">
                                                 {item.name}
-                                            </a>
+                                            </Link>
                                         </DropdownMenuItem>
                                     ))}
                                 </DropdownMenuContent>
