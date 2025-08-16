@@ -1,7 +1,7 @@
 import {Metadata} from 'next';
 
 export const metadata: Metadata = {
-    title: '자주 묻는 질문 | 핀코인',
+    title: '자주 묻는 질문',
     description: '핀코인 서비스에 대한 자주 묻는 질문과 답변입니다.',
 };
 

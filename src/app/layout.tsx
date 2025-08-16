@@ -21,8 +21,8 @@ const nanumGothic = Nanum_Gothic({
 
 export const metadata: Metadata = {
     title: {
-        template: '%s | Pincoin App',
-        default: 'Pincoin App',
+        template: '%s | 대한민국 1등 온라인 상품권 쇼핑몰 핀코인',
+        default: '핀코인 상품권 쇼핑몰',
     },
     description: '대한민국 1등 상품권 쇼핑몰 핀코인',
     keywords: ['컬쳐랜드', '넥슨카드', '구글기프트카드'],
