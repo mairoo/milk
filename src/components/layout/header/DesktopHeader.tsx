@@ -7,7 +7,7 @@ import {useSession} from "next-auth/react";
 import {NavLink} from "@/components/layout/navigation/NavLink";
 import {DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,} from "@/components/ui/dropdown-menu";
 import Link from "next/link";
-import {categoryItems} from "@/global/types/constants";
+import {desktopMenuItems} from "@/global/types/menu";
 import {cn} from "@/lib/utils";
 import {useAuth} from "@/features/auth/shared/hooks";
 import {NavButton} from "@/components/layout/navigation/NavButton";
@@ -99,7 +99,7 @@ export default function DesktopHeader({className}: DesktopHeaderProps) {
             <div className="bg-green-50 text-green-950">
                 <div className="mx-auto container flex justify-between items-center py-2">
                     <div className="flex items-center gap-x-12">
-                        {categoryItems.map((category, index) => (
+                        {desktopMenuItems.map((category, index) => (
                             <DropdownMenu key={index} modal={false}>
                                 <DropdownMenuTrigger
                                     className="flex items-center justify-start gap-x-1 cursor-pointer hover:text-green-700 focus:outline-none">
