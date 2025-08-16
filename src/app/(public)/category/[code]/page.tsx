@@ -19,9 +19,9 @@ interface CategoryData {
 }
 
 interface CategoryPageProps {
-    params: {
+    params: Promise<{
         code: string;
-    };
+    }>;
 }
 
 // 카테고리 코드를 디코딩하는 함수
@@ -70,7 +70,8 @@ async function getCategoryData(code: string): Promise<CategoryData | null> {
 }
 
 export async function generateMetadata({params}: CategoryPageProps): Promise<Metadata> {
-    const categoryData = await getCategoryData(params.code);
+    const {code} = await params;
+    const categoryData = await getCategoryData(code);
 
     if (!categoryData) {
         return {
@@ -85,12 +86,13 @@ export async function generateMetadata({params}: CategoryPageProps): Promise<Met
 }
 
 export default async function CategoryPage({params}: CategoryPageProps) {
-    const categoryData = await getCategoryData(params.code);
+    const {code} = await params;
+    const categoryData = await getCategoryData(code);
 
     if (!categoryData) {
         notFound();
     }
-    decode(params.code);
+
     return (
         <div className="container mx-auto px-4 py-8">
             {/* 브레드크럼 */}

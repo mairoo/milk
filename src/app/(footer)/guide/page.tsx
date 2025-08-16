@@ -7,21 +7,191 @@ export const metadata: Metadata = {
 
 export default function GuidePage() {
     return (
-        <div className="container mx-auto px-4 py-8">
-            <h1 className="text-3xl font-bold mb-6">이용안내</h1>
-            <div className="prose max-w-none">
-                <section className="mb-8">
-                    <h2 className="text-2xl font-semibold mb-4">서비스 소개</h2>
-                    <p>핀코인 서비스에 대한 전반적인 소개 내용입니다.</p>
+        <div className="px-2 md:px-0 py-2">
+            <h1 className="text-2xl font-bold mb-4">이용안내</h1>
+            <div className="flex flex-col gap-y-4">
+                <section className="flex flex-col gap-y-2">
+                    <h2 className="text-xl font-semibold">회원가입 및 회원탈퇴</h2>
+                    <ul className="list-disc list-inside ml-4 space-y-2">
+                        <li>핀코인(pincoin)은 회원제로 운영하며 반드시 회원가입해야 상품권을 주문할 수 있습니다.</li>
+                        <li>회원은 언제든지 회원탈퇴할 수 있으며 수집된 회원개인정보는 즉시 파기합니다.</li>
+                        <li>단, 전자상거래 등에서의 소비자보호에 관한 법률 제6조에 의거 아이디, 이름, 전자우편주소 등 거래의 주체를 식별할 수 있는 정보에 한하여 서비스 이용에 관한 동의를
+                            철회한 경우에도 이를 보존할 수 있으며, 동법 시행령 제6조에 의거 다음과 같이 거래 기록을 보관합니다.
+                        </li>
+                    </ul>
+                    <ul className="list-disc list-inside ml-8 space-y-2">
+                        <li>표시, 광고에 관한 기록 : 6개월</li>
+                        <li>계약 또는 청약철회 등에 관한 기록 : 5년</li>
+                        <li>대금결제 및 재화 등의 공급에 관한 기록 : 5년</li>
+                        <li>소비자의 불만 또는 분쟁처리에 관한 기록 : 3년</li>
+                        <li>채권․채무관계 잔존시에는 해당 채권․채무관계 정산시까지</li>
+                    </ul>
                 </section>
 
-                <section className="mb-8">
-                    <h2 className="text-2xl font-semibold mb-4">이용 방법</h2>
-                    <ol className="list-decimal list-inside space-y-2">
-                        <li>회원가입을 진행합니다</li>
-                        <li>서비스를 이용합니다</li>
-                        <li>문의사항이 있으면 고객센터로 연락주세요</li>
-                    </ol>
+                <section className="flex flex-col gap-y-2">
+                    <h2 className="text-xl font-semibold">본인인증</h2>
+                    <div className="space-y-4">
+                        <div>
+                            <p className="mb-2">핀코인은 보이스피싱 및 파밍 사기 피해 방지를 위하여 <strong>휴대폰본인인증</strong>을 요청하고 있습니다.</p>
+                            <ul className="list-disc list-inside ml-4">
+                                <li>해외에서 페이팔 결제하시는 경우 서류본인인증을 대신 완료해야 합니다.</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p className="mb-2">핀코인은 보이스피싱 및 파밍 사기 피해 방지를 위하여 경우에 따라 <strong>서류본인인증</strong>을 요청하고 있습니다.
+                            </p>
+                            <ul className="list-disc list-inside ml-4 space-y-1">
+                                <li><strong>문화상품권, 해피머니, 도서문화상품권, 구글기프트카드를 포함하고 일일 액면가 기준 누계 10만원 이상 첫 구매</strong> 시 반드시
+                                    서류본인인증을 해야 합니다.
+                                </li>
+                                <li><strong>계좌이체로 일일 액면가 기준 누계 30만원 이상 첫 구매 시</strong> 반드시 서류본인인증을 해야 합니다.</li>
+                                <li><strong>페이팔로 최근30일 이내 액면가 기준 누계 15만원 이상 구매 시</strong> 반드시 <strong>한국 신분증</strong>으로
+                                    서류본인인증을 해야 합니다.
+                                </li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p className="mb-2">서류본인인증을 위해 확인되야 하는 정보는 다음과 같습니다.</p>
+                            <ul className="list-disc list-inside ml-4 space-y-2">
+                                <li>
+                                    <strong>신분증 (주민등록증, 운전면허증) - 여권 및 등초본 불가</strong><br/>
+                                    <div className="ml-8">
+                                        주민등록번호 뒷자리 및 사진 가리고 <strong>이름, 생년월일, 주소 전체</strong><br/>
+                                        <strong>포스트잇 메모지 등으로 업로드 일자 및 &quot;핀코인 상품권 구매&quot; 반드시 자필 표기</strong>
+                                    </div>
+                                </li>
+                                <li>
+                                    <strong>통장 또는 ATM 카드, 체크카드</strong><br/>
+                                    <div className="ml-8">
+                                        통장번호 또는 카드번호를 가리고 <strong>이름</strong><br/>
+                                        <strong>포스트잇 메모지 등으로 업로드 일자 및 &quot;핀코인 상품권 구매&quot; 반드시 자필 표기</strong>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p className="mb-2">저희 핀코인은 고객 여러분의 안전한 상품권 구매와 개인정보 보호 관리를 위해 노력합니다.</p>
+                            <ul className="list-disc list-inside ml-4 space-y-1">
+                                <li>고객 여러분께서 제출한 개인정보 사진은 어디에도 노출되지 않으며 암호화하여 파일을 저장합니다.</li>
+                                <li>제출한 사진은 개인정보보호 및 시스템 보안을 위해 마이페이지에서도 열람할 수 없습니다.</li>
+                                <li>제출한 사진은 경찰 등 수사기관의 요청이 없는 경우 3개월 이후 지체 없이 파기합니다.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <section className="flex flex-col gap-y-2">
+                    <h2 className="text-xl font-semibold">주문 방법</h2>
+                    <ul className="list-disc list-inside ml-4 space-y-2">
+                        <li>핀코인은 반드시 회원가입 후 로그인해야 상품권을 주문할 수 있습니다.</li>
+                        <li>원하시는 상품권을 장바구니에 담고 장바구니 페이지에서 수량을 변경하실 수 있습니다.</li>
+                        <li>아래에서 설명하는 결제 방법을 선택하고 약관 동의 후 주문을 완료합니다.</li>
+                    </ul>
+                </section>
+
+                <section className="flex flex-col gap-y-2">
+                    <h2 className="text-xl font-semibold">결제 방법</h2>
+                    <div className="space-y-4">
+                        <div>
+                            <p className="mb-2">핀코인 대표몰에서 다음 방법으로 결제 가능합니다.</p>
+                            <ul className="list-disc list-inside ml-4">
+                                <li>계좌이체 / 무통장입금</li>
+                                <li>국민은행 에스크로</li>
+                                <li>페이팔</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p className="mb-2">핀코인 대표몰에서 주문을 완료하시고 다음 은행으로 계좌이체 또는 무통장 입금 가능합니다.</p>
+                            <ul className="list-disc list-inside ml-4">
+                                <li>국민은행</li>
+                                <li>신한은행</li>
+                                <li>기업은행</li>
+                                <li>농협</li>
+                            </ul>
+                        </div>
+                        <ul className="list-disc list-inside ml-4 space-y-2">
+                            <li>계좌이체 또는 무통장 입금할 경우 주문자와 입금자의 실명이 반드시 일치해야 합니다.</li>
+                            <li>에스크로 결제는 국민은행 에스크로에 거래 대금을 예치하시면 됩니다.</li>
+                            <li>페이팔 결제는 USD로 결제됩니다.</li>
+                            <li>핀코인 카드몰에서 신용카드로 결제 가능합니다.</li>
+                        </ul>
+                        <div>
+                            <p className="mb-2 font-semibold">아래의 경우에는 페이팔 결제 무효 처리하고 12시간 이내 무조건 환불 처리됩니다.</p>
+                            <ul className="list-disc list-inside ml-4 space-y-2">
+                                <li>
+                                    <strong>핀코인 계정 기본 이메일 주소와 페이팔 계정 이메일 주소 불일치</strong><br/>
+                                    핀코인 계정의 기본 이메일 주소와 페이팔 계정의 이메일 주소가 동일해야 합니다. 기본 이메일 주소 등록을 위해서는 이메일 주소 인증을 먼저 해야
+                                    합니다.
+                                </li>
+                                <li>
+                                    <strong>unverified 또는 unregistered 페이팔 계정</strong><br/>
+                                    verified (확인된) 페이팔 계정으로만 결제 가능합니다.
+                                </li>
+                                <li>
+                                    <strong>echeck 결제</strong><br/>
+                                    instant (즉시) 결제로만 결제 가능합니다.
+                                </li>
+                                <li>
+                                    <strong>서류본인인증 미완료</strong><br/>
+                                    페이팔로 최근 30일 이내 액면가 기준 누계 15만원 이상 구매 시 반드시 한국 내 주소 확인 가능한 신분증으로 서류본인인증을 완료해야 합니다.
+                                </li>
+                                <li>
+                                    <strong>페이팔 최소 결제 금액 9천원 미만</strong><br/>
+                                    페이팔 수수료 문제로 인하여 원화 기준 최소 9천원 이상일 때 결제 가능합니다.
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <section className="flex flex-col gap-y-2">
+                    <h2 className="text-xl font-semibold">상품권 발송 및 확인</h2>
+                    <ul className="list-disc list-inside ml-4 space-y-2">
+                        <li>핀코인에서 판매되는 상품권은 온라인 상품권으로 실물이 아닌 핀번호만 발송됩니다.</li>
+                        <li>상품권 확인은 핀코인 사이트 주문내역에서 확인합니다.</li>
+                        <li>한국 시각 밤 11시 이후 10만원 이상 주문은 한국 시각 오전 10시 이후에 순차적으로 발송될 수 있습니다.</li>
+                        <li>메뉴의 마이페이지에서 모든 본인인증 절차를 완료하신 경우 최대 10분 이내로 상품권을 확인할 수 있습니다.</li>
+                        <li>모든 본인인증 절차를 완료하시고도 10분 이내로 상품권을 확인하지 못한 경우 고객문의에 주문번호, 입금은행, 입금시각을 남겨주세요.</li>
+                    </ul>
+                </section>
+
+                <section className="flex flex-col gap-y-2">
+                    <h2 className="text-xl font-semibold">주문 취소</h2>
+                    <ul className="list-disc list-inside ml-4 space-y-2">
+                        <li>무통장 입금의 경우 주문 완료 후 다음 날 입금하지 않으면 자동으로 주문취소 됩니다.</li>
+                        <li>입금 이전에는 구매자가 직접 주문내역 페이지에서 주문을 취소할 수도 있습니다.</li>
+                    </ul>
+                </section>
+
+                <section className="flex flex-col gap-y-2">
+                    <h2 className="text-xl font-semibold">교환 및 환불</h2>
+                    <ul className="list-disc list-inside ml-4 space-y-2">
+                        <li>핀코인은 소비자보호를 위해서 규정한 제반 법규를 준수합니다.</li>
+                        <li>상품권을 받기 전에 고객님의 교환 또는 환불 요청이 있은 날로부터 은행 영업일 기준으로 3~4일 이내에 처리됩니다.</li>
+                        <li>상품권을 받으신 경우 해당 상품권을 사용하지 않은 경우에 한하여 3일 이내에만 교환 또는 환불 요청 가능합니다.</li>
+                        <li>교환 또는 환불 요청한 날로부터 은행 영업일 기준 5~7일 이내에 처리됩니다.</li>
+                        <li>환불 수수료 500원 차감한 금액이 환불 입금처리됩니다.</li>
+                    </ul>
+                </section>
+
+                <section className="flex flex-col gap-y-2">
+                    <h2 className="text-xl font-semibold">상품권 구매한도</h2>
+                    <ul className="list-disc list-inside ml-4 space-y-2">
+                        <li><strong>문화상품권, 해피머니, 도서문화상품권, 구글기프트카드를 포함하고 일일 액면가 기준 누계 10만원 이상 첫 구매</strong> 시 반드시 서류본인인증을
+                            해야 합니다.
+                        </li>
+                        <li><strong>계좌이체로 일일 액면가 기준 누계 30만원 이상 첫 구매</strong> 시 반드시 서류본인인증을 해야 합니다.</li>
+                        <li><strong>페이팔로 최근30일 이내 액면가 기준 누계 15만원 이상 구매</strong> 시 반드시 한국 신분증으로 서류본인인증을 해야 합니다.</li>
+                    </ul>
+                </section>
+
+                <section className="flex flex-col gap-y-2">
+                    <h2 className="text-xl font-semibold">적립금 제도 없음</h2>
+                    <ul className="list-disc list-inside ml-4 space-y-2">
+                        <li><strong>핀코인은 적립금 제도를 운영하지 않습니다.</strong></li>
+                        <li>과거 100원 이익이 발생하면 50원 적립금을 드렸으나 현재는 차라리 무조건 50원 이익으로 판매하고 있습니다.</li>
+                        <li>핀코인은 이제 50원 이익이 아니라 30원, 20원 이익을 낮춰 고객 여러분께 최저가로 상품권을 판매하기 위해 최선을 다하고 있습니다.</li>
+                    </ul>
                 </section>
             </div>
         </div>
