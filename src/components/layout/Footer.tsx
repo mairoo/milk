@@ -11,10 +11,10 @@ export default function Footer() {
                         <Link href="/guide">
                             이용안내
                         </Link>
-                        <Link href="/faq">
+                        <Link href="/support/faq">
                             자주 묻는 질문
                         </Link>
-                        <Link href="/contact">
+                        <Link href="/support/contact">
                             문의하기
                         </Link>
                         <Link href="/terms">

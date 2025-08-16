@@ -69,23 +69,23 @@ export default function DesktopHeader({className}: DesktopHeaderProps) {
                                 <NavButton icon={LogIn} onClick={handleLogin}>
                                     로그인
                                 </NavButton>
-                                <NavLink href="/auth/register" icon={UserPlus}>
+                                <NavLink href="/auth/sign-up" icon={UserPlus}>
                                     회원가입
                                 </NavLink>
                             </>
                         )}
-                        <NavLink href="/orders" icon={Package}>
+                        <NavLink href="/my/order" icon={Package}>
                             주문/발송
                         </NavLink>
-                        <NavLink href="/cart" icon={ShoppingCart}>
+                        <NavLink href="/my/cart" icon={ShoppingCart}>
                             장바구니
                         </NavLink>
-                        <NavLink href="/customer-service" icon={MessageCircle}>
+                        <NavLink href="/support" icon={MessageCircle}>
                             고객센터
                         </NavLink>
                         {session && (
                             <>
-                                <NavLink href="/mypage" icon={User}>
+                                <NavLink href="/my/profile" icon={User}>
                                     마이페이지
                                 </NavLink>
                                 <NavButton icon={LogOut} onClick={handleLogout}>
