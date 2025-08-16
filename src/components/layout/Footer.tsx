@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 
 export default function Footer() {
     return (
@@ -7,16 +8,26 @@ export default function Footer() {
             <div className="bg-green-50 text-green-950">
                 <div className="mx-auto container px-4 sm:px-0 py-6 space-y-4">
                     <div className="flex flex-wrap gap-x-6 gap-y-0.5">
-                        <span>이용안내</span>
-                        <span>자주 묻는 질문</span>
-                        <span>문의하기</span>
-                        <span>이용약관</span>
-                        <span>개인정보 처리방침</span>
+                        <Link href="/guide">
+                            이용안내
+                        </Link>
+                        <Link href="/faq">
+                            자주 묻는 질문
+                        </Link>
+                        <Link href="/contact">
+                            문의하기
+                        </Link>
+                        <Link href="/terms">
+                            이용약관
+                        </Link>
+                        <Link href="/privacy">
+                            개인정보 처리방침
+                        </Link>
                     </div>
                     <div className="text-lime-600 font-bold">주식회사 핀코인</div>
                     <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm">
                         <span>대표: 서종화</span>
-                        <span>주소: 서울특별시 서초구 서초대로29길 22 (보미빌딩), 303호</span>
+                        <span>주소: 서울특별시 서초구 서초대로29길 22, 303호</span>
                         <span>사업자등록번호: 163-81-01158</span>
                         <span>통신판매업신고: 2019-서울서초-0835</span>
                         <span>help@pincoin.co.kr</span>
