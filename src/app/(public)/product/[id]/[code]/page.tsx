@@ -79,7 +79,7 @@ export default function ProductPage({params}: ProductPageProps) {
                     </div>
                 )}
 
-                <h1 className="text-3xl font-bold mb-6">상품: {productData.name}</h1>
+                <h1 className="text-3xl font-bold mb-6">상품: {productData.code}</h1>
 
                 <div className="space-y-4">
                     <div>

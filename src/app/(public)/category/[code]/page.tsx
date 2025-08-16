@@ -3,6 +3,7 @@
 import {useEffect, useState} from 'react'
 import {decode} from "@/global/lib/url"
 import {useCategory, useProducts} from '@/features/inventory/public/hooks'
+import Link from "next/link";
 
 interface CategoryPageProps {
     params: Promise<{
@@ -172,7 +173,10 @@ export default function CategoryPage({params}: CategoryPageProps) {
                                     <div key={product.id} className="border p-4 rounded">
                                         <div className="space-y-2">
                                             <div>
-                                                <strong>ID:</strong> {product.id}
+                                                <strong>ID:</strong>
+                                                <Link href={`/product/${product.id}/${product.code}`}>
+                                                    {product.id}
+                                                </Link>
                                             </div>
                                             <div>
                                                 <strong>이름:</strong> {product.name}
