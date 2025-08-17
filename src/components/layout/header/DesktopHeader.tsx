@@ -20,7 +20,7 @@ interface DesktopHeaderProps {
 
 export default function DesktopHeader({className}: DesktopHeaderProps) {
     const {data: session, status} = useSession();
-    const {handleLogin, handleLogout} = useAuth();
+    const {signIn, signOut} = useAuth();
 
     // 로딩 중일 때는 기본 메뉴만 표시
     if (status === 'loading') {
@@ -66,7 +66,7 @@ export default function DesktopHeader({className}: DesktopHeaderProps) {
                     <nav className="space-x-4">
                         {!session && (
                             <>
-                                <NavButton icon={LogIn} onClick={handleLogin}>
+                                <NavButton icon={LogIn} onClick={signIn}>
                                     로그인
                                 </NavButton>
                                 <NavLink href="/auth/sign-up" icon={UserPlus}>
@@ -88,7 +88,7 @@ export default function DesktopHeader({className}: DesktopHeaderProps) {
                                 <NavLink href="/my/profile" icon={User}>
                                     마이페이지
                                 </NavLink>
-                                <NavButton icon={LogOut} onClick={handleLogout}>
+                                <NavButton icon={LogOut} onClick={signOut}>
                                     로그아웃
                                 </NavButton>
                             </>
