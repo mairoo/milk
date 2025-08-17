@@ -20,25 +20,47 @@ jobs:
       - name: Cache node_modules
         uses: actions/cache@v4
         with:
-          path: ~/.npm
-          key: npm-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
+          path: |
+            ~/.npm
+            node_modules
+          key: npm-deps-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
-            npm-${{ runner.os }}-
+            npm-deps-${{ runner.os }}-
+
+      - name: Cache Next.js build
+        uses: actions/cache@v4
+        with:
+          path: |
+            .next/cache
+          key: nextjs-build-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**.[jt]s', '**.[jt]sx', '**/*.json') }}
+          restore-keys: |
+            nextjs-build-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}-
+            nextjs-build-${{ runner.os }}-
 
       - name: Copy production config
         run: cp ${{ secrets.CONFIG_PATH }}/dotenv .env.production
 
       - name: Install dependencies
-        run: npm ci
+        run: |
+          if [ ! -d "node_modules" ]; then
+            echo "Installing dependencies..."
+            npm ci --prefer-offline --no-audit
+          else
+            echo "Using cached dependencies"
+          fi
 
       - name: Build Next.js application
         run: npm run build
+        env:
+          NEXT_TELEMETRY_DISABLED: 1
+          CI: true
 
       - name: Build Docker image
         run: |
           echo "🔨 Building frontend Docker image..."
           DOCKER_BUILDKIT=1 docker build \
             --cache-from ${{ secrets.PREFIX }}-frontend:latest \
+            --build-arg BUILDKIT_INLINE_CACHE=1 \
             -f Dockerfile.prod \
             -t ${{ secrets.PREFIX }}-frontend:latest .
 
