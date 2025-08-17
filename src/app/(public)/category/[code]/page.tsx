@@ -146,7 +146,7 @@ export default function CategoryPage({params}: CategoryPageProps) {
                                 <p className="text-gray-500">등록된 상품이 없습니다.</p>
                             </div>
                         ) : (
-                            <div className="grid grid-cols-2 md:grid-cols-6 gap-6">
+                            <div className="grid grid-cols-2 md:grid-cols-6 gap-2 md:gap-6">
                                 {productsData.map((product) => (
                                     <ProductCard
                                         key={product.id}

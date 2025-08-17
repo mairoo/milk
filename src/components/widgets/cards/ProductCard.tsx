@@ -37,32 +37,28 @@ export default function ProductCard({
     // 재고 상태 확인
     const isSoldOut = product.stock === ProductStock.SOLD_OUT;
 
-    // PG 상품인지 확인하여 적절한 가격 사용
-    const displaySellingPrice = product.pg ? product.pgSellingPrice : product.sellingPrice;
-
     return (
         <Card
-            className="w-full max-w-sm cursor-pointer"
+            className="w-full max-w-sm cursor-pointer p-0 gap-2"
             onClick={() => onClick?.(product.id)}
         >
 
             {/* 이미지 섹션 */}
             <CardHeader className="p-0">
-                <div className="aspect-square w-full overflow-hidden rounded-t-lg">
+                <div className="aspect-[156/100] w-full relative overflow-hidden rounded-t-xl">
                     <Image
                         src={imageUrl}
                         alt={finalImageAlt}
-                        width={400}  // 명시적 크기 지정으로 position 문제 해결
-                        height={400}
-                        className="w-full h-full object-cover"
-                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                        priority={false}  // 카드 이미지는 lazy loading
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 768px) 50vw, 16vw"
+                        priority={false}
                     />
                 </div>
             </CardHeader>
 
             {/* 상품 정보 섹션 */}
-            <CardContent className="p-4 space-y-2">
+            <CardContent className="px-4 space-y-2">
                 <h3 className="font-medium text-gray-900 line-clamp-2 leading-5">
                     {product.name}
                 </h3>
@@ -73,29 +69,22 @@ export default function ProductCard({
                     </p>
                 )}
 
-                <div className="space-y-1">
-                    {product.listPrice > displaySellingPrice && (
-                        <p className="text-sm text-gray-500 line-through">
-                            {formatPrice(product.listPrice)}
-                        </p>
-                    )}
-                    <div className="flex items-center justify-between">
-                        <p className="text-lg font-bold text-gray-900">
-                            {formatPrice(displaySellingPrice)}
-                        </p>
-                        {discountRate > 0 && (
-                            <span className="text-sm font-medium text-red-600 bg-red-50 px-2 py-1 rounded">
+                <div className="flex items-center justify-between">
+                    <p className="text-lg font-bold text-gray-900">
+                        {formatPrice(product.sellingPrice)}
+                    </p>
+                    {discountRate > 0 && (
+                        <span className="text-sm font-medium text-red-600 bg-red-50 px-2 py-1 rounded">
                                 {discountRate.toFixed(1)}%
                             </span>
-                        )}
-                    </div>
+                    )}
                 </div>
             </CardContent>
 
             {/* 액션 버튼 섹션 */}
-            <CardFooter className="p-4 pt-0">
+            <CardFooter className="p-2">
                 <Button
-                    className="w-full flex items-center gap-2"
+                    className="w-full flex items-center gap-2 bg-emerald-100 text-green-950 hover:bg-emerald-600 hover:text-white"
                     onClick={(e) => {
                         e.stopPropagation();
                         onAddToCart?.(product.id);
