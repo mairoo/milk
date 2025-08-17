@@ -1,3 +1,13 @@
+export enum ProductStatus {
+    ENABLED = 0,
+    DISABLED = 1
+}
+
+export enum ProductStock {
+    SOLD_OUT = 0,
+    IN_STOCK = 1
+}
+
 export interface CategoryResponse {
     id: number
     created: string
@@ -26,8 +36,8 @@ export interface ProductResponse {
     sellingPrice: number
     description: string | null
     position: number
-    status: number
-    stock: number
+    status: ProductStatus
+    stock: ProductStock
     categoryId: number
     reviewCount: number
     naverPartner: boolean
