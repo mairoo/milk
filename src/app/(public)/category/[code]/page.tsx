@@ -4,6 +4,7 @@ import {useEffect, useState} from 'react'
 import {decode} from "@/global/lib/url"
 import {useCategory, useProducts} from '@/features/inventory/public/hooks'
 import Link from "next/link";
+import ReactMarkdown from 'react-markdown';
 
 interface CategoryPageProps {
     params: Promise<{
@@ -120,15 +121,15 @@ export default function CategoryPage({params}: CategoryPageProps) {
                     </div>
                     <div>
                         <strong>설명:</strong>
-                        <pre className="whitespace-pre-wrap mt-2 p-4 bg-gray-100 rounded">
+                        <ReactMarkdown>
                             {categoryData.description}
-                        </pre>
+                        </ReactMarkdown>
                     </div>
                     <div>
                         <strong>상세 설명:</strong>
-                        <pre className="whitespace-pre-wrap mt-2 p-4 bg-gray-100 rounded">
+                        <ReactMarkdown>
                             {categoryData.description1}
-                        </pre>
+                        </ReactMarkdown>
                     </div>
                     <div>
                         <strong>레벨:</strong> {categoryData.level}
