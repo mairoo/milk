@@ -1,5 +1,11 @@
 import {useCallback} from 'react'
-import {closeAllDrawers, closeCartDrawer, closeMenuDrawer, openCartDrawer, openMenuDrawer,} from './slice'
+import {
+    closeAllDrawers as closeAllDrawersAction,
+    closeCartDrawer as closeCartDrawerAction,
+    closeMenuDrawer as closeMenuDrawerAction,
+    openCartDrawer as openCartDrawerAction,
+    openMenuDrawer as openMenuDrawerAction,
+} from './slice'
 import {useAppDispatch, useAppSelector} from "@/global/store/hooks";
 
 /**
@@ -15,26 +21,26 @@ export const useDrawer = () => {
     const {menuDrawerOpen, cartDrawerOpen} = useAppSelector((state) => state.drawer)
 
     // 모바일 메뉴 서랍 액션
-    const handleOpenMenuDrawer = useCallback(() => {
-        dispatch(openMenuDrawer())
+    const openMenuDrawer = useCallback(() => {
+        dispatch(openMenuDrawerAction())
     }, [dispatch])
 
-    const handleCloseMenuDrawer = useCallback(() => {
-        dispatch(closeMenuDrawer())
+    const closeMenuDrawer = useCallback(() => {
+        dispatch(closeMenuDrawerAction())
     }, [dispatch])
 
     // 모바일 장바구니 서랍 액션
-    const handleOpenMobileCart = useCallback(() => {
-        dispatch(openCartDrawer())
+    const openCartDrawer = useCallback(() => {
+        dispatch(openCartDrawerAction())
     }, [dispatch])
 
-    const handleCloseMobileCart = useCallback(() => {
-        dispatch(closeCartDrawer())
+    const closeCartDrawer = useCallback(() => {
+        dispatch(closeCartDrawerAction())
     }, [dispatch])
 
     // 모든 서랍 닫기
-    const handleCloseAllDrawers = useCallback(() => {
-        dispatch(closeAllDrawers())
+    const closeAllDrawers = useCallback(() => {
+        dispatch(closeAllDrawersAction())
     }, [dispatch])
 
     return {
@@ -44,14 +50,14 @@ export const useDrawer = () => {
         hasOpenDrawer: menuDrawerOpen || cartDrawerOpen,
 
         // 메뉴 서랍 액션
-        openDrawerMenu: handleOpenMenuDrawer,
-        closeDrawerMenu: handleCloseMenuDrawer,
+        openMenuDrawer,
+        closeMenuDrawer,
 
         // 장바구니 서랍 액션
-        openCartDrawer: handleOpenMobileCart,
-        closeCartDrawer: handleCloseMobileCart,
+        openCartDrawer,
+        closeCartDrawer,
 
         // 전체 액션
-        closeAllDrawers: handleCloseAllDrawers,
+        closeAllDrawers,
     }
 }
