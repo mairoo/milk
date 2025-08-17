@@ -14,6 +14,13 @@ body[style*="overflow: hidden"] {
     padding-right: 0 !important; /* Radix가 자동 추가하는 padding-right 제거 */
 }
 
+/* Sticky header 안정화 클래스 */
+.sticky-header-stable {
+    will-change: transform; /* GPU 가속으로 렌더링 안정화 */
+    transform: translateZ(0); /* GPU 레이어 강제 생성 (transform-gpu 역할) */
+    backface-visibility: hidden; /* 뒷면 숨김으로 깜빡임 방지 */
+}
+
 /* Tailwind v4 font family */
 @theme {
     --font-family-nanum-gothic: "Nanum Gothic", system-ui, sans-serif;

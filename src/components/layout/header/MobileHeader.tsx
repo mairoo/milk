@@ -20,16 +20,11 @@ export default function MobileHeader({className}: MobileHeaderProps) {
     // 버튼 테두리는 variant="outline"
     // 버튼 아이콘 이미지 크기는 size-*로 동작
 
-    // 기본 sticky 설정
-    // "sticky top-0 z-10 bg-white",
-    //
-    // sticky 안정화 옵션
-    // "will-change-transform",  // GPU 가속으로 렌더링 안정화
-    // "transform-gpu",          // Tailwind의 GPU 가속 클래스
-    // "backface-hidden",        // 뒷면 숨김으로 깜빡임 방지
     return (
-        <header
-            className={cn(" sticky top-0 z-10 will-change-transform transform-gpu backface-hidden bg-white", className)}>
+        <header className={cn(
+            "sticky top-0 z-10 bg-white sticky-header-stable",
+            className
+        )}>
             <div className="flex items-center p-2">
                 <div>
                     <Button
