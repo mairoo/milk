@@ -25,6 +25,17 @@ export const inventoryPublicApi = baseApi.injectEndpoints({
             ],
         }),
 
+        getCategoryById: builder.query<CategoryResponse, number>({
+            query: (categoryId) => ({
+                url: `/open/categories/${categoryId}`,
+                method: 'GET',
+            }),
+            transformResponse: (response: ApiResponse<CategoryResponse>) => response.data,
+            providesTags: (result, error, categoryId) => [
+                {type: 'Category' as const, id: categoryId}
+            ],
+        }),
+
         getProductsByCategory: builder.query<ProductResponse[], { categoryId: number; params?: ProductSearchRequest }>({
             query: ({categoryId, params = {}}) => ({
                 url: `/open/products/category/${categoryId}`,
@@ -52,6 +63,8 @@ export const inventoryPublicApi = baseApi.injectEndpoints({
 export const {
     useGetCategoryBySlugQuery,
     useLazyGetCategoryBySlugQuery,
+    useGetCategoryByIdQuery,
+    useLazyGetCategoryByIdQuery,
     useGetProductsByCategoryQuery,
     useLazyGetProductsByCategoryQuery,
     useGetProductQuery,

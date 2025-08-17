@@ -2,7 +2,7 @@
 
 import {useEffect, useState} from 'react'
 import {decode} from "@/global/lib/url"
-import {useCategory, useProducts} from '@/features/inventory/public/hooks'
+import {useCategoryBySlug, useProducts} from '@/features/inventory/public/hooks'
 import ReactMarkdown from 'react-markdown';
 import {Alert} from "@/components/layout/containers/Alert";
 import {useRouter} from 'next/navigation';
@@ -24,7 +24,7 @@ export default function CategoryPage({params}: CategoryPageProps) {
         error: categoryError,
         hasError: categoryHasError,
         getCategoryBySlug
-    } = useCategory()
+    } = useCategoryBySlug()
 
     const {
         loading: productsLoading,

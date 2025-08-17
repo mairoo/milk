@@ -2,6 +2,7 @@ import {useCallback} from 'react'
 import {useDispatch} from 'react-redux'
 import {
     inventoryPublicApi,
+    useLazyGetCategoryByIdQuery,
     useLazyGetCategoryBySlugQuery,
     useLazyGetProductQuery,
     useLazyGetProductsByCategoryQuery
@@ -9,7 +10,7 @@ import {
 import type {ProductSearchRequest} from './request'
 import {getErrorMessage} from "@/global/lib/rtkQueryUtils";
 
-export const useCategory = () => {
+export const useCategoryBySlug = () => {
     const dispatch = useDispatch()
     const [getCategoryTrigger, result] = useLazyGetCategoryBySlugQuery()
 
@@ -33,6 +34,29 @@ export const useCategory = () => {
         reset,
 
         // 추가 상태 (필요시)
+        isFetching: result.isFetching,
+    }
+}
+
+export const useCategoryById = () => {
+    const dispatch = useDispatch()
+    const [getCategoryTrigger, result] = useLazyGetCategoryByIdQuery()
+
+    const getCategoryById = useCallback((categoryId: number) => {
+        return getCategoryTrigger(categoryId)
+    }, [getCategoryTrigger])
+
+    const reset = useCallback(() => {
+        dispatch(inventoryPublicApi.util.resetApiState())
+    }, [dispatch])
+
+    return {
+        loading: result.isLoading,
+        data: result.data,
+        error: getErrorMessage(result.error),
+        hasError: !!result.error,
+        getCategoryById,
+        reset,
         isFetching: result.isFetching,
     }
 }
