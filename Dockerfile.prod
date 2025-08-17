@@ -2,6 +2,9 @@
 FROM node:18-alpine AS builder
 WORKDIR /build
 
+# Next.js telemetry 빌드 시에도 비활성화
+ENV NEXT_TELEMETRY_DISABLED 1
+
 # package.json과 package-lock.json을 먼저 복사 (캐싱 최적화)
 COPY package.json package-lock.json ./
 
@@ -23,6 +26,9 @@ WORKDIR /app
 
 # 헬스체크용 curl 설치
 RUN apk add --no-cache curl
+
+# Next.js telemetry 실행 시에도 비활성화
+ENV NEXT_TELEMETRY_DISABLED 1
 
 # 빌드된 파일들 복사
 COPY --from=builder /build/.next ./.next
