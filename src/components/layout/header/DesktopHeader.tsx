@@ -25,7 +25,8 @@ export default function DesktopHeader({className}: DesktopHeaderProps) {
     // 로딩 중일 때는 기본 메뉴만 표시
     if (status === 'loading') {
         return (
-            <header className={cn("sticky top-0 bg-white", className)}>
+            <header
+                className={cn(" sticky top-0 z-10 will-change-transform transform-gpu backface-hidden bg-white", className)}>
                 <div className="mx-auto container">
                     <div className="mx-auto container flex justify-between items-center py-2">
                         <div>
@@ -49,7 +50,8 @@ export default function DesktopHeader({className}: DesktopHeaderProps) {
     }
 
     return (
-        <header className={cn("sticky top-0 bg-white", className)}>
+        <header
+            className={cn(" sticky top-0 z-10 will-change-transform transform-gpu backface-hidden bg-white", className)}>
             <div className="mx-auto container">
                 <div className="mx-auto container flex justify-between items-center py-4">
                     <div>

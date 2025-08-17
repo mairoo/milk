@@ -115,7 +115,7 @@ export default function CategoryPage({params}: CategoryPageProps) {
 
     // 카테고리 데이터가 있을 때 메인 컨텐츠 렌더링
     return (
-        <div className="flex flex-col gap-y-8">
+        <div className="flex flex-col gap-y-2">
             <Alert>
                 <ReactMarkdown>
                     {categoryData.description}
@@ -124,8 +124,6 @@ export default function CategoryPage({params}: CategoryPageProps) {
 
             {/* 상품 목록 섹션 */}
             <div>
-                <h2 className="text-2xl font-bold mb-6">상품 목록</h2>
-
                 {productsLoading && (
                     <div className="flex justify-center py-8">
                         <p>상품 목록 로딩 중...</p>
@@ -153,7 +151,7 @@ export default function CategoryPage({params}: CategoryPageProps) {
                                     <ProductCard
                                         key={product.id}
                                         product={product}
-                                        imageUrl={getProductImageUrl(product.id)}
+                                        imageUrl={getProductImageUrl()}
                                         onAddToCart={handleAddToCart}
                                         onClick={(productId) => handleProductClick(productId, product.code)}
                                     />

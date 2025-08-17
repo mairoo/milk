@@ -42,26 +42,21 @@ export default function ProductCard({
 
     return (
         <Card
-            className="w-full max-w-sm cursor-pointer hover:shadow-lg transition-shadow duration-200 relative"
+            className="w-full max-w-sm cursor-pointer"
             onClick={() => onClick?.(product.id)}
         >
-            {/* 품절 오버레이 */}
-            {isSoldOut && (
-                <div
-                    className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center z-10 rounded-lg">
-                    <span className="text-white font-bold text-lg">품절</span>
-                </div>
-            )}
 
             {/* 이미지 섹션 */}
             <CardHeader className="p-0">
-                <div className="relative aspect-square w-full overflow-hidden rounded-t-lg">
+                <div className="aspect-square w-full overflow-hidden rounded-t-lg">
                     <Image
                         src={imageUrl}
                         alt={finalImageAlt}
-                        fill
-                        className={`object-cover transition-transform duration-300 hover:scale-105 ${isSoldOut ? 'opacity-50' : ''}`}
+                        width={400}  // 명시적 크기 지정으로 position 문제 해결
+                        height={400}
+                        className="w-full h-full object-cover"
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        priority={false}  // 카드 이미지는 lazy loading
                     />
                 </div>
             </CardHeader>
