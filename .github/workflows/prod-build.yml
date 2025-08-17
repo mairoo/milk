@@ -37,7 +37,10 @@ jobs:
       - name: Build Docker image
         run: |
           echo "🔨 Building frontend Docker image..."
-          docker build -f Dockerfile.prod -t ${{ secrets.PREFIX }}-frontend:latest .
+          DOCKER_BUILDKIT=1 docker build \
+            --cache-from ${{ secrets.PREFIX }}-frontend:latest \
+            -f Dockerfile.prod \
+            -t ${{ secrets.PREFIX }}-frontend:latest .
 
       - name: Verify Docker image
         run: |
