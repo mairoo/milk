@@ -7,7 +7,7 @@ export const metadata: Metadata = {
 
 export default function GuidePage() {
     return (
-        <div className="px-2 md:px-0 py-2">
+        <>
             <h1 className="text-2xl font-bold mb-4">이용안내</h1>
             <div className="flex flex-col gap-y-4">
                 <section className="flex flex-col gap-y-2">
@@ -197,6 +197,6 @@ export default function GuidePage() {
                     </ul>
                 </section>
             </div>
-        </div>
+        </>
     );
 }

@@ -79,7 +79,7 @@ export default function ProductPage({params}: ProductPageProps) {
 
     // 상품 데이터가 있을 때 메인 컨텐츠 렌더링
     return (
-        <div className="px-2 md:px-0 py-2">
+        <>
             <h1 className="text-3xl font-bold mb-6">상품: {productData.code}</h1>
 
             <div className="space-y-4">
@@ -163,6 +163,6 @@ export default function ProductPage({params}: ProductPageProps) {
                     <strong>PG 리뷰 수:</strong> {productData.reviewCountPg}
                 </div>
             </div>
-        </div>
+        </>
     )
 }

@@ -27,7 +27,7 @@ const faqs: FAQ[] = [
 
 export default function FAQPage() {
     return (
-        <div className="container mx-auto px-4 py-8">
+        <>
             <h1 className="text-3xl font-bold mb-6">자주 묻는 질문</h1>
             <div className="space-y-6">
                 {faqs.map((faq, index) => (
@@ -39,6 +39,6 @@ export default function FAQPage() {
                     </div>
                 ))}
             </div>
-        </div>
+        </>
     );
 }

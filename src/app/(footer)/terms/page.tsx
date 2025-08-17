@@ -7,7 +7,7 @@ export const metadata: Metadata = {
 
 export default function TermsPage() {
     return (
-        <div className="px-2 md:px-0 py-2">
+        <>
             <h1 className="text-3xl font-bold mb-6">이용약관</h1>
 
             <div className="prose max-w-none">
@@ -45,6 +45,6 @@ export default function TermsPage() {
                     <p>시행일: 2024년 1월 1일</p>
                 </div>
             </div>
-        </div>
+        </>
     );
 }

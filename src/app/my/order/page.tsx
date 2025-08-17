@@ -7,7 +7,7 @@ export const metadata: Metadata = {
 
 export default function MyOrderPage() {
     return (
-        <div className="container mx-auto px-4 py-8">
+        <>
             <h1 className="text-3xl font-bold mb-6">주문/발송</h1>
             <div className="prose max-w-none">
                 <section className="mb-8">
@@ -24,6 +24,6 @@ export default function MyOrderPage() {
                     </ol>
                 </section>
             </div>
-        </div>
+        </>
     );
 }

@@ -7,7 +7,6 @@ export const metadata: Metadata = {
 
 export default function PrivacyPage() {
     return (
-        <div className="px-2 md:px-0 py-2">
-        </div>
+        <></>
     );
 }
