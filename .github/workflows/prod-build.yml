@@ -25,6 +25,16 @@ jobs:
           restore-keys: |
             npm-${{ runner.os }}-
 
+      - name: Cache Next.js build
+        uses: actions/cache@v4
+        with:
+          path: |
+            .next/cache
+          key: nextjs-build-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx') }}
+          restore-keys: |
+            nextjs-build-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}-
+            nextjs-build-${{ runner.os }}-
+
       - name: Copy production config
         run: cp ${{ secrets.CONFIG_PATH }}/dotenv .env.production
 
