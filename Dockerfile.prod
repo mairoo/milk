@@ -8,8 +8,8 @@ ENV NEXT_TELEMETRY_DISABLED 1
 # package.json과 package-lock.json을 먼저 복사 (캐싱 최적화)
 COPY package.json package-lock.json ./
 
-# 의존성 설치
-RUN npm ci --only=production=false
+# 개발 의존성 포함해서 설치 (빌드용)
+RUN npm ci
 
 # 환경변수 파일 복사 (빌드 타임에 NEXT_PUBLIC_* 변수들이 번들에 포함됨)
 COPY .env.production .env.production
@@ -19,6 +19,9 @@ COPY . .
 
 # Next.js 빌드
 RUN npm run build
+
+# 개발 의존성 제거하고 프로덕션만 유지
+RUN npm prune --production && npm cache clean --force
 
 # 실행 스테이지
 FROM node:18-alpine
@@ -30,14 +33,12 @@ RUN apk add --no-cache curl
 # Next.js telemetry 실행 시에도 비활성화
 ENV NEXT_TELEMETRY_DISABLED 1
 
-# 빌드된 파일들 복사
+# 빌드된 파일들과 프로덕션 의존성 복사
 COPY --from=builder /build/.next ./.next
 COPY --from=builder /build/public ./public
 COPY --from=builder /build/package.json ./package.json
 COPY --from=builder /build/package-lock.json ./package-lock.json
-
-# 프로덕션 의존성만 설치
-RUN npm ci --only=production && npm cache clean --force
+COPY --from=builder /build/node_modules ./node_modules
 
 # Next.js 포트 노출
 EXPOSE 3000
