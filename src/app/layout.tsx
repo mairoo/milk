@@ -12,7 +12,7 @@ import {authOptions} from "@/global/lib/auth";
 import MobileHeader from "@/components/layout/header/MobileHeader";
 import MenuDrawerSheet from "@/components/layout/drawer/MenuDrawerSheet";
 import CartDrawerSheet from "@/components/layout/drawer/CartDrawerSheet";
-import MainContainer from "@/components/layout/main/MainContainer";
+import MainContainer from "@/components/layout/containers/MainContainer";
 
 const nanumGothic = Nanum_Gothic({
     weight: ['400', '700', '800'],

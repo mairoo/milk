@@ -5,6 +5,7 @@ import {decode} from "@/global/lib/url"
 import {useCategory, useProducts} from '@/features/inventory/public/hooks'
 import Link from "next/link";
 import ReactMarkdown from 'react-markdown';
+import {Alert} from "@/components/layout/containers/Alert";
 
 interface CategoryPageProps {
     params: Promise<{
@@ -97,59 +98,15 @@ export default function CategoryPage({params}: CategoryPageProps) {
 
     // 카테고리 데이터가 있을 때 메인 컨텐츠 렌더링
     return (
-        <>
-            <h1 className="text-3xl font-bold mb-6">카테고리: {categoryData.title}</h1>
-
-            <div className="space-y-4 mb-8">
-                <div>
-                    <strong>ID:</strong> {categoryData.id}
-                </div>
-                <div>
-                    <strong>생성일:</strong> {categoryData.created}
-                </div>
-                <div>
-                    <strong>수정일:</strong> {categoryData.modified}
-                </div>
-                <div>
-                    <strong>제목:</strong> {categoryData.title}
-                </div>
-                <div>
-                    <strong>슬러그:</strong> {categoryData.slug}
-                </div>
-                <div>
-                    <strong>썸네일:</strong> {categoryData.thumbnail}
-                </div>
-                <div>
-                    <strong>설명:</strong>
-                    <ReactMarkdown>
-                        {categoryData.description}
-                    </ReactMarkdown>
-                </div>
-                <div>
-                    <strong>상세 설명:</strong>
-                    <ReactMarkdown>
-                        {categoryData.description1}
-                    </ReactMarkdown>
-                </div>
-                <div>
-                    <strong>레벨:</strong> {categoryData.level}
-                </div>
-                <div>
-                    <strong>부모 ID:</strong> {categoryData.parentId}
-                </div>
-                <div>
-                    <strong>할인율:</strong> {categoryData.discountRate}%
-                </div>
-                <div>
-                    <strong>PG:</strong> {categoryData.pg ? '예' : '아니오'}
-                </div>
-                <div>
-                    <strong>PG 할인율:</strong> {categoryData.pgDiscountRate}%
-                </div>
-            </div>
+        <div className="flex flex-col gap-y-8">
+            <Alert>
+                <ReactMarkdown>
+                    {categoryData.description}
+                </ReactMarkdown>
+            </Alert>
 
             {/* 상품 목록 섹션 */}
-            <div className="border-t pt-8">
+            <div>
                 <h2 className="text-2xl font-bold mb-4">상품 목록</h2>
 
                 {productsLoading && (
@@ -250,6 +207,6 @@ export default function CategoryPage({params}: CategoryPageProps) {
                     </div>
                 )}
             </div>
-        </>
+        </div>
     )
 }
