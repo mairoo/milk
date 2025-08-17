@@ -5,12 +5,12 @@ import {Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle,} from "@
 import {useDrawer} from "@/features/ui/drawer/hooks";
 
 export default function MenuDrawerSheet() {
-    const {menuDrawerOpen, closeDrawerMenu} = useDrawer();
+    const {menuDrawerOpen, closeMenuDrawer} = useDrawer();
 
     return (
         <Sheet
             open={menuDrawerOpen}
-            onOpenChange={(open) => !open && closeDrawerMenu()}
+            onOpenChange={(open) => !open && closeMenuDrawer()}
         >
             <SheetContent side="left" className="w-80">
                 <SheetHeader>
