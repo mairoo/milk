@@ -3,9 +3,10 @@
 import {useEffect, useState} from 'react'
 import {decode} from "@/global/lib/url"
 import {useCategory, useProducts} from '@/features/inventory/public/hooks'
-import Link from "next/link";
 import ReactMarkdown from 'react-markdown';
 import {Alert} from "@/components/layout/containers/Alert";
+import {useRouter} from 'next/navigation';
+import ProductCard from "@/components/widgets/cards/ProductCard";
 
 interface CategoryPageProps {
     params: Promise<{
@@ -15,8 +16,8 @@ interface CategoryPageProps {
 
 export default function CategoryPage({params}: CategoryPageProps) {
     const [slug, setSlug] = useState<string>('')
+    const router = useRouter();
 
-    // 커스텀 hooks 사용
     const {
         loading: categoryLoading,
         data: categoryData,
@@ -56,6 +57,22 @@ export default function CategoryPage({params}: CategoryPageProps) {
             getProductsByCategory(categoryData.id)
         }
     }, [categoryData?.id, getProductsByCategory])
+
+    // 장바구니 추가 핸들러
+    const handleAddToCart = (productId: number) => {
+        console.log('장바구니에 추가:', productId);
+        // TODO: 장바구니 추가 로직 구현
+    };
+
+    // 상품 클릭 핸들러
+    const handleProductClick = (productId: number, productCode: string) => {
+        router.push(`/product/${productId}/${productCode}`);
+    };
+
+    // 카테고리 썸네일을 상품 이미지로 사용
+    const getProductImageUrl = () => {
+        return `https://pincoin-s3.s3.amazonaws.com/media/${categoryData?.thumbnail}`;
+    };
 
     // slug가 아직 준비되지 않았을 때
     if (!slug) {
@@ -107,14 +124,16 @@ export default function CategoryPage({params}: CategoryPageProps) {
 
             {/* 상품 목록 섹션 */}
             <div>
-                <h2 className="text-2xl font-bold mb-4">상품 목록</h2>
+                <h2 className="text-2xl font-bold mb-6">상품 목록</h2>
 
                 {productsLoading && (
-                    <p>상품 목록 로딩 중...</p>
+                    <div className="flex justify-center py-8">
+                        <p>상품 목록 로딩 중...</p>
+                    </div>
                 )}
 
                 {productsHasError && (
-                    <div>
+                    <div className="text-center py-8">
                         <p>상품 목록을 불러오는데 실패했습니다.</p>
                         {productsError && (
                             <p className="text-sm text-red-500 mt-1">오류: {productsError}</p>
@@ -123,86 +142,23 @@ export default function CategoryPage({params}: CategoryPageProps) {
                 )}
 
                 {productsData && (
-                    <div className="space-y-6">
+                    <div>
                         {productsData.length === 0 ? (
-                            <p>등록된 상품이 없습니다.</p>
+                            <div className="text-center py-12">
+                                <p className="text-gray-500">등록된 상품이 없습니다.</p>
+                            </div>
                         ) : (
-                            productsData.map((product) => (
-                                <div key={product.id} className="border p-4 rounded">
-                                    <div className="space-y-2">
-                                        <div>
-                                            <strong>ID:</strong>
-                                            <Link href={`/product/${product.id}/${product.code}`}>
-                                                {product.id}
-                                            </Link>
-                                        </div>
-                                        <div>
-                                            <strong>이름:</strong> {product.name}
-                                        </div>
-                                        {product.subtitle && (
-                                            <div>
-                                                <strong>부제목:</strong> {product.subtitle}
-                                            </div>
-                                        )}
-                                        <div>
-                                            <strong>코드:</strong> {product.code}
-                                        </div>
-                                        <div>
-                                            <strong>정가:</strong> {product.listPrice.toLocaleString()}원
-                                        </div>
-                                        <div>
-                                            <strong>판매가:</strong> {product.sellingPrice.toLocaleString()}원
-                                        </div>
-                                        {product.description && (
-                                            <div>
-                                                <strong>설명:</strong>
-                                                <pre
-                                                    className="whitespace-pre-wrap mt-1 p-2 bg-gray-50 rounded text-sm">
-                                                    {product.description}
-                                                </pre>
-                                            </div>
-                                        )}
-                                        <div>
-                                            <strong>재고:</strong> {product.stock}
-                                        </div>
-                                        <div>
-                                            <strong>상태:</strong> {product.status}
-                                        </div>
-                                        <div>
-                                            <strong>포지션:</strong> {product.position}
-                                        </div>
-                                        <div>
-                                            <strong>리뷰 수:</strong> {product.reviewCount}
-                                        </div>
-                                        <div>
-                                            <strong>네이버 파트너:</strong> {product.naverPartner ? '예' : '아니오'}
-                                        </div>
-                                        {product.naverPartnerTitle && (
-                                            <div>
-                                                <strong>네이버 파트너 제목:</strong> {product.naverPartnerTitle}
-                                            </div>
-                                        )}
-                                        <div>
-                                            <strong>PG:</strong> {product.pg ? '예' : '아니오'}
-                                        </div>
-                                        <div>
-                                            <strong>PG 판매가:</strong> {product.pgSellingPrice.toLocaleString()}원
-                                        </div>
-                                        <div>
-                                            <strong>PG 리뷰 수:</strong> {product.reviewCountPg}
-                                        </div>
-                                        <div>
-                                            <strong>삭제됨:</strong> {product.isRemoved ? '예' : '아니오'}
-                                        </div>
-                                        <div>
-                                            <strong>생성일:</strong> {product.created || 'N/A'}
-                                        </div>
-                                        <div>
-                                            <strong>수정일:</strong> {product.modified || 'N/A'}
-                                        </div>
-                                    </div>
-                                </div>
-                            ))
+                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                                {productsData.map((product) => (
+                                    <ProductCard
+                                        key={product.id}
+                                        product={product}
+                                        imageUrl={getProductImageUrl(product.id)}
+                                        onAddToCart={handleAddToCart}
+                                        onClick={(productId) => handleProductClick(productId, product.code)}
+                                    />
+                                ))}
+                            </div>
                         )}
                     </div>
                 )}

@@ -1,7 +1,16 @@
-import type { NextConfig } from "next";
+import type {NextConfig} from "next";
 
 const nextConfig: NextConfig = {
-  /* config auth here */
+    images: {
+        remotePatterns: [
+            {
+                protocol: 'https',
+                hostname: 'pincoin-s3.s3.amazonaws.com',
+                port: '',
+                pathname: '/media/**',
+            },
+        ],
+    },
 };
 
 export default nextConfig;
