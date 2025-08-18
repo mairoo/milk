@@ -3,12 +3,12 @@
 import {useCallback, useEffect, useMemo, useState} from 'react'
 import {Minus, Plus, ShoppingCart} from 'lucide-react'
 import Image from 'next/image'
-import ReactMarkdown from 'react-markdown'
 import {useCategoryById, useProduct} from '@/features/inventory/public/hooks'
 import {Card, CardContent} from '@/components/ui/card'
 import {Button} from '@/components/ui/button'
 import {Alert} from '@/components/layout/containers/Alert'
 import {ProductStock} from '@/features/inventory/public/response'
+import {StyledMarkdown} from "@/components/layout/containers/StyledMakrdown";
 
 interface ProductDetailPageProps {
     params: Promise<{
@@ -274,9 +274,9 @@ export default function ProductDetailPage({params}: ProductDetailPageProps) {
                         <div className="flex-1"> {/* flex-1로 남은 공간 모두 차지 */}
                             <Alert variant="warning" className="h-full">
                                 <div className="h-full overflow-y-auto">
-                                    <ReactMarkdown>
+                                    <StyledMarkdown variant="compact">
                                         {categoryData.description}
-                                    </ReactMarkdown>
+                                    </StyledMarkdown>
                                 </div>
                             </Alert>
                         </div>
@@ -288,9 +288,9 @@ export default function ProductDetailPage({params}: ProductDetailPageProps) {
             <div className="space-y-4">
                 {categoryData?.description1 && (
                     <Alert variant="info">
-                        <ReactMarkdown>
+                        <StyledMarkdown variant="compact">
                             {categoryData.description1}
-                        </ReactMarkdown>
+                        </StyledMarkdown>
                     </Alert>
                 )}
                 {/* 상품권 발송 안내 */}

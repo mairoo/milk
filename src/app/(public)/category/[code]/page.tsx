@@ -2,11 +2,11 @@
 
 import {useCallback, useEffect, useState} from 'react'
 import {useRouter} from 'next/navigation'
-import ReactMarkdown from 'react-markdown'
 import {decode} from '@/global/lib/url'
 import {useCategoryBySlug, useProducts} from '@/features/inventory/public/hooks'
 import {Alert} from '@/components/layout/containers/Alert'
 import ProductCard from '@/components/widgets/cards/ProductCard'
+import {StyledMarkdown} from "@/components/layout/containers/StyledMakrdown";
 
 interface CategoryPageProps {
     params: Promise<{
@@ -113,9 +113,9 @@ export default function CategoryPage({params}: CategoryPageProps) {
         <div className="flex flex-col gap-y-2">
             {/* 카테고리 설명 */}
             <Alert>
-                <ReactMarkdown>
+                <StyledMarkdown variant="compact">
                     {categoryData.description}
-                </ReactMarkdown>
+                </StyledMarkdown>
             </Alert>
 
             {/* 상품 목록 섹션 */}
