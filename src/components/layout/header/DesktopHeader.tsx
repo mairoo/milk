@@ -13,6 +13,7 @@ import {useAuth} from "@/features/auth/shared/hooks";
 import {NavButton} from "@/components/layout/navigation/NavButton";
 import {Button} from "@/components/ui/button";
 import {Input} from "@/components/ui/input";
+import {useScrollShadow} from "@/features/ui/header/hooks";
 
 interface DesktopHeaderProps {
     className?: string;
@@ -21,12 +22,14 @@ interface DesktopHeaderProps {
 export default function DesktopHeader({className}: DesktopHeaderProps) {
     const {data: session, status} = useSession();
     const {signIn, signOut} = useAuth();
+    const isScrolled = useScrollShadow(10); // 10px 스크롤시 shadow 적용
 
     // 로딩 중일 때는 기본 메뉴만 표시
     if (status === 'loading') {
         return (
             <header className={cn(
-                "sticky top-0 z-10 bg-white sticky-header-stable",
+                "sticky top-0 z-10 bg-white transition-shadow duration-300",
+                isScrolled && "shadow-md",
                 className
             )}>
                 <div className="mx-auto container">
@@ -53,7 +56,8 @@ export default function DesktopHeader({className}: DesktopHeaderProps) {
 
     return (
         <header className={cn(
-            "sticky top-0 z-10 bg-white sticky-header-stable",
+            "sticky top-0 z-10 bg-white transition-shadow duration-300",
+            isScrolled && "shadow-md",
             className
         )}>
             <div className="mx-auto container">

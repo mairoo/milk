@@ -7,6 +7,7 @@ import Image from "next/image";
 import {Button} from "@/components/ui/button";
 import {Menu, ShoppingCart} from "lucide-react";
 import {useDrawer} from "@/features/ui/drawer/hooks";
+import {useScrollShadow} from "@/features/ui/header/hooks";
 
 interface MobileHeaderProps {
     className?: string;
@@ -14,15 +15,12 @@ interface MobileHeaderProps {
 
 export default function MobileHeader({className}: MobileHeaderProps) {
     const {openMenuDrawer, openCartDrawer} = useDrawer();
-
-    // sticky 요소가 동시에 flex container가 되면, flex 레이아웃 계산과 sticky positioning 계산이 서로 간섭
-    // sticky position만 담당하는 요소와 가로 배치 div 요소 분리
-    // 버튼 테두리는 variant="outline"
-    // 버튼 아이콘 이미지 크기는 size-*로 동작
+    const isScrolled = useScrollShadow(10); // 10px 스크롤시 shadow 적용
 
     return (
         <header className={cn(
-            "sticky top-0 z-10 bg-white sticky-header-stable",
+            "sticky top-0 z-10 bg-white transition-shadow duration-300",
+            isScrolled && "shadow-md",
             className
         )}>
             <div className="flex items-center p-2">
