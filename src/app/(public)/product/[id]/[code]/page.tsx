@@ -200,38 +200,45 @@ export default function ProductDetailPage({params}: ProductDetailPageProps) {
                             </div>
                         </div>
 
-                        {/* 수량 선택 */}
+                        {/* 수량 선택 및 총 금액 */}
                         {!isSoldOut && (
-                            <div className="p-3 border rounded-lg flex items-center justify-center lg:justify-start space-x-4">
-                                <label className="font-medium">수량:</label>
-                                <div className="flex items-center space-x-2">
-                                    <button
-                                        onClick={decreaseQuantity}
-                                        className="p-2 border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50"
-                                        disabled={quantity <= 1}
-                                    >
-                                        <Minus className="h-4 w-4"/>
-                                    </button>
-                                    <span className="min-w-[3rem] text-center font-medium">
-                {quantity}
-            </span>
-                                    <button
-                                        onClick={increaseQuantity}
-                                        className="p-2 border border-gray-300 rounded-md hover:bg-gray-50"
-                                    >
-                                        <Plus className="h-4 w-4"/>
-                                    </button>
+                            <div className="space-y-2">
+                                {/* 수량 선택 */}
+                                <div className="bg-gray-50 p-4 rounded-lg">
+                                    <div className="flex items-center justify-between">
+                                        <span className="font-medium text-gray-700">수량</span>
+                                        <div className="flex items-center space-x-3">
+                                            <button
+                                                onClick={decreaseQuantity}
+                                                className="w-8 h-8 flex items-center justify-center border border-gray-300 rounded-md hover:bg-white hover:border-gray-400 disabled:opacity-50 disabled:hover:bg-gray-50 disabled:hover:border-gray-300 transition-colors"
+                                                disabled={quantity <= 1}
+                                                aria-label="수량 감소"
+                                            >
+                                                <Minus className="h-4 w-4 text-gray-600"/>
+                                            </button>
+                                            <span className="min-w-[3rem] text-center font-semibold text-lg">
+                        {quantity}
+                    </span>
+                                            <button
+                                                onClick={increaseQuantity}
+                                                className="w-8 h-8 flex items-center justify-center border border-gray-300 rounded-md hover:bg-white hover:border-gray-400 transition-colors"
+                                                aria-label="수량 증가"
+                                            >
+                                                <Plus className="h-4 w-4 text-gray-600"/>
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        )}
 
-                        {/* 총 금액 */}
-                        {!isSoldOut && (
-                            <div className="bg-emerald-50 p-3 rounded-lg flex justify-between items-center">
-                                <span className="font-medium">총 금액:</span>
-                                <span className="text-lg font-bold text-emerald-600">
-                            {formatPrice(totalAmount)}
-                        </span>
+                                {/* 총 금액 */}
+                                <div className="bg-emerald-50 p-4 rounded-lg border border-emerald-200">
+                                    <div className="flex items-center justify-between">
+                                        <span className="font-medium text-gray-700">총 금액</span>
+                                        <span className="text-xl font-bold text-emerald-600">
+                    {formatPrice(totalAmount)}
+                </span>
+                                    </div>
+                                </div>
                             </div>
                         )}
 
