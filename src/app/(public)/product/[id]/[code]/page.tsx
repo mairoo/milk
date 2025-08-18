@@ -184,17 +184,6 @@ export default function ProductDetailPage({params}: ProductDetailPageProps) {
                             </div>
                         </div>
 
-                        {/* 재고 상태 */}
-                        <div className="text-center lg:text-left">
-                    <span className={`inline-block px-3 py-1 rounded-full text-sm ${
-                        isSoldOut
-                            ? 'bg-red-100 text-red-600'
-                            : 'bg-green-100 text-green-700'
-                    }`}>
-                        {isSoldOut ? '품절' : '판매중'}
-                    </span>
-                        </div>
-
                         {/* 수량 선택 */}
                         {!isSoldOut && (
                             <div className="space-y-3">
