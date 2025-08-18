@@ -2,6 +2,7 @@
 
 import {useCallback, useEffect, useMemo, useState} from 'react'
 import {Minus, Plus, ShoppingCart} from 'lucide-react'
+import Image from 'next/image'
 import ReactMarkdown from 'react-markdown'
 import {useCategoryById, useProduct} from '@/features/inventory/public/hooks'
 import {Card, CardContent} from '@/components/ui/card'
@@ -49,6 +50,16 @@ export default function ProductDetailPage({params}: ProductDetailPageProps) {
     const isSoldOut = useMemo(() => {
         return productData?.stock === ProductStock.SOLD_OUT
     }, [productData?.stock])
+
+    // 카테고리 이미지 URL 생성 (CategoryPage와 동일한 방식)
+    const imageUrl = useMemo(() => {
+        if (!categoryData?.thumbnail) return '/placeholder-image.jpg' // 기본 플레이스홀더 이미지
+        return `https://pincoin-s3.s3.amazonaws.com/media/${categoryData.thumbnail}`
+    }, [categoryData])
+
+    const imageAlt = useMemo(() => {
+        return productData ? `${productData.name} 상품 이미지` : '상품 이미지'
+    }, [productData])
 
     useEffect(() => {
         const fetchParams = async () => {
@@ -139,25 +150,25 @@ export default function ProductDetailPage({params}: ProductDetailPageProps) {
 
     return (
         // 반응형 레이아웃: 모바일은 세로, 태블릿+ 는 1/3 + 2/3 배치
-        <div className="space-y-6">
+        <div className="space-y-3">
             {/* 상품 기본 정보 섹션 */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
                 {/* 상품 정보 및 구매 옵션 - 모바일: 전체, 태블릿+: 1/3 */}
                 <div className="lg:col-span-1 space-y-6">
                     <div className="max-w-md mx-auto lg:max-w-none space-y-2">
                         {/* 상품 이미지와 기본 정보를 가로로 배치 */}
-                        <div className="flex flex-col sm:flex-row gap-4">
+                        <div className="flex flex-col sm:flex-row gap-2">
                             {/* 상품 이미지 - 좌측 절반 */}
                             <div className="flex-1 flex justify-center sm:justify-start">
                                 <div className="w-40 h-28 relative overflow-hidden rounded-lg border shadow-sm">
-                                    <div
-                                        className="w-full h-full bg-gradient-to-br from-blue-50 to-green-50 flex items-center justify-center">
-                                        <div className="text-center text-gray-500 text-xs">
-                                            <div className="text-lg">🎁</div>
-                                            <p className="font-medium">{productData.name}</p>
-                                            <p className="text-xs opacity-75">{productData.code}</p>
-                                        </div>
-                                    </div>
+                                    <Image
+                                        src={imageUrl}
+                                        alt={imageAlt}
+                                        fill
+                                        className="object-cover"
+                                        sizes="(max-width: 640px) 160px, 160px"
+                                        priority={false}
+                                    />
                                 </div>
                             </div>
 
@@ -165,10 +176,11 @@ export default function ProductDetailPage({params}: ProductDetailPageProps) {
                             <div className="flex-1 space-y-3">
                                 {/* 상품명 */}
                                 <div className="text-center sm:text-left">
-                                    <h1 className="text-xl font-bold">{productData.name}</h1>
-                                    {productData.subtitle && (
-                                        <p className="text-gray-600">{productData.subtitle}</p>
-                                    )}
+                                    <h1 className="text-xl font-bold">
+                                        {productData.name}
+                                        <br/>
+                                        {productData.subtitle}
+                                    </h1>
                                 </div>
 
                                 {/* 가격 정보 */}
