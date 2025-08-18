@@ -4,9 +4,10 @@ import React, {useEffect, useState} from 'react';
 import {Card, CardContent} from '@/components/ui/card';
 import {Button} from '@/components/ui/button';
 import {Minus, Plus, ShoppingCart} from 'lucide-react';
-import {useProduct, useCategoryById} from '@/features/inventory/public/hooks';
+import {useCategoryById, useProduct} from '@/features/inventory/public/hooks';
 import ReactMarkdown from 'react-markdown';
 import {Alert} from "@/components/layout/containers/Alert";
+import {ProductStock} from "@/features/inventory/public/response";
 
 interface ProductDetailPageProps {
     params: Promise<{
@@ -69,6 +70,11 @@ export default function ProductDetailPage({params}: ProductDetailPageProps) {
     const calculateDiscountRate = () => {
         if (!productData || productData.listPrice === 0) return 0;
         return ((productData.listPrice - productData.sellingPrice) / productData.listPrice) * 100;
+    };
+
+    // 재고가 품절인지 확인하는 함수
+    const isSoldOut = () => {
+        return productData?.stock === ProductStock.SOLD_OUT;
     };
 
     // productId가 아직 준비되지 않았을 때
@@ -177,13 +183,13 @@ export default function ProductDetailPage({params}: ProductDetailPageProps) {
                     <div className="text-sm">
                         <span className="text-gray-600">재고: </span>
                         <span
-                            className={`font-medium ${productData.stock === 'SOLD_OUT' ? 'text-red-600' : 'text-green-600'}`}>
-                            {productData.stock === 'SOLD_OUT' ? '품절' : '판매중'}
+                            className={`font-medium ${isSoldOut() ? 'text-red-600' : 'text-green-600'}`}>
+                            {isSoldOut() ? '품절' : '판매중'}
                         </span>
                     </div>
 
                     {/* 수량 선택 */}
-                    {productData.stock !== 'SOLD_OUT' && (
+                    {!isSoldOut() && (
                         <div className="space-y-2">
                             <label className="block text-sm font-medium text-gray-700">
                                 수량
@@ -210,7 +216,7 @@ export default function ProductDetailPage({params}: ProductDetailPageProps) {
                     )}
 
                     {/* 총 금액 */}
-                    {productData.stock !== 'SOLD_OUT' && (
+                    {!isSoldOut() && (
                         <div className="p-4 bg-gray-50 rounded-lg">
                             <div className="flex justify-between items-center">
                                 <span className="text-lg font-medium">총 금액:</span>
@@ -224,10 +230,10 @@ export default function ProductDetailPage({params}: ProductDetailPageProps) {
                     {/* 구매 버튼 */}
                     <Button
                         className="w-full h-12 text-lg bg-emerald-600 hover:bg-emerald-700 text-white flex items-center justify-center gap-2"
-                        disabled={productData.stock === 'SOLD_OUT'}
+                        disabled={isSoldOut()}
                     >
                         <ShoppingCart className="h-5 w-5"/>
-                        {productData.stock === 'SOLD_OUT' ? '품절' : '장바구니 담기'}
+                        {isSoldOut() ? '품절' : '장바구니 담기'}
                     </Button>
                 </div>
             </div>
