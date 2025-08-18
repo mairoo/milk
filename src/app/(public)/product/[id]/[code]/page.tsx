@@ -253,7 +253,7 @@ export default function ProductDetailPage({params}: ProductDetailPageProps) {
                 </div>
 
                 {/* 카테고리 설명1만 우측 영역 - 모바일: 전체, 태블릿+: 2/3 */}
-                <div className="lg:col-span-2 space-y-4">
+                <div className="lg:col-span-2 space-y-4 flex flex-col">
                     {/* 카테고리 상태 표시 */}
                     {categoryLoading && (
                         <div className="text-center py-2">
@@ -269,13 +269,17 @@ export default function ProductDetailPage({params}: ProductDetailPageProps) {
                         </div>
                     )}
 
-                    {/* description1만 우측 영역에 표시 */}
+                    {/* description만 우측 영역에 표시 */}
                     {categoryData?.description && (
-                        <Alert variant="error">
-                            <ReactMarkdown>
-                                {categoryData.description}
-                            </ReactMarkdown>
-                        </Alert>
+                        <div className="flex-1"> {/* flex-1로 남은 공간 모두 차지 */}
+                            <Alert variant="warning" className="h-full">
+                                <div className="h-full overflow-y-auto">
+                                    <ReactMarkdown>
+                                        {categoryData.description}
+                                    </ReactMarkdown>
+                                </div>
+                            </Alert>
+                        </div>
                     )}
                 </div>
             </div>
