@@ -172,76 +172,75 @@ export default function ProductDetailPage({params}: ProductDetailPageProps) {
 
                 {/* 상품 정보 및 구매 옵션 */}
                 <div className="space-y-2">
-                    <div>
-                        <h1 className="font-bold text-gray-900 mb-2">
-                            {productData.name}
-                        </h1>
-                        {productData.subtitle && (
-                            <p className="text-gray-600">{productData.subtitle}</p>
-                        )}
+                    {/* 상품명 */}
+                    <h1 className="font-bold">
+                        {productData.name}
+                    </h1>
+
+                    {/* 부제목 */}
+                    {productData.subtitle && (
+                        <p className="font-bold">{productData.subtitle}</p>
+                    )}
+
+                    {/* 정가 */}
+                    <div className="text-gray-700">
+                        정가: {formatPrice(productData.listPrice)}
                     </div>
 
-                    {/* 가격 정보 */}
-                    <div className="space-y-2">
+                    {/* 판매가 */}
+                    <div className="flex items-center space-x-3">
+        <span className="font-bold text-gray-900">
+            판매가: {formatPrice(productData.sellingPrice)}
+        </span>
                         {discountRate > 0 && (
-                            <div className="flex items-center space-x-3">
-                                <span className="text-gray-500 line-through">
-                                  정가: {formatPrice(productData.listPrice)}
-                                </span>
-                                <span className="text-red-600 bg-red-50 px-2 py-1 rounded">
-                                  {discountRate.toFixed(2)}% 할인
-                                </span>
-                            </div>
+                            <span className="text-red-600 bg-red-50 px-2 py-1 rounded">
+                {discountRate.toFixed(2)}% 할인
+            </span>
                         )}
-                        <div className="font-bold text-gray-900">
-                            판매가: {formatPrice(productData.sellingPrice)}
-                        </div>
                     </div>
 
                     {/* 재고 상태 */}
                     <div>
-                        <span className="text-gray-600">재고: </span>
-                        <span className={`${isSoldOut ? 'text-red-600' : 'text-green-600'}`}>
-              {isSoldOut ? '품절' : '판매중'}
-            </span>
+                        <span>재고: </span>
+                        <span className={`${isSoldOut ? 'text-red-600' : 'text-green-700'}`}>
+            {isSoldOut ? '품절' : '판매중'}
+        </span>
                     </div>
 
-                    {/* 수량 선택 */}
+                    {/* 수량 선택 라벨 */}
                     {!isSoldOut && (
-                        <div className="space-y-2">
-                            <label className="block text-gray-700">
-                                수량
-                            </label>
-                            <div className="flex items-center space-x-3">
-                                <button
-                                    onClick={decreaseQuantity}
-                                    className="p-2 border border-gray-300 rounded-md hover:bg-gray-50"
-                                    disabled={quantity <= 1}
-                                >
-                                    <Minus className="h-4 w-4"/>
-                                </button>
-                                <span className="min-w-[3rem] text-center">
-                  {quantity}
-                </span>
-                                <button
-                                    onClick={increaseQuantity}
-                                    className="p-2 border border-gray-300 rounded-md hover:bg-gray-50"
-                                >
-                                    <Plus className="h-4 w-4"/>
-                                </button>
-                            </div>
+                        <label className="block text-gray-700">수량</label>
+                    )}
+
+                    {/* 수량 조절 버튼 */}
+                    {!isSoldOut && (
+                        <div className="flex items-center space-x-3">
+                            <button
+                                onClick={decreaseQuantity}
+                                className="p-2 border border-gray-300 rounded-md hover:bg-gray-50"
+                                disabled={quantity <= 1}
+                            >
+                                <Minus className="h-4 w-4"/>
+                            </button>
+                            <span className="min-w-[3rem] text-center">
+                {quantity}
+            </span>
+                            <button
+                                onClick={increaseQuantity}
+                                className="p-2 border border-gray-300 rounded-md hover:bg-gray-50"
+                            >
+                                <Plus className="h-4 w-4"/>
+                            </button>
                         </div>
                     )}
 
                     {/* 총 금액 */}
                     {!isSoldOut && (
-                        <div className="p-4 bg-gray-50 rounded-lg">
-                            <div className="flex justify-between items-center">
-                                <span>총 금액:</span>
-                                <span className="font-bold text-emerald-600">
-                  {formatPrice(totalAmount)}
-                </span>
-                            </div>
+                        <div className="p-4 bg-gray-50 rounded-lg flex justify-between items-center">
+                            <span>총 금액:</span>
+                            <span className="font-bold text-emerald-600">
+                {formatPrice(totalAmount)}
+            </span>
                         </div>
                     )}
 
