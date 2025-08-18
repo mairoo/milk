@@ -7,7 +7,6 @@ import Image from "next/image";
 import {Button} from "@/components/ui/button";
 import {Menu, ShoppingCart} from "lucide-react";
 import {useDrawer} from "@/features/ui/drawer/hooks";
-import {useScrollShadow} from "@/features/ui/header/hooks";
 
 interface MobileHeaderProps {
     className?: string;
@@ -15,12 +14,10 @@ interface MobileHeaderProps {
 
 export default function MobileHeader({className}: MobileHeaderProps) {
     const {openMenuDrawer, openCartDrawer} = useDrawer();
-    const isScrolled = useScrollShadow(10); // 10px 스크롤시 shadow 적용
 
     return (
         <header className={cn(
-            "sticky top-0 z-10 bg-white transition-shadow duration-300",
-            isScrolled && "shadow-md",
+            "sticky top-0 z-10 bg-white transition-shadow duration-300 shadow-md",
             className
         )}>
             <div className="flex items-center p-2">
