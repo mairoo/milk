@@ -27,13 +27,7 @@ export default function ProductCard({
         return ((product.listPrice - product.sellingPrice) / product.listPrice) * 100
     }, [product.listPrice, product.sellingPrice])
 
-    const finalImageAlt = useMemo(() => {
-        return imageAlt || product.name
-    }, [imageAlt, product.name])
-
-    const isSoldOut = useMemo(() => {
-        return product.stock === ProductStock.SOLD_OUT
-    }, [product.stock])
+    const isSoldOut = product.stock === ProductStock.SOLD_OUT
 
     const buttonText = useMemo(() => {
         if (isSoldOut) return '품절'
@@ -55,16 +49,13 @@ export default function ProductCard({
     }
 
     return (
-        <Card
-            className="w-full max-w-sm cursor-pointer p-0 gap-2"
-            onClick={handleCardClick}
-        >
+        <Card className="w-full max-w-sm cursor-pointer p-0 gap-2" onClick={handleCardClick}>
             {/* 이미지 섹션 */}
             <CardHeader className="p-0">
                 <div className="aspect-[156/100] w-full relative overflow-hidden rounded-t-xl">
                     <Image
                         src={imageUrl}
-                        alt={finalImageAlt}
+                        alt={imageAlt || product.name}
                         fill
                         className="object-cover"
                         sizes="(max-width: 768px) 50vw, 16vw"
@@ -91,8 +82,8 @@ export default function ProductCard({
                     </p>
                     {discountRate > 0 && (
                         <span className="text-sm font-medium text-red-600 bg-red-50 px-2 py-1 rounded">
-              {discountRate.toFixed(1)}%
-            </span>
+                            {discountRate.toFixed(1)}%
+                        </span>
                     )}
                 </div>
             </CardContent>

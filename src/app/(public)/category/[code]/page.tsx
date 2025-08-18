@@ -16,7 +16,6 @@ interface CategoryPageProps {
 
 export default function CategoryPage({params}: CategoryPageProps) {
     const router = useRouter()
-
     const [slug, setSlug] = useState<string>('')
 
     const {
@@ -74,39 +73,22 @@ export default function CategoryPage({params}: CategoryPageProps) {
         return `https://pincoin-s3.s3.amazonaws.com/media/${categoryData?.thumbnail}`
     }
 
-    if (!slug) {
-        return (
-            <div className="px-2 md:px-0 py-2">
-                <p>로딩 중...</p>
-            </div>
-        )
-    }
-
-    if (categoryLoading) {
-        return (
-            <div className="px-2 md:px-0 py-2">
-                <p>로딩 중...</p>
-            </div>
-        )
+    // Early returns for loading and error states
+    if (!slug || categoryLoading) {
+        return <p className="px-2 md:px-0 py-2">로딩 중...</p>
     }
 
     if (categoryHasError) {
         return (
             <div className="px-2 md:px-0 py-2">
                 <p>카테고리를 불러오는데 실패했습니다.</p>
-                {categoryError && (
-                    <p className="text-sm text-red-500 mt-1">오류: {categoryError}</p>
-                )}
+                {categoryError && <p className="text-sm text-red-500 mt-1">오류: {categoryError}</p>}
             </div>
         )
     }
 
     if (!categoryData) {
-        return (
-            <div className="px-2 md:px-0 py-2">
-                <p>카테고리 데이터가 없습니다.</p>
-            </div>
-        )
+        return <p className="px-2 md:px-0 py-2">카테고리 데이터가 없습니다.</p>
     }
 
     return (
@@ -119,44 +101,34 @@ export default function CategoryPage({params}: CategoryPageProps) {
             </Alert>
 
             {/* 상품 목록 섹션 */}
-            <div>
-                {productsLoading && (
-                    <div className="flex justify-center py-8">
-                        <p>상품 목록 로딩 중...</p>
-                    </div>
-                )}
+            {productsLoading && (
+                <p className="text-center py-8">상품 목록 로딩 중...</p>
+            )}
 
-                {productsHasError && (
-                    <div className="text-center py-8">
-                        <p>상품 목록을 불러오는데 실패했습니다.</p>
-                        {productsError && (
-                            <p className="text-sm text-red-500 mt-1">오류: {productsError}</p>
-                        )}
-                    </div>
-                )}
+            {productsHasError && (
+                <div className="text-center py-8">
+                    <p>상품 목록을 불러오는데 실패했습니다.</p>
+                    {productsError && <p className="text-sm text-red-500 mt-1">오류: {productsError}</p>}
+                </div>
+            )}
 
-                {productsData && (
-                    <div>
-                        {productsData.length === 0 ? (
-                            <div className="text-center py-12">
-                                <p className="text-gray-500">등록된 상품이 없습니다.</p>
-                            </div>
-                        ) : (
-                            <div className="grid grid-cols-2 md:grid-cols-6 gap-2 md:gap-6">
-                                {productsData.map((product) => (
-                                    <ProductCard
-                                        key={product.id}
-                                        product={product}
-                                        imageUrl={getProductImageUrl()}
-                                        onAddToCart={addToCart}
-                                        onClick={(productId) => navigateToProduct(productId, product.code)}
-                                    />
-                                ))}
-                            </div>
-                        )}
+            {productsData && (
+                productsData.length === 0 ? (
+                    <p className="text-gray-500 text-center py-12">등록된 상품이 없습니다.</p>
+                ) : (
+                    <div className="grid grid-cols-2 md:grid-cols-6 gap-2 md:gap-6">
+                        {productsData.map((product) => (
+                            <ProductCard
+                                key={product.id}
+                                product={product}
+                                imageUrl={getProductImageUrl()}
+                                onAddToCart={addToCart}
+                                onClick={(productId) => navigateToProduct(productId, product.code)}
+                            />
+                        ))}
                     </div>
-                )}
-            </div>
+                )
+            )}
         </div>
     )
 }
