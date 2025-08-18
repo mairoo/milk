@@ -287,7 +287,7 @@ export default function ProductDetailPage({params}: ProductDetailPageProps) {
             {/* 나머지 안내 섹션들 */}
             <div className="space-y-4 w-full min-w-0">
                 {categoryData?.description1 && (
-                    <Alert variant="info" className="w-full">
+                    <Alert variant="info" className="w-full px-6">
                         <StyledMarkdown variant="compact">
                             {categoryData.description1}
                         </StyledMarkdown>
