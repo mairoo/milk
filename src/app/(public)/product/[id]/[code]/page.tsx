@@ -177,9 +177,7 @@ export default function ProductDetailPage({params}: ProductDetailPageProps) {
                                 {/* 상품명 */}
                                 <div className="text-center sm:text-left">
                                     <h1 className="text-xl font-bold">
-                                        {productData.name}
-                                        <br/>
-                                        {productData.subtitle}
+                                        {productData.name} {productData.subtitle}
                                     </h1>
                                 </div>
 
@@ -204,8 +202,8 @@ export default function ProductDetailPage({params}: ProductDetailPageProps) {
 
                         {/* 수량 선택 */}
                         {!isSoldOut && (
-                            <div className="flex items-center justify-center lg:justify-start space-x-4">
-                                <label className="font-medium">수량</label>
+                            <div className="p-3 border rounded-lg flex items-center justify-center lg:justify-start space-x-4">
+                                <label className="font-medium">수량:</label>
                                 <div className="flex items-center space-x-2">
                                     <button
                                         onClick={decreaseQuantity}
