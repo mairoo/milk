@@ -150,11 +150,11 @@ export default function ProductDetailPage({params}: ProductDetailPageProps) {
 
     return (
         // 반응형 레이아웃: 모바일은 세로, 태블릿+ 는 1/3 + 2/3 배치
-        <div className="space-y-3">
+        <div className="w-full min-w-0 space-y-3">
             {/* 상품 기본 정보 섹션 */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 w-full min-w-0">
                 {/* 상품 정보 및 구매 옵션 - 모바일: 전체, 태블릿+: 1/3 */}
-                <div className="lg:col-span-1 space-y-6">
+                <div className="lg:col-span-1 space-y-6 min-w-0">
                     <div className="max-w-md mx-auto lg:max-w-none space-y-2">
                         {/* 상품 이미지와 기본 정보를 가로로 배치 */}
                         <div className="flex flex-col sm:flex-row gap-2">
@@ -173,9 +173,9 @@ export default function ProductDetailPage({params}: ProductDetailPageProps) {
                             </div>
 
                             {/* 상품명과 가격 정보 - 우측 절반 */}
-                            <div className="flex-1 flex flex-col gap-y-2 sm:justify-between sm:h-28 text-center md:text-start py-2">
+                            <div className="flex-1 flex flex-col gap-y-2 sm:justify-between sm:h-28 text-center md:text-start py-2 min-w-0">
                                 {/* 상품명 */}
-                                <h1 className="text-xl font-bold text-gray-900">
+                                <h1 className="text-xl font-bold text-gray-900 truncate">
                                     {productData.name} {productData.subtitle}
                                 </h1>
 
@@ -185,12 +185,12 @@ export default function ProductDetailPage({params}: ProductDetailPageProps) {
                                 </div>
 
                                 {/* 판매가 및 할인율 */}
-                                <div className="flex items-center justify-center md:justify-start space-x-3">
+                                <div className="flex items-center justify-center md:justify-start space-x-3 flex-wrap">
         <span className="text-lg font-bold text-gray-900">
             {formatPrice(productData.sellingPrice)}
         </span>
                                     {discountRate > 0 && (
-                                        <span className="text-red-600 bg-red-100 px-2 py-1 rounded text-sm font-medium">
+                                        <span className="text-red-600 bg-red-100 px-2 py-1 rounded text-sm font-medium whitespace-nowrap">
                 {discountRate.toFixed(0)}% 할인
             </span>
                                     )}
@@ -252,8 +252,8 @@ export default function ProductDetailPage({params}: ProductDetailPageProps) {
                     </div>
                 </div>
 
-                {/* 카테고리 설명1만 우측 영역 - 모바일: 전체, 태블릿+: 2/3 */}
-                <div className="lg:col-span-2 space-y-4 flex flex-col">
+                {/* 카테고리 설명만 우측 영역 - 모바일: 전체, 태블릿+: 2/3 */}
+                <div className="lg:col-span-2 space-y-4 flex flex-col min-w-0">
                     {/* 카테고리 상태 표시 */}
                     {categoryLoading && (
                         <div className="text-center py-2">
@@ -271,9 +271,9 @@ export default function ProductDetailPage({params}: ProductDetailPageProps) {
 
                     {/* description만 우측 영역에 표시 */}
                     {categoryData?.description && (
-                        <div className="flex-1"> {/* flex-1로 남은 공간 모두 차지 */}
+                        <div className="flex-1 min-w-0">
                             <Alert variant="warning" className="h-full">
-                                <div className="h-full overflow-y-auto">
+                                <div className="h-full overflow-y-auto min-w-0">
                                     <StyledMarkdown variant="compact">
                                         {categoryData.description}
                                     </StyledMarkdown>
@@ -285,16 +285,16 @@ export default function ProductDetailPage({params}: ProductDetailPageProps) {
             </div>
 
             {/* 나머지 안내 섹션들 */}
-            <div className="space-y-4">
+            <div className="space-y-4 w-full min-w-0">
                 {categoryData?.description1 && (
-                    <Alert variant="info">
+                    <Alert variant="info" className="w-full">
                         <StyledMarkdown variant="compact">
                             {categoryData.description1}
                         </StyledMarkdown>
                     </Alert>
                 )}
                 {/* 상품권 발송 안내 */}
-                <Card>
+                <Card className="w-full">
                     <CardContent>
                         <h2 className="font-bold mb-4">상품권 발송 안내</h2>
                         <div className="space-y-2 text-gray-700">
@@ -307,7 +307,7 @@ export default function ProductDetailPage({params}: ProductDetailPageProps) {
                 </Card>
 
                 {/* 교환 및 환불 안내 */}
-                <Card>
+                <Card className="w-full">
                     <CardContent>
                         <h2 className="font-bold mb-4">교환 및 환불 안내</h2>
                         <div className="space-y-2 text-gray-700">
@@ -320,7 +320,7 @@ export default function ProductDetailPage({params}: ProductDetailPageProps) {
                 </Card>
 
                 {/* 상품권 구매 한도 안내 */}
-                <Card>
+                <Card className="w-full">
                     <CardContent>
                         <h2 className="font-bold mb-4">상품권 구매 한도 안내</h2>
                         <div className="space-y-2 text-gray-700">
