@@ -1,22 +1,23 @@
 'use client'
 
-import {useEffect, useState} from 'react'
-import {decode} from "@/global/lib/url"
+import {useCallback, useEffect, useState} from 'react'
+import {useRouter} from 'next/navigation'
+import ReactMarkdown from 'react-markdown'
+import {decode} from '@/global/lib/url'
 import {useCategoryBySlug, useProducts} from '@/features/inventory/public/hooks'
-import ReactMarkdown from 'react-markdown';
-import {Alert} from "@/components/layout/containers/Alert";
-import {useRouter} from 'next/navigation';
-import ProductCard from "@/components/widgets/cards/ProductCard";
+import {Alert} from '@/components/layout/containers/Alert'
+import ProductCard from '@/components/widgets/cards/ProductCard'
 
 interface CategoryPageProps {
     params: Promise<{
-        code: string;
-    }>;
+        code: string
+    }>
 }
 
 export default function CategoryPage({params}: CategoryPageProps) {
+    const router = useRouter()
+
     const [slug, setSlug] = useState<string>('')
-    const router = useRouter();
 
     const {
         loading: categoryLoading,
@@ -36,45 +37,43 @@ export default function CategoryPage({params}: CategoryPageProps) {
 
     useEffect(() => {
         const fetchSlug = async () => {
-            const {code} = await params
-            const decodedCode = decode(code)
-            setSlug(decodedCode)
+            try {
+                const {code} = await params
+                const decodedCode = decode(code)
+                setSlug(decodedCode)
+            } catch (err) {
+                console.error('Failed to fetch slug:', err)
+            }
         }
 
         void fetchSlug()
     }, [params])
 
-    // slug가 준비되면 카테고리 조회
     useEffect(() => {
         if (slug) {
             getCategoryBySlug(slug)
         }
     }, [slug, getCategoryBySlug])
 
-    // 카테고리 데이터가 준비되면 상품 목록 조회
     useEffect(() => {
         if (categoryData?.id) {
             getProductsByCategory(categoryData.id)
         }
     }, [categoryData?.id, getProductsByCategory])
 
-    // 장바구니 추가 핸들러
-    const handleAddToCart = (productId: number) => {
-        console.log('장바구니에 추가:', productId);
+    const addToCart = useCallback((productId: number) => {
+        console.log('장바구니에 추가:', productId)
         // TODO: 장바구니 추가 로직 구현
-    };
+    }, [])
 
-    // 상품 클릭 핸들러
-    const handleProductClick = (productId: number, productCode: string) => {
-        router.push(`/product/${productId}/${productCode}`);
-    };
+    const navigateToProduct = useCallback((productId: number, productCode: string) => {
+        router.push(`/product/${productId}/${productCode}`)
+    }, [router])
 
-    // 카테고리 썸네일을 상품 이미지로 사용
     const getProductImageUrl = () => {
-        return `https://pincoin-s3.s3.amazonaws.com/media/${categoryData?.thumbnail}`;
-    };
+        return `https://pincoin-s3.s3.amazonaws.com/media/${categoryData?.thumbnail}`
+    }
 
-    // slug가 아직 준비되지 않았을 때
     if (!slug) {
         return (
             <div className="px-2 md:px-0 py-2">
@@ -83,7 +82,6 @@ export default function CategoryPage({params}: CategoryPageProps) {
         )
     }
 
-    // 카테고리 처음 로딩 중
     if (categoryLoading) {
         return (
             <div className="px-2 md:px-0 py-2">
@@ -92,7 +90,6 @@ export default function CategoryPage({params}: CategoryPageProps) {
         )
     }
 
-    // 카테고리 에러 발생시
     if (categoryHasError) {
         return (
             <div className="px-2 md:px-0 py-2">
@@ -104,7 +101,6 @@ export default function CategoryPage({params}: CategoryPageProps) {
         )
     }
 
-    // 카테고리 데이터가 없을 때
     if (!categoryData) {
         return (
             <div className="px-2 md:px-0 py-2">
@@ -113,9 +109,9 @@ export default function CategoryPage({params}: CategoryPageProps) {
         )
     }
 
-    // 카테고리 데이터가 있을 때 메인 컨텐츠 렌더링
     return (
         <div className="flex flex-col gap-y-2">
+            {/* 카테고리 설명 */}
             <Alert>
                 <ReactMarkdown>
                     {categoryData.description}
@@ -152,8 +148,8 @@ export default function CategoryPage({params}: CategoryPageProps) {
                                         key={product.id}
                                         product={product}
                                         imageUrl={getProductImageUrl()}
-                                        onAddToCart={handleAddToCart}
-                                        onClick={(productId) => handleProductClick(productId, product.code)}
+                                        onAddToCart={addToCart}
+                                        onClick={(productId) => navigateToProduct(productId, product.code)}
                                     />
                                 ))}
                             </div>
