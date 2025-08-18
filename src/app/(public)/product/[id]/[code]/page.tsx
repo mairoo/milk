@@ -240,7 +240,7 @@ export default function ProductDetailPage({params}: ProductDetailPageProps) {
 
             {/* 카테고리 설명 섹션 */}
             {categoryData?.description && (
-                <Alert>
+                <Alert variant="error">
                     <ReactMarkdown>
                         {categoryData.description}
                     </ReactMarkdown>
@@ -249,7 +249,7 @@ export default function ProductDetailPage({params}: ProductDetailPageProps) {
 
             {/* 카테고리 설명 섹션 */}
             {categoryData?.description1 && (
-                <Alert>
+                <Alert variant="info">
                     <ReactMarkdown>
                         {categoryData.description1}
                     </ReactMarkdown>
