@@ -173,29 +173,27 @@ export default function ProductDetailPage({params}: ProductDetailPageProps) {
                             </div>
 
                             {/* 상품명과 가격 정보 - 우측 절반 */}
-                            <div className="flex-1 space-y-3">
+                            <div className="flex-1 flex flex-col gap-y-2 sm:justify-between sm:h-28 text-center md:text-start py-2">
                                 {/* 상품명 */}
-                                <div className="text-center sm:text-left">
-                                    <h1 className="text-xl font-bold">
-                                        {productData.name} {productData.subtitle}
-                                    </h1>
+                                <h1 className="text-xl font-bold text-gray-900">
+                                    {productData.name} {productData.subtitle}
+                                </h1>
+
+                                {/* 정가 */}
+                                <div className="text-sm text-gray-600">
+                                    정가: <span className="line-through">{formatPrice(productData.listPrice)}</span>
                                 </div>
 
-                                {/* 가격 정보 */}
-                                <div className="bg-gray-50 p-4 rounded-lg text-center sm:text-left space-y-2">
-                                    <div className="text-sm text-gray-600">
-                                        정가: <span className="line-through">{formatPrice(productData.listPrice)}</span>
-                                    </div>
-                                    <div className="flex items-center justify-center sm:justify-start space-x-3">
-                <span className="text-lg font-bold text-gray-900">
-                    {formatPrice(productData.sellingPrice)}
-                </span>
-                                        {discountRate > 0 && (
-                                            <span className="text-red-600 bg-red-100 px-2 py-1 rounded text-sm">
-                        {discountRate.toFixed(2)}% 할인
-                    </span>
-                                        )}
-                                    </div>
+                                {/* 판매가 및 할인율 */}
+                                <div className="flex items-center justify-center md:justify-start space-x-3">
+        <span className="text-lg font-bold text-gray-900">
+            {formatPrice(productData.sellingPrice)}
+        </span>
+                                    {discountRate > 0 && (
+                                        <span className="text-red-600 bg-red-100 px-2 py-1 rounded text-sm font-medium">
+                {discountRate.toFixed(0)}% 할인
+            </span>
+                                    )}
                                 </div>
                             </div>
                         </div>
