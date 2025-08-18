@@ -6,7 +6,7 @@ import {MainContainerProps} from "@/global/types/layout";
 
 export default function MainContainer({children, className}: MainContainerProps) {
     return (
-        <main className={cn("py-2 px-2 md:px-0", className)}>
+        <main className={cn("mt-1 py-2 px-2 md:px-0", className)}>
             <div className="mx-auto container">
                 {children}
             </div>
