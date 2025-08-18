@@ -184,7 +184,7 @@ export default function ProductDetailPage({params}: ProductDetailPageProps) {
                                 {/* 가격 정보 */}
                                 <div className="bg-gray-50 p-4 rounded-lg text-center sm:text-left space-y-2">
                                     <div className="text-sm text-gray-600">
-                                        정가: {formatPrice(productData.listPrice)}
+                                        정가: <span className="line-through">{formatPrice(productData.listPrice)}</span>
                                     </div>
                                     <div className="flex items-center justify-center sm:justify-start space-x-3">
                 <span className="text-lg font-bold text-gray-900">
