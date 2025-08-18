@@ -141,54 +141,60 @@ export default function ProductDetailPage({params}: ProductDetailPageProps) {
         // 반응형 레이아웃: 모바일은 세로, 태블릿+ 는 1/3 + 2/3 배치
         <div className="space-y-6">
             {/* 상품 기본 정보 섹션 */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
                 {/* 상품 정보 및 구매 옵션 - 모바일: 전체, 태블릿+: 1/3 */}
                 <div className="lg:col-span-1 space-y-6">
-                    {/* 상품 이미지 - 작고 중앙 정렬 */}
-                    <div className="flex justify-center">
-                        <div className="w-40 h-28 relative overflow-hidden rounded-lg border shadow-sm">
-                            <div
-                                className="w-full h-full bg-gradient-to-br from-blue-50 to-green-50 flex items-center justify-center">
-                                <div className="text-center text-gray-500 text-xs">
-                                    <div className="mb-1 text-lg">🎁</div>
-                                    <p className="font-medium">{productData.name}</p>
-                                    <p className="text-xs opacity-75">{productData.code}</p>
+                    <div className="max-w-md mx-auto lg:max-w-none space-y-2">
+                        {/* 상품 이미지와 기본 정보를 가로로 배치 */}
+                        <div className="flex flex-col sm:flex-row gap-4">
+                            {/* 상품 이미지 - 좌측 절반 */}
+                            <div className="flex-1 flex justify-center sm:justify-start">
+                                <div className="w-40 h-28 relative overflow-hidden rounded-lg border shadow-sm">
+                                    <div
+                                        className="w-full h-full bg-gradient-to-br from-blue-50 to-green-50 flex items-center justify-center">
+                                        <div className="text-center text-gray-500 text-xs">
+                                            <div className="text-lg">🎁</div>
+                                            <p className="font-medium">{productData.name}</p>
+                                            <p className="text-xs opacity-75">{productData.code}</p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
 
-                    <div className="max-w-md mx-auto lg:max-w-none space-y-4">
-                        {/* 상품명 */}
-                        <div className="text-center lg:text-left">
-                            <h1 className="text-xl font-bold mb-2">{productData.name}</h1>
-                            {productData.subtitle && (
-                                <p className="text-gray-600">{productData.subtitle}</p>
-                            )}
-                        </div>
+                            {/* 상품명과 가격 정보 - 우측 절반 */}
+                            <div className="flex-1 space-y-3">
+                                {/* 상품명 */}
+                                <div className="text-center sm:text-left">
+                                    <h1 className="text-xl font-bold">{productData.name}</h1>
+                                    {productData.subtitle && (
+                                        <p className="text-gray-600">{productData.subtitle}</p>
+                                    )}
+                                </div>
 
-                        {/* 가격 정보 */}
-                        <div className="bg-gray-50 p-4 rounded-lg text-center lg:text-left space-y-2">
-                            <div className="text-sm text-gray-600">
-                                정가: {formatPrice(productData.listPrice)}
-                            </div>
-                            <div className="flex items-center justify-center lg:justify-start space-x-3">
-                        <span className="text-lg font-bold text-gray-900">
-                            {formatPrice(productData.sellingPrice)}
-                        </span>
-                                {discountRate > 0 && (
-                                    <span className="text-red-600 bg-red-100 px-2 py-1 rounded text-sm">
-                                {discountRate.toFixed(2)}% 할인
-                            </span>
-                                )}
+                                {/* 가격 정보 */}
+                                <div className="bg-gray-50 p-4 rounded-lg text-center sm:text-left space-y-2">
+                                    <div className="text-sm text-gray-600">
+                                        정가: {formatPrice(productData.listPrice)}
+                                    </div>
+                                    <div className="flex items-center justify-center sm:justify-start space-x-3">
+                <span className="text-lg font-bold text-gray-900">
+                    {formatPrice(productData.sellingPrice)}
+                </span>
+                                        {discountRate > 0 && (
+                                            <span className="text-red-600 bg-red-100 px-2 py-1 rounded text-sm">
+                        {discountRate.toFixed(2)}% 할인
+                    </span>
+                                        )}
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
                         {/* 수량 선택 */}
                         {!isSoldOut && (
-                            <div className="space-y-3">
-                                <label className="block text-center lg:text-left font-medium">수량</label>
-                                <div className="flex items-center justify-center lg:justify-start space-x-4">
+                            <div className="flex items-center justify-center lg:justify-start space-x-4">
+                                <label className="font-medium">수량</label>
+                                <div className="flex items-center space-x-2">
                                     <button
                                         onClick={decreaseQuantity}
                                         className="p-2 border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50"
@@ -197,8 +203,8 @@ export default function ProductDetailPage({params}: ProductDetailPageProps) {
                                         <Minus className="h-4 w-4"/>
                                     </button>
                                     <span className="min-w-[3rem] text-center font-medium">
-                                {quantity}
-                            </span>
+                {quantity}
+            </span>
                                     <button
                                         onClick={increaseQuantity}
                                         className="p-2 border border-gray-300 rounded-md hover:bg-gray-50"
@@ -211,7 +217,7 @@ export default function ProductDetailPage({params}: ProductDetailPageProps) {
 
                         {/* 총 금액 */}
                         {!isSoldOut && (
-                            <div className="bg-emerald-50 p-4 rounded-lg flex justify-between items-center">
+                            <div className="bg-emerald-50 p-3 rounded-lg flex justify-between items-center">
                                 <span className="font-medium">총 금액:</span>
                                 <span className="text-lg font-bold text-emerald-600">
                             {formatPrice(totalAmount)}
