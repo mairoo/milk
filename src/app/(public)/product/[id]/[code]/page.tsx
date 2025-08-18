@@ -119,9 +119,7 @@ export default function ProductDetailPage({params}: ProductDetailPageProps) {
     const discountRate = calculateDiscountRate();
 
     return (
-        <div className="max-w-6xl mx-auto p-4 space-y-6">
-
-
+        <div className="space-y-4">
             {/* 카테고리 로딩 또는 에러 상태 */}
             {categoryLoading && (
                 <div className="text-center py-2">
@@ -154,7 +152,7 @@ export default function ProductDetailPage({params}: ProductDetailPageProps) {
                 {/* 상품 정보 및 구매 옵션 */}
                 <div className="space-y-6">
                     <div>
-                        <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
+                        <h1 className="text-xl font-bold text-gray-900 mb-2">
                             {productData.name}
                         </h1>
                         {productData.subtitle && (
@@ -259,7 +257,7 @@ export default function ProductDetailPage({params}: ProductDetailPageProps) {
             {/* 상품권 발송 안내 */}
             <Card>
                 <CardContent>
-                    <h2 className="text-xl font-bold mb-4">상품권 발송 안내</h2>
+                    <h2 className="text-lg font-bold mb-4">상품권 발송 안내</h2>
                     <div className="space-y-2 text-sm text-gray-700">
                         <p>• 상품권 확인은 사이트에서 확인합니다.</p>
                         <p>• 메뉴에서 모든 본인인증 절차를 완료하신 경우 최대 10분 이내로 상품권을 확인할 수 있습니다.</p>
@@ -272,7 +270,7 @@ export default function ProductDetailPage({params}: ProductDetailPageProps) {
             {/* 교환 및 환불 안내 */}
             <Card>
                 <CardContent>
-                    <h2 className="text-xl font-bold mb-4">교환 및 환불 안내</h2>
+                    <h2 className="text-lg font-bold mb-4">교환 및 환불 안내</h2>
                     <div className="space-y-2 text-sm text-gray-700">
                         <p>• 상품권을 받기 전에 고객님의 교환 또는 환불 요청이 있은 날로부터 은행 영업일 기준으로 3~4일 이내에 처리됩니다.</p>
                         <p>• 상품권을 받으신 경우 해당 상품권을 사용하지 않은 경우에 한하여 3일 이내에만 교환 또는 환불 요청 가능합니다.</p>
@@ -285,7 +283,7 @@ export default function ProductDetailPage({params}: ProductDetailPageProps) {
             {/* 상품권 구매 한도 안내 */}
             <Card>
                 <CardContent>
-                    <h2 className="text-xl font-bold mb-4">상품권 구매 한도 안내</h2>
+                    <h2 className="text-lg font-bold mb-4">상품권 구매 한도 안내</h2>
                     <div className="space-y-2 text-sm text-gray-700">
                         <p className="font-bold">• 컬쳐랜드상품권, 도서문화상품권, 구글기프트카드를 포함하고 일일 액면가 기준 누계 10만원 이상 첫 구매 시 반드시
                             서류본인인증을 해야 합니다.</p>
