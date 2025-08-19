@@ -63,16 +63,10 @@ export default function ProductCard({
             </CardHeader>
 
             {/* 상품 정보 섹션 */}
-            <CardContent className="px-4 space-y-2">
-                <h3 className="font-medium text-gray-900 line-clamp-2 leading-5">
-                    {product.name}
+            <CardContent className="px-4 space-y-1">
+                <h3 className="text-gray-900">
+                    {product.name} {product.subtitle}
                 </h3>
-
-                {product.subtitle && (
-                    <p className="text-sm text-gray-600 line-clamp-1">
-                        {product.subtitle}
-                    </p>
-                )}
 
                 <div className="flex items-center justify-between">
                     <p className="text-lg font-bold text-gray-900">

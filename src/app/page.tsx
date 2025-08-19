@@ -1,20 +1,12 @@
 'use client'
 
 import {useSession} from 'next-auth/react'
-import {useS3HealthCheck} from "@/features/s3/admin/hooks";
+import Section from "@/components/widgets/cards/Section";
+import {todayCategoryData} from "@/global/types/categories";
+import CategoryCard from "@/components/widgets/cards/CategoryCard";
 
 export default function Home() {
     const {data: session, status} = useSession()
-
-    const {
-        loading,
-        isHealthy,
-        hasError,
-        error,
-        quickCheck,
-        fullCheck,
-    } = useS3HealthCheck()
-
     // 세션 에러가 있는 경우 사용자에게 안내
     if (session?.error) {
         return (
@@ -34,72 +26,21 @@ export default function Home() {
             </div>
         )
     }
-
     return (
-        <>
-            {/* 로그인 상태 섹션 */}
-            <section>
-                <h2>현재 로그인 상태</h2>
-
-                {session &&
-                    <div>
-                        <h3>로그인 사용자 정보</h3>
-                        <ul style={{listStyle: 'none', padding: 0}}>
-                            <li><strong>이름:</strong> {session.user?.name || 'N/A'}</li>
-                            <li><strong>이메일:</strong> {session.user?.email || 'N/A'}</li>
-                            <li><strong>사용자명:</strong> {session.user?.preferred_username || 'N/A'}</li>
-                            <li><strong>사용자 ID:</strong> {session.user?.id || 'N/A'}</li>
-                        </ul>
-                    </div>
-                }
-            </section>
-
-            {/* 테스트 기능 섹션 */}
-            <section>
-                <h2>테스트 기능</h2>
-
-                <div>
-                    <h3>세션 상태 확인</h3>
-                    <p><strong>Status:</strong> {status}</p>
-                    <p><strong>Session Exists:</strong> {session ? 'Yes' : 'No'}</p>
-                    {session?.accessToken && (
-                        <p><strong>Access Token:</strong> 존재함 (토큰 내용은 보안상 표시하지 않음)</p>
-                    )}
+        <div className="flex flex-col gap-y-6">
+            <Section title="오늘의 상품권" className="">
+                <div className="grid grid-cols-2 md:grid-cols-6 gap-2 md:gap-6">
+                    {todayCategoryData.map((category) => (
+                        <CategoryCard
+                            key={category.name}
+                            name={category.name}
+                            href={category.href}
+                            imageUrl={category.imageUrl}
+                            discountRate={category.discountRate}
+                        />
+                    ))}
                 </div>
-
-                <div>
-                    <button
-                        onClick={() => {
-                            console.log('Current Session:', session)
-                            console.log('Session Status:', status)
-                            alert('콘솔에서 세션 정보를 확인하세요.')
-                        }}
-                        style={{
-                            padding: '10px 20px',
-                            backgroundColor: '#17a2b8',
-                            color: 'white',
-                            border: 'none',
-                            borderRadius: '4px',
-                            cursor: 'pointer'
-                        }}
-                    >
-                        세션 정보 콘솔 출력
-                    </button>
-                </div>
-            </section>
-
-            <div>
-                <button onClick={quickCheck} disabled={loading}>
-                    빠른 체크
-                </button>
-                <button onClick={fullCheck} disabled={loading}>
-                    전체 체크
-                </button>
-
-                {loading && <p>체크 중...</p>}
-                {isHealthy && <p>✅ S3 연결 정상</p>}
-                {hasError && <p>❌ 오류: {error}</p>}
-            </div>
-        </>
+            </Section>
+        </div>
     )
 }

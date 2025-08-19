@@ -49,7 +49,6 @@ interface MobileMenuItem {
     icon: LucideIcon;
     label: string;
     href: string;
-    badge?: number;
 }
 
 export const mobileMenuItems: MobileMenuItem[] = [
@@ -67,14 +66,13 @@ export const mobileMenuItems1: MobileMenuItem[] = [
     {icon: Dot, label: "에그머니", href: "/category/에그머니"},
     {icon: Dot, label: "틴캐시", href: "/category/틴캐시"},
     {icon: Dot, label: "스마트문화상품권", href: "/category/스마트문화상품권"},
-    {icon: Dot, label: "스타벅스", href: "/category/스타벅스"},
     {icon: Dot, label: "아프리카별풍선", href: "/category/아프리카tv"},
     {icon: Dot, label: "플레이스테이션", href: "/category/플레이스테이션-기프트카드-교환권"},
+    {icon: Dot, label: "스타벅스", href: "/category/스타벅스"},
     {icon: Dot, label: "와우캐시", href: "/category/와우캐시"},
     {icon: Dot, label: "퍼니카드", href: "/category/퍼니카드"},
     {icon: Dot, label: "N코인", href: "/category/엔코인"},
     {icon: Dot, label: "요기요", href: "/category/요기요"},
-    {icon: Dot, label: "한게임 상품권", href: "/category/한게임-한코인"},
     {icon: Dot, label: "메니아선불쿠폰", href: "/category/매니아선불쿠폰"},
     {icon: Dot, label: "아이템베이선불쿠폰", href: "/category/아이템베이선불쿠폰"},
 ];
