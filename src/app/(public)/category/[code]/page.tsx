@@ -37,7 +37,7 @@ export default function CategoryPage({params}: CategoryPageProps) {
     } = useProducts()
 
     const {addProduct} = useCart()
-    const {showSuccess, showError} = useToast()
+    const {showInfo, showError} = useToast()
 
     useEffect(() => {
         const fetchSlug = async () => {
@@ -94,7 +94,7 @@ export default function CategoryPage({params}: CategoryPageProps) {
             })
 
             // 성공 메시지 표시
-            showSuccess(
+            showInfo(
                 '장바구니 추가',
                 `${product.name} ${product.subtitle}이(가) 장바구니에 추가되었습니다.`
             )
@@ -103,7 +103,7 @@ export default function CategoryPage({params}: CategoryPageProps) {
             console.error('장바구니 추가 실패:', error)
             showError('오류', '장바구니에 추가하는 중 오류가 발생했습니다.')
         }
-    }, [productsData, addProduct, showSuccess, showError])
+    }, [productsData, addProduct, showInfo, showError])
 
     const navigateToProduct = useCallback((productId: number, productCode: string) => {
         router.push(`/product/${productId}/${productCode}`)

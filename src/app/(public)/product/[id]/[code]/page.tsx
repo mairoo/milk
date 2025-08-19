@@ -40,7 +40,7 @@ export default function ProductDetailPage({params}: ProductDetailPageProps) {
     } = useCategoryById()
 
     const {addProduct} = useCart()
-    const {showSuccess, showError} = useToast()
+    const {showInfo, showError} = useToast()
 
     const discountRate = useMemo(() => {
         if (!productData || productData.listPrice === 0) return 0
@@ -129,7 +129,7 @@ export default function ProductDetailPage({params}: ProductDetailPageProps) {
             })
 
             // 성공 메시지 표시
-            showSuccess(
+            showInfo(
                 '장바구니 추가',
                 `${productData.name} ${productData.subtitle}이(가) ${quantity}개 장바구니에 추가되었습니다.`
             )
@@ -141,7 +141,7 @@ export default function ProductDetailPage({params}: ProductDetailPageProps) {
             console.error('장바구니 추가 실패:', error)
             showError('오류', '장바구니에 추가하는 중 오류가 발생했습니다.')
         }
-    }, [productData, isSoldOut, quantity, addProduct, showSuccess, showError])
+    }, [productData, isSoldOut, quantity, addProduct, showInfo, showError])
 
     const formatPrice = (price: number) => {
         return `₩${price.toLocaleString()}`

@@ -18,6 +18,7 @@ export default function ToastContainer() {
             closeButton
             expand
             visibleToasts={5}
+            duration={1500}
         />
     )
 }
