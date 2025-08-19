@@ -73,50 +73,54 @@ export default function CartDrawerSheet() {
                                             key={product.id}
                                             className="bg-white border border-gray-200 rounded-lg p-3 shadow-sm"
                                         >
-                                            {/* 상품 정보 */}
+                                            {/* 상품 정보 및 삭제 버튼 */}
                                             <div className="flex justify-between items-start mb-3">
                                                 <h4 className="font-medium text-gray-900 text-sm leading-tight">
                                                     {product.title} {product.subtitle}
                                                 </h4>
-                                                <span className="text-sm font-semibold text-emerald-600 ml-2">
-            {formatPrice(product.price)}
-        </span>
+                                                <button
+                                                    onClick={() => removeProduct(product.id)}
+                                                    className="text-gray-400 hover:text-red-600 transition-colors p-1"
+                                                    aria-label="상품 삭제"
+                                                >
+                                                    <Trash2 className="w-4 h-4"/>
+                                                </button>
                                             </div>
 
-                                            {/* 수량 조절 및 삭제 */}
+                                            {/* 수량 조절 및 가격 정보 */}
                                             <div className="flex items-center justify-between">
-                                                {/* 수량 조절 및 삭제 버튼 */}
+                                                {/* 수량 조절 */}
                                                 <div className="flex items-center gap-2">
                                                     <button
                                                         onClick={() => decrement(product.id)}
-                                                        className="w-7 h-7 flex items-center justify-center border border-gray-300 rounded-md transition-colors"
+                                                        className="w-7 h-7 flex items-center justify-center border border-gray-300 rounded-md hover:bg-gray-50 transition-colors"
                                                         aria-label="수량 감소"
                                                     >
                                                         <Minus className="h-3 w-3 text-gray-600"/>
                                                     </button>
                                                     <span className="min-w-[2rem] text-center font-medium text-sm">
-                {product.quantity}
-            </span>
+                                                        {product.quantity}
+                                                    </span>
                                                     <button
                                                         onClick={() => increment(product.id)}
-                                                        className="w-7 h-7 flex items-center justify-center border border-gray-300 rounded-md transition-colors"
+                                                        className="w-7 h-7 flex items-center justify-center border border-gray-300 rounded-md hover:bg-gray-50 transition-colors"
                                                         aria-label="수량 증가"
                                                     >
                                                         <Plus className="h-3 w-3 text-gray-600"/>
                                                     </button>
-                                                    <button
-                                                        onClick={() => removeProduct(product.id)}
-                                                        className="text-gray-400 transition-colors p-1"
-                                                        aria-label="상품 삭제"
-                                                    >
-                                                        <Trash2 className="w-4 h-4"/>
-                                                    </button>
                                                 </div>
 
-                                                {/* 소계 */}
+                                                {/* 단가 */}
+                                                <span className="text-sm font-semibold text-emerald-600">
+                                                    {formatPrice(product.price)}
+                                                </span>
+                                            </div>
+
+                                            {/* 소계 (오른쪽 정렬) */}
+                                            <div className="flex justify-end mt-2">
                                                 <span className="font-semibold text-sm text-gray-900">
-            {formatPrice(product.price * product.quantity)}
-        </span>
+                                                    {formatPrice(product.price * product.quantity)}
+                                                </span>
                                             </div>
                                         </div>
                                     ))}
