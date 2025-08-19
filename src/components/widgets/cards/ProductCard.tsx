@@ -3,6 +3,7 @@ import {ShoppingCart} from 'lucide-react'
 import {Card, CardContent, CardFooter, CardHeader} from '@/components/ui/card'
 import {Button} from '@/components/ui/button'
 import {ProductResponse, ProductStock} from '@/features/inventory/public/response'
+import Image from 'next/image';
 
 interface ProductCardProps {
     product: ProductResponse
@@ -52,10 +53,11 @@ export default function ProductCard({
             {/* 이미지 섹션 */}
             <CardHeader className="p-0">
                 <div className="aspect-[156/100] w-full relative overflow-hidden rounded-t-xl">
-                    <img
+                    <Image
                         src={imageUrl}
                         alt={imageAlt || product.name}
-                        className="w-full h-full object-cover"
+                        fill
+                        className="object-cover"
                     />
                 </div>
             </CardHeader>

@@ -8,6 +8,7 @@ import {Button} from '@/components/ui/button'
 import {Alert} from '@/components/layout/containers/Alert'
 import {ProductStock} from '@/features/inventory/public/response'
 import {StyledMarkdown} from "@/components/layout/containers/StyledMakrdown";
+import Image from 'next/image';
 
 interface ProductDetailPageProps {
     params: Promise<{
@@ -141,10 +142,11 @@ export default function ProductDetailPage({params}: ProductDetailPageProps) {
                             {/* 상품 이미지 */}
                             <div className="flex justify-center sm:justify-start">
                                 <div className="w-40 h-28 relative overflow-hidden rounded-lg border shadow-sm">
-                                    <img
+                                    <Image
                                         src={imageUrl}
                                         alt={imageAlt}
-                                        className="w-full h-full object-cover"
+                                        fill
+                                        className="object-cover"
                                     />
                                 </div>
                             </div>
