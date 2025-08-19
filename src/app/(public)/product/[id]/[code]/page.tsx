@@ -3,6 +3,8 @@
 import {useCallback, useEffect, useMemo, useState} from 'react'
 import {Minus, Plus, ShoppingCart} from 'lucide-react'
 import {useCategoryById, useProduct} from '@/features/inventory/public/hooks'
+import {useCart} from '@/features/order/cart/hooks'
+import {useToast} from '@/features/ui/toast/hooks'
 import {Button} from '@/components/ui/button'
 import {Alert} from '@/components/layout/containers/Alert'
 import {ProductStock} from '@/features/inventory/public/response'
@@ -36,6 +38,9 @@ export default function ProductDetailPage({params}: ProductDetailPageProps) {
         hasError: categoryHasError,
         getCategoryById
     } = useCategoryById()
+
+    const {addProduct} = useCart()
+    const {showSuccess, showError} = useToast()
 
     const discountRate = useMemo(() => {
         if (!productData || productData.listPrice === 0) return 0
@@ -98,16 +103,45 @@ export default function ProductDetailPage({params}: ProductDetailPageProps) {
         updateQuantity(-1)
     }, [updateQuantity])
 
+    /**
+     * 장바구니에 상품 추가
+     * 현재 선택된 수량만큼 장바구니에 추가
+     */
     const addToCart = useCallback(() => {
-        if (!productData || isSoldOut) return
+        if (!productData || isSoldOut) {
+            return
+        }
 
-        console.log('장바구니에 추가:', {
-            productId: productData.id,
-            quantity,
-            totalAmount
-        })
-        // TODO: 장바구니 추가 로직 구현
-    }, [productData, isSoldOut, quantity, totalAmount])
+        try {
+            // 입력값 검증
+            if (!productData.id || quantity <= 0) {
+                showError('오류', '유효하지 않은 상품 정보입니다.')
+                return
+            }
+
+            // 장바구니에 추가
+            addProduct({
+                id: String(productData.id),
+                title: productData.name,
+                subtitle: productData.subtitle || '',
+                price: productData.sellingPrice,
+                quantity: quantity
+            })
+
+            // 성공 메시지 표시
+            showSuccess(
+                '장바구니 추가',
+                `${productData.name} ${productData.subtitle}이(가) ${quantity}개 장바구니에 추가되었습니다.`
+            )
+
+            // 수량을 1로 초기화 (선택사항)
+            setQuantity(1)
+
+        } catch (error) {
+            console.error('장바구니 추가 실패:', error)
+            showError('오류', '장바구니에 추가하는 중 오류가 발생했습니다.')
+        }
+    }, [productData, isSoldOut, quantity, addProduct, showSuccess, showError])
 
     const formatPrice = (price: number) => {
         return `₩${price.toLocaleString()}`
