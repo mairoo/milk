@@ -74,18 +74,18 @@ export default function CartDrawerSheet() {
                                             className="bg-white border border-gray-200 rounded-lg p-3 shadow-sm"
                                         >
                                             {/* 상품 정보 */}
-                                            <div className="space-y-2 mb-3">
+                                            <div className="flex justify-between items-start mb-3">
                                                 <h4 className="font-medium text-gray-900 text-sm leading-tight">
                                                     {product.title} {product.subtitle}
                                                 </h4>
-                                                <span className="text-sm font-semibold text-emerald-600 mt-1">
-                                                    {formatPrice(product.price)}
-                                                </span>
+                                                <span className="text-sm font-semibold text-emerald-600 ml-2">
+            {formatPrice(product.price)}
+        </span>
                                             </div>
 
                                             {/* 수량 조절 및 삭제 */}
                                             <div className="flex items-center justify-between">
-                                                {/* 수량 조절 */}
+                                                {/* 수량 조절 및 삭제 버튼 */}
                                                 <div className="flex items-center gap-2">
                                                     <button
                                                         onClick={() => decrement(product.id)}
@@ -95,8 +95,8 @@ export default function CartDrawerSheet() {
                                                         <Minus className="h-3 w-3 text-gray-600"/>
                                                     </button>
                                                     <span className="min-w-[2rem] text-center font-medium text-sm">
-                                                        {product.quantity}
-                                                    </span>
+                {product.quantity}
+            </span>
                                                     <button
                                                         onClick={() => increment(product.id)}
                                                         className="w-7 h-7 flex items-center justify-center border border-gray-300 rounded-md transition-colors"
@@ -104,13 +104,6 @@ export default function CartDrawerSheet() {
                                                     >
                                                         <Plus className="h-3 w-3 text-gray-600"/>
                                                     </button>
-                                                </div>
-
-                                                {/* 소계 및 삭제 버튼 */}
-                                                <div className="flex items-center gap-2">
-                                                    <span className="font-semibold text-sm text-gray-900">
-                                                        {formatPrice(product.price * product.quantity)}
-                                                    </span>
                                                     <button
                                                         onClick={() => removeProduct(product.id)}
                                                         className="text-gray-400 transition-colors p-1"
@@ -119,6 +112,11 @@ export default function CartDrawerSheet() {
                                                         <Trash2 className="w-4 h-4"/>
                                                     </button>
                                                 </div>
+
+                                                {/* 소계 */}
+                                                <span className="font-semibold text-sm text-gray-900">
+            {formatPrice(product.price * product.quantity)}
+        </span>
                                             </div>
                                         </div>
                                     ))}
