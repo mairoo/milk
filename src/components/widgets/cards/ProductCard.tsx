@@ -52,14 +52,16 @@ export default function ProductCard({
         <Card className="w-full max-w-sm cursor-pointer p-0 gap-2" onClick={handleCardClick}>
             {/* 이미지 섹션 */}
             <CardHeader className="p-0">
-                <div className="aspect-[156/100] w-full relative overflow-hidden rounded-t-xl">
+                <div className="aspect-[156/100] w-full relative overflow-hidden rounded-t-xl bg-gray-100">
                     <Image
                         src={imageUrl}
                         alt={imageAlt || product.name}
                         fill
                         className="object-cover"
-                        sizes="(max-width: 768px) 50vw, 16vw"
+                        sizes="156px"
                         priority={false}
+                        loading="lazy"
+                        quality={85}
                     />
                 </div>
             </CardHeader>

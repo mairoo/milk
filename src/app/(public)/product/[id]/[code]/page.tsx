@@ -138,17 +138,18 @@ export default function ProductDetailPage({params}: ProductDetailPageProps) {
                 <div className="space-y-6">
                     <div className="max-w-md mx-auto lg:max-w-none space-y-2">
                         {/* 상품 이미지와 기본 정보 */}
-                        <div className="flex flex-col sm:flex-row gap-2">
+                        <div className="flex flex-col sm:flex-row gap-x-8 gap-y-2">
                             {/* 상품 이미지 */}
                             <div className="flex justify-center sm:justify-start">
-                                <div className="w-40 h-28 relative overflow-hidden rounded-lg border shadow-sm">
+                                <div className="w-40 h-28 relative overflow-hidden rounded-lg border shadow-sm bg-gray-100">
                                     <Image
                                         src={imageUrl}
                                         alt={imageAlt}
                                         fill
                                         className="object-cover"
                                         sizes="160px"
-                                        priority={false}
+                                        priority={true}
+                                        quality={85}
                                     />
                                 </div>
                             </div>
