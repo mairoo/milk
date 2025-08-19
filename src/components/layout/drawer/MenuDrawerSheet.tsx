@@ -101,7 +101,7 @@ export default function MenuDrawerSheet() {
                                         key={index}
                                         href={item.href}
                                         onClick={handleLinkClick}
-                                        className="flex items-center gap-3 p-2 rounded-md hover:bg-green-50 transition-colors"
+                                        className="flex items-center gap-3 p-2 rounded-md transition-colors"
                                     >
                                         <item.icon className="w-5 h-5 text-gray-600 flex-shrink-0"/>
                                         <span className="text-gray-800">{item.label}</span>
@@ -116,7 +116,7 @@ export default function MenuDrawerSheet() {
                         <Link
                             href="/"
                             onClick={handleLinkClick}
-                            className="w-full flex items-center justify-center gap-2 p-3 bg-green-50 text-black rounded-md hover:bg-green-100 transition-colors"
+                            className="w-full flex items-center justify-center gap-2 p-3 bg-green-50 text-black rounded-md transition-colors"
                         >
                             <CreditCard className="w-4 h-4"/>
                             <span>카드몰로 이동</span>
