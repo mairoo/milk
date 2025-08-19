@@ -6,10 +6,12 @@ import React from "react";
 import {useSession} from "next-auth/react";
 import {NavLink} from "@/components/layout/navigation/NavLink";
 import {DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,} from "@/components/ui/dropdown-menu";
+import {Badge} from "@/components/ui/badge";
 import Link from "next/link";
 import {desktopMenuItems} from "@/global/types/menu";
 import {cn} from "@/lib/utils";
 import {useAuth} from "@/features/auth/shared/hooks";
+import {useCartStats} from "@/features/order/cart/hooks";
 import {NavButton} from "@/components/layout/navigation/NavButton";
 import {Button} from "@/components/ui/button";
 import {Input} from "@/components/ui/input";
@@ -21,6 +23,7 @@ interface DesktopHeaderProps {
 export default function DesktopHeader({className}: DesktopHeaderProps) {
     const {data: session, status} = useSession();
     const {signIn, signOut} = useAuth();
+    const cartStats = useCartStats();
 
     // 로딩 중일 때는 기본 메뉴만 표시
     if (status === 'loading') {
@@ -85,9 +88,21 @@ export default function DesktopHeader({className}: DesktopHeaderProps) {
                         <NavLink href="/my/order" icon={Package}>
                             주문/발송
                         </NavLink>
-                        <NavLink href="/my/cart" icon={ShoppingCart}>
-                            장바구니
-                        </NavLink>
+
+                        <div className="relative inline-flex">
+                            <NavLink href="/my/cart" icon={ShoppingCart}>
+                                장바구니
+                            </NavLink>
+                            {cartStats.productCount > 0 && (
+                                <Badge
+                                    variant="destructive"
+                                    className="absolute -top-2 -right-2 h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs"
+                                >
+                                    {cartStats.productCount > 99 ? '99+' : cartStats.productCount}
+                                </Badge>
+                            )}
+                        </div>
+
                         <NavLink href="/support" icon={MessageCircle}>
                             고객센터
                         </NavLink>
