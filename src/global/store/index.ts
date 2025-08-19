@@ -1,6 +1,7 @@
 import {configureStore} from '@reduxjs/toolkit'
 import {baseApi} from '@/global/api/baseApi'
 import drawerReducer from '@/features/ui/drawer/slice'
+import toastReducer from '@/features/ui/toast/slice'
 import cartReducer from '@/features/order/cart/slice'
 
 /**
@@ -18,8 +19,9 @@ export const store = configureStore({
         [baseApi.reducerPath]: baseApi.reducer,
 
         // 클라이언트 전용 상태
-        drawer: drawerReducer, // UI 서랍
-        cart: cartReducer, // 장바구니
+        drawer: drawerReducer,
+        toast: toastReducer,
+        cart: cartReducer,
         // 모달, 토스트, 알림
         // 프로필
         // 테마, 다크모드

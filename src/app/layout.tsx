@@ -13,6 +13,7 @@ import MobileHeader from "@/components/layout/header/MobileHeader";
 import MenuDrawerSheet from "@/components/layout/drawer/MenuDrawerSheet";
 import CartDrawerSheet from "@/components/layout/drawer/CartDrawerSheet";
 import MainContainer from "@/components/layout/containers/MainContainer";
+import ToastContainer from "@/components/layout/containers/ToastContainer";
 
 const nanumGothic = Nanum_Gothic({
     weight: ['400', '700', '800'],
@@ -153,7 +154,7 @@ export default async function RootLayout({children}: RootLayoutProps) {
                 */}
                 <MenuDrawerSheet/> {/* 모바일 햄버거 메뉴 드로어 */}
                 <CartDrawerSheet/> {/* 모바일 장바구니 드로어 */}
-                {/* TODO: 토스트 컨테이너 (z-50) */}
+                <ToastContainer /> {/* 토스트 컨테이너 (z-50) */}
                 {/* TODO: 확인/경고 다이얼로그 (z-40) */}
             </ReduxProvider>
         </SessionProvider>
