@@ -57,7 +57,7 @@ export default function MenuDrawerSheet() {
                         </div>
 
                         {/* 스크롤 가능한 상품권 목록 */}
-                        <div className="flex-1 overflow-y-auto p-2 max-h-[calc(100vh-328px)]">
+                        <div className="flex-1 overflow-y-auto p-2 max-h-[calc(100dvh-328px)]">
                             <div className="space-y-3">
                                 {mobileMenuItems1.map((item, index) => (
                                     <Link
