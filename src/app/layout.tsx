@@ -152,8 +152,8 @@ export default async function RootLayout({children}: RootLayoutProps) {
                     - 서드파티 라이브러리와의 z-index 충돌 가능성 고려
                     - Radix UI 기본값: Portal 사용으로 body 끝에 렌더링
                 */}
-                <MenuDrawerSheet/> {/* 모바일 햄버거 메뉴 드로어 */}
-                <CartDrawerSheet/> {/* 모바일 장바구니 드로어 */}
+                <MenuDrawerSheet/> {/* 모바일 햄버거 서랍 메뉴*/}
+                <CartDrawerSheet/> {/* 모바일 장바구니 서랍 */}
                 <ToastContainer /> {/* 토스트 컨테이너 (z-50) */}
                 {/* TODO: 확인/경고 다이얼로그 (z-40) */}
             </ReduxProvider>

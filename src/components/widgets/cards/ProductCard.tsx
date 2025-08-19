@@ -9,6 +9,7 @@ interface ProductCardProps {
     product: ProductResponse
     imageUrl: string
     imageAlt?: string
+    isPriority?: boolean
     onAddToCart?: (productId: number) => void
     onClick?: (productId: number) => void
     isLoading?: boolean
@@ -18,6 +19,7 @@ export default function ProductCard({
                                         product,
                                         imageUrl,
                                         imageAlt,
+                                        isPriority,
                                         onAddToCart,
                                         onClick,
                                         isLoading = false
@@ -58,6 +60,7 @@ export default function ProductCard({
                         alt={imageAlt || product.name}
                         fill
                         className="object-cover"
+                        priority={isPriority}
                     />
                 </div>
             </CardHeader>

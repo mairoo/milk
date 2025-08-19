@@ -4,9 +4,11 @@ import {useCallback, useEffect, useState} from 'react'
 import {useRouter} from 'next/navigation'
 import {decode} from '@/global/lib/url'
 import {useCategoryBySlug, useProducts} from '@/features/inventory/public/hooks'
+import {useCart} from '@/features/order/cart/hooks'
+import {useToast} from '@/features/ui/toast/hooks'
 import {Alert} from '@/components/layout/containers/Alert'
 import ProductCard from '@/components/widgets/cards/ProductCard'
-import {StyledMarkdown} from "@/components/layout/containers/StyledMakrdown";
+import {StyledMarkdown} from "@/components/layout/containers/StyledMakrdown"
 
 interface CategoryPageProps {
     params: Promise<{
@@ -34,6 +36,9 @@ export default function CategoryPage({params}: CategoryPageProps) {
         getProductsByCategory
     } = useProducts()
 
+    const {addProduct} = useCart()
+    const {showSuccess, showError} = useToast()
+
     useEffect(() => {
         const fetchSlug = async () => {
             try {
@@ -60,10 +65,45 @@ export default function CategoryPage({params}: CategoryPageProps) {
         }
     }, [categoryData?.id, getProductsByCategory])
 
+    /**
+     * 장바구니에 상품 추가
+     */
     const addToCart = useCallback((productId: number) => {
-        console.log('장바구니에 추가:', productId)
-        // TODO: 장바구니 추가 로직 구현
-    }, [])
+        try {
+            // 입력값 검증
+            if (!productId || !Number.isInteger(productId) || productId <= 0) {
+                showError('오류', '유효하지 않은 상품 ID입니다.')
+                return
+            }
+
+            // 상품 데이터 찾기
+            const product = productsData?.find(p => p.id === productId)
+
+            if (!product) {
+                showError('오류', '상품 정보를 찾을 수 없습니다.')
+                return
+            }
+
+            // 장바구니에 추가
+            addProduct({
+                id: String(product.id),
+                title: product.name,
+                subtitle: product.subtitle || '',
+                price: product.sellingPrice,
+                quantity: 1
+            })
+
+            // 성공 메시지 표시
+            showSuccess(
+                '장바구니 추가',
+                `${product.name} ${product.subtitle}이(가) 장바구니에 추가되었습니다.`
+            )
+
+        } catch (error) {
+            console.error('장바구니 추가 실패:', error)
+            showError('오류', '장바구니에 추가하는 중 오류가 발생했습니다.')
+        }
+    }, [productsData, addProduct, showSuccess, showError])
 
     const navigateToProduct = useCallback((productId: number, productCode: string) => {
         router.push(`/product/${productId}/${productCode}`)
@@ -117,13 +157,14 @@ export default function CategoryPage({params}: CategoryPageProps) {
                     <p className="text-gray-500 text-center py-12">등록된 상품이 없습니다.</p>
                 ) : (
                     <div className="grid grid-cols-2 md:grid-cols-6 gap-2 md:gap-6">
-                        {productsData.map((product) => (
+                        {productsData.map((product, index) => (
                             <ProductCard
                                 key={product.id}
                                 product={product}
                                 imageUrl={getProductImageUrl()}
                                 onAddToCart={addToCart}
                                 onClick={(productId) => navigateToProduct(productId, product.code)}
+                                isPriority={index === 0} // 첫 번째 이미지만 priority
                             />
                         ))}
                     </div>
