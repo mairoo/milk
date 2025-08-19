@@ -1,5 +1,4 @@
 import {useCallback, useMemo} from 'react'
-import Image from 'next/image'
 import {ShoppingCart} from 'lucide-react'
 import {Card, CardContent, CardFooter, CardHeader} from '@/components/ui/card'
 import {Button} from '@/components/ui/button'
@@ -53,13 +52,10 @@ export default function ProductCard({
             {/* 이미지 섹션 */}
             <CardHeader className="p-0">
                 <div className="aspect-[156/100] w-full relative overflow-hidden rounded-t-xl">
-                    <Image
+                    <img
                         src={imageUrl}
                         alt={imageAlt || product.name}
-                        fill
-                        className="object-cover"
-                        sizes="(max-width: 768px) 50vw, 16vw"
-                        priority={false}
+                        className="w-full h-full object-cover"
                     />
                 </div>
             </CardHeader>

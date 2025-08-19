@@ -2,7 +2,6 @@
 
 import {useCallback, useEffect, useMemo, useState} from 'react'
 import {Minus, Plus, ShoppingCart} from 'lucide-react'
-import Image from 'next/image'
 import {useCategoryById, useProduct} from '@/features/inventory/public/hooks'
 import {Card, CardContent} from '@/components/ui/card'
 import {Button} from '@/components/ui/button'
@@ -142,13 +141,10 @@ export default function ProductDetailPage({params}: ProductDetailPageProps) {
                             {/* 상품 이미지 */}
                             <div className="flex justify-center sm:justify-start">
                                 <div className="w-40 h-28 relative overflow-hidden rounded-lg border shadow-sm">
-                                    <Image
+                                    <img
                                         src={imageUrl}
                                         alt={imageAlt}
-                                        fill
-                                        className="object-cover"
-                                        sizes="160px"
-                                        priority={false}
+                                        className="w-full h-full object-cover"
                                     />
                                 </div>
                             </div>
@@ -169,7 +165,8 @@ export default function ProductDetailPage({params}: ProductDetailPageProps) {
                                         {formatPrice(productData.sellingPrice)}
                                     </span>
                                     {discountRate > 0 && (
-                                        <span className="text-red-600 bg-red-100 px-2 py-1 rounded text-sm font-medium whitespace-nowrap">
+                                        <span
+                                            className="text-red-600 bg-red-100 px-2 py-1 rounded text-sm font-medium whitespace-nowrap">
                                             {discountRate.toFixed(0)}% 할인
                                         </span>
                                     )}
