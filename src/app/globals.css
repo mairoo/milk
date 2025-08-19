@@ -1,69 +1,13 @@
+/* ===== 임포트 ===== */
 @import "tailwindcss";
 @import "tw-animate-css";
+
 @plugin "@tailwindcss/typography";
 
+/* ===== CUSTOM VARIANTS ===== */
 @custom-variant dark (&:is(.dark *));
 
-/* Scrollbar Layout Shift 방지 */
-html {
-    scrollbar-gutter: stable;
-}
-
-/* Radix UI 모달/드롭다운으로 인한 레이아웃 시프트 방지 */
-body[style*="overflow: hidden"] {
-    scrollbar-gutter: stable;
-    padding-right: 0 !important; /* Radix가 자동 추가하는 padding-right 제거 */
-}
-
-/* iOS Safari 전용 최적화 */
-@supports (-webkit-touch-callout: none) {
-    html {
-        /* 주소창 변화 시 레이아웃 안정화 */
-        height: 100%;
-    }
-
-    body {
-        /* iOS Safari 바운스 효과 비활성화 */
-        overscroll-behavior: none;
-        -webkit-overflow-scrolling: touch;
-
-        /* 뷰포트 안정화 */
-        min-height: 100vh;
-        min-height: -webkit-fill-available;
-    }
-}
-
-/* Sticky header 안정화 클래스 */
-.sticky-header-stable {
-    will-change: transform;
-    transform: translateZ(0);
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
-
-    /* contain 속성 개선 */
-    contain: layout style paint; /* paint 추가로 리페인트 최적화 */
-}
-
-/* 노치 안전 영역 대응 */
-.safe-area-inset {
-    /* padding 대신 margin 사용 고려하거나, 선택적 적용 */
-    padding-top: env(safe-area-inset-top, 0);
-    padding-left: env(safe-area-inset-left, 0);
-    padding-right: env(safe-area-inset-right, 0);
-    /* padding-bottom은 일반적으로 불필요 */
-}
-
-/* iOS Safari 스크롤 바운스 방지 강화 */
-@supports (-webkit-touch-callout: none) {
-    html, body {
-        /* 전체 문서에서 바운스 방지 */
-        overscroll-behavior-y: none;
-        /* 가로 스크롤도 방지하려면 */
-        /* overscroll-behavior-x: none; */
-    }
-}
-
-/* Tailwind v4 font family */
+/* ===== 테마 설정 ===== */
 @theme {
     --font-family-nanum-gothic: "Nanum Gothic", system-ui, sans-serif;
 
@@ -109,6 +53,8 @@ body[style*="overflow: hidden"] {
     --color-sidebar-ring: var(--sidebar-ring);
 }
 
+/* ===== 색상 변수 ===== */
+/* Light Theme */
 :root {
     --radius: 0.625rem;
     --background: oklch(1 0 0);
@@ -144,6 +90,7 @@ body[style*="overflow: hidden"] {
     --sidebar-ring: oklch(0.704 0.04 256.788);
 }
 
+/* Dark Theme */
 .dark {
     --background: oklch(0.129 0.042 264.695);
     --foreground: oklch(0.984 0.003 247.858);
@@ -178,11 +125,73 @@ body[style*="overflow: hidden"] {
     --sidebar-ring: oklch(0.551 0.027 264.364);
 }
 
-@layer base {
-  * {
-    @apply border-border outline-ring/50;
+/* ===== 전역 스타일 ===== */
+/* Scrollbar Layout Shift 방지 */
+html {
+    scrollbar-gutter: stable;
+}
+
+/* Radix UI 모달/드롭다운으로 인한 레이아웃 시프트 방지 */
+body[style*="overflow: hidden"] {
+    scrollbar-gutter: stable;
+    padding-right: 0 !important; /* Radix가 자동 추가하는 padding-right 제거 */
+}
+
+/* ===== 플랫폼 종속 스타일 ===== */
+/* iOS Safari 전용 최적화 */
+@supports (-webkit-touch-callout: none) {
+    html {
+        /* 주소창 변화 시 레이아웃 안정화 */
+        height: 100%;
     }
-  body {
-    @apply bg-background text-foreground;
+
+    body {
+        /* iOS Safari 바운스 효과 비활성화 */
+        overscroll-behavior: none;
+        -webkit-overflow-scrolling: touch;
+
+        /* 뷰포트 안정화 */
+        min-height: 100vh;
+        min-height: -webkit-fill-available;
+    }
+
+    /* iOS Safari 스크롤 바운스 방지 강화 */
+    html, body {
+        /* 전체 문서에서 바운스 방지 */
+        overscroll-behavior-y: none;
+        /* 가로 스크롤도 방지하려면 */
+        /* overscroll-behavior-x: none; */
+    }
+}
+
+/* ===== 유틸리티 클래스 ===== */
+/* Sticky header 안정화 클래스 */
+.sticky-header-stable {
+    will-change: transform;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+
+    /* contain 속성 개선 */
+    contain: layout style paint; /* paint 추가로 리페인트 최적화 */
+}
+
+/* 노치 안전 영역 대응 */
+.safe-area-inset {
+    /* padding 대신 margin 사용 고려하거나, 선택적 적용 */
+    padding-top: env(safe-area-inset-top, 0);
+    padding-left: env(safe-area-inset-left, 0);
+    padding-right: env(safe-area-inset-right, 0);
+    /* padding-bottom은 일반적으로 불필요 */
+}
+
+/* ===== Tailwind 베이스 레이어 ===== */
+@layer base {
+    * {
+        @apply border-border outline-ring/50;
+    }
+
+    body {
+        @apply bg-background text-foreground;
     }
 }
