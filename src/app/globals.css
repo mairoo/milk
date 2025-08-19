@@ -138,55 +138,31 @@ body[style*="overflow: hidden"] {
 }
 
 /* ===== 플랫폼 종속 스타일 ===== */
-/* iOS Safari 전용 최적화 */
+/* iOS Safari 최적화 */
 @supports (-webkit-touch-callout: none) {
-    html {
-        /* 주소창 변화 시 레이아웃 안정화 */
-        height: 100%;
-    }
-
     body {
         /* iOS Safari 바운스 효과 비활성화 */
         overscroll-behavior: none;
         -webkit-overflow-scrolling: touch;
-
-        /* 뷰포트 안정화 */
-        min-height: 100vh;
-        min-height: -webkit-fill-available;
-    }
-
-    /* iOS Safari 스크롤 바운스 방지 강화 */
-    html, body {
-        /* 전체 문서에서 바운스 방지 */
-        overscroll-behavior-y: none;
-        /* 가로 스크롤도 방지하려면 */
-        /* overscroll-behavior-x: none; */
     }
 }
 
 /* ===== 유틸리티 클래스 ===== */
-/* Sticky header 안정화 클래스 */
+/* 데스크톱 고정 헤더 설정 */
 .sticky-header-stable {
     will-change: transform;
     transform: translateZ(0);
     backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
-
-    /* iOS Safari 깜박임 해결 핵심 */
     opacity: 0.999;
     contain: layout style paint;
-
-    /* 전환 효과 제거 */
     transition: none !important;
 }
 
-/* 노치 안전 영역 대응 */
+/* 노치 대응 (필요 시) */
 .safe-area-inset {
-    /* padding 대신 margin 사용 고려하거나, 선택적 적용 */
     padding-top: env(safe-area-inset-top, 0);
     padding-left: env(safe-area-inset-left, 0);
     padding-right: env(safe-area-inset-right, 0);
-    /* padding-bottom은 일반적으로 불필요 */
 }
 
 /* ===== Tailwind 베이스 레이어 ===== */
