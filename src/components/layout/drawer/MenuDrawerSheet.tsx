@@ -5,7 +5,6 @@ import {Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle,} from "@
 import {useDrawer} from "@/features/ui/drawer/hooks";
 import {CreditCard, Dot, HelpCircle, LogOut, LucideIcon, Package, ShoppingCart, User} from "lucide-react";
 import Link from "next/link";
-import {Button} from "@/components/ui/button";
 
 // 메뉴 아이템 타입 정의
 interface MenuItem {
@@ -29,18 +28,18 @@ export default function MenuDrawerSheet() {
 
     // 상품권 카테고리
     const giftCardCategories: MenuItem[] = [
-        {icon: Dot, label: "구글기프트카드", href: "/category/구글기프트카드"},
         {icon: Dot, label: "넥슨카드", href: "/category/넥슨카드"},
-        {icon: Dot, label: "퍼니카드", href: "/category/퍼니카드"},
         {icon: Dot, label: "컬쳐랜드상품권", href: "/category/컬쳐랜드상품권"},
         {icon: Dot, label: "도서문화상품권", href: "/category/도서문화상품권"},
-        {icon: Dot, label: "스마트문화상품권", href: "/category/스마트문화상품권"},
+        {icon: Dot, label: "구글기프트카드", href: "/category/구글기프트카드"},
         {icon: Dot, label: "에그머니", href: "/category/에그머니"},
         {icon: Dot, label: "틴캐시", href: "/category/틴캐시"},
+        {icon: Dot, label: "스마트문화상품권", href: "/category/스마트문화상품권"},
         {icon: Dot, label: "스타벅스", href: "/category/스타벅스"},
         {icon: Dot, label: "아프리카별풍선", href: "/category/아프리카tv"},
         {icon: Dot, label: "플레이스테이션", href: "/category/플레이스테이션-기프트카드-교환권"},
         {icon: Dot, label: "와우캐시", href: "/category/와우캐시"},
+        {icon: Dot, label: "퍼니카드", href: "/category/퍼니카드"},
         {icon: Dot, label: "N코인", href: "/category/엔코인"},
         {icon: Dot, label: "요기요", href: "/category/요기요"},
         {icon: Dot, label: "한게임 상품권", href: "/category/한게임-한코인"},
@@ -74,7 +73,7 @@ export default function MenuDrawerSheet() {
                                     key={index}
                                     href={item.href}
                                     onClick={handleLinkClick}
-                                    className="flex items-center gap-3 p-2 rounded-md hover:bg-red-100 transition-colors"
+                                    className="flex items-center gap-3 p-2 rounded-md transition-colors"
                                 >
                                     <item.icon className="w-5 h-5 text-gray-600"/>
                                     <span className="text-gray-800">{item.label}</span>
@@ -112,17 +111,16 @@ export default function MenuDrawerSheet() {
                         </div>
                     </div>
 
-                    {/* 카드몰로 이동 버튼 (푸터) */}
+                    {/* 카드몰로 이동 링크 (푸터) */}
                     <div className="p-4 bg-green-50">
-                        <Button
-                            asChild
-                            className="w-full bg-green-50 text-black"
+                        <Link
+                            href="/"
+                            onClick={handleLinkClick}
+                            className="w-full flex items-center justify-center gap-2 p-3 bg-green-50 text-black rounded-md hover:bg-green-100 transition-colors"
                         >
-                            <Link href="/" onClick={handleLinkClick}>
-                                <CreditCard className="w-4 h-4 mr-2"/>
-                                카드몰로 이동
-                            </Link>
-                        </Button>
+                            <CreditCard className="w-4 h-4"/>
+                            <span>카드몰로 이동</span>
+                        </Link>
                     </div>
                 </div>
             </SheetContent>
