@@ -17,7 +17,7 @@ export default function MobileHeader({className}: MobileHeaderProps) {
 
     return (
         <header className={cn(
-            "sticky top-0 z-10 bg-white transition-shadow duration-300 shadow-md",
+            "sticky top-0 z-10 bg-white shadow-md",
             "sticky-header-stable safe-area-inset",
             className,
         )}>

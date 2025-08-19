@@ -172,8 +172,12 @@ body[style*="overflow: hidden"] {
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
 
-    /* contain 속성 개선 */
-    contain: layout style paint; /* paint 추가로 리페인트 최적화 */
+    /* iOS Safari 깜박임 해결 핵심 */
+    opacity: 0.999;
+    contain: layout style paint;
+
+    /* 전환 효과 제거 */
+    transition: none !important;
 }
 
 /* 노치 안전 영역 대응 */
