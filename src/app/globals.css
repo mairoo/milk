@@ -15,11 +15,52 @@ body[style*="overflow: hidden"] {
     padding-right: 0 !important; /* Radix가 자동 추가하는 padding-right 제거 */
 }
 
+/* iOS Safari 전용 최적화 */
+@supports (-webkit-touch-callout: none) {
+    html {
+        /* 주소창 변화 시 레이아웃 안정화 */
+        height: 100%;
+    }
+
+    body {
+        /* iOS Safari 바운스 효과 비활성화 */
+        overscroll-behavior: none;
+        -webkit-overflow-scrolling: touch;
+
+        /* 뷰포트 안정화 */
+        min-height: 100vh;
+        min-height: -webkit-fill-available;
+    }
+}
+
 /* Sticky header 안정화 클래스 */
 .sticky-header-stable {
-    will-change: transform; /* GPU 가속으로 렌더링 안정화 */
-    transform: translateZ(0); /* GPU 레이어 강제 생성 (transform-gpu 역할) */
-    backface-visibility: hidden; /* 뒷면 숨김으로 깜빡임 방지 */
+    will-change: transform;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+
+    /* contain 속성 개선 */
+    contain: layout style paint; /* paint 추가로 리페인트 최적화 */
+}
+
+/* 노치 안전 영역 대응 */
+.safe-area-inset {
+    /* padding 대신 margin 사용 고려하거나, 선택적 적용 */
+    padding-top: env(safe-area-inset-top, 0);
+    padding-left: env(safe-area-inset-left, 0);
+    padding-right: env(safe-area-inset-right, 0);
+    /* padding-bottom은 일반적으로 불필요 */
+}
+
+/* iOS Safari 스크롤 바운스 방지 강화 */
+@supports (-webkit-touch-callout: none) {
+    html, body {
+        /* 전체 문서에서 바운스 방지 */
+        overscroll-behavior-y: none;
+        /* 가로 스크롤도 방지하려면 */
+        /* overscroll-behavior-x: none; */
+    }
 }
 
 /* Tailwind v4 font family */

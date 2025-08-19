@@ -27,7 +27,8 @@ export default function DesktopHeader({className}: DesktopHeaderProps) {
         return (
             <header className={cn(
                 "sticky top-0 z-10 bg-white transition-shadow duration-300 shadow-md",
-                className
+                "sticky-header-stable safe-area-inset",
+                className,
             )}>
                 <div className="mx-auto container">
                     <div className="mx-auto container flex justify-between items-center py-2">
@@ -54,7 +55,8 @@ export default function DesktopHeader({className}: DesktopHeaderProps) {
     return (
         <header className={cn(
             "sticky top-0 z-10 bg-white transition-shadow duration-300 shadow-md",
-            className
+            "sticky-header-stable safe-area-inset",
+            className,
         )}>
             <div className="mx-auto container">
                 <div className="mx-auto container flex justify-between items-center py-4">

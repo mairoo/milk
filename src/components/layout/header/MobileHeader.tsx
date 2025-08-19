@@ -18,7 +18,8 @@ export default function MobileHeader({className}: MobileHeaderProps) {
     return (
         <header className={cn(
             "sticky top-0 z-10 bg-white transition-shadow duration-300 shadow-md",
-            className
+            "sticky-header-stable safe-area-inset",
+            className,
         )}>
             <div className="flex items-center p-2">
                 <div>
