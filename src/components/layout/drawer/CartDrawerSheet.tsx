@@ -1,6 +1,6 @@
 'use client'
 
-import React from "react";
+import React, {useState} from "react";
 import {Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle,} from "@/components/ui/sheet";
 import {useDrawer} from "@/features/ui/drawer/hooks";
 import {useCart} from "@/features/order/cart/hooks";
@@ -9,10 +9,78 @@ import {Button} from "@/components/ui/button";
 
 export default function CartDrawerSheet() {
     const {cartDrawerOpen, closeCartDrawer} = useDrawer();
-    const {products, stats, increment, decrement, removeProduct, clear} = useCart();
+    const {products, stats, increment, decrement, removeProduct, clear, updateQuantity} = useCart();
+
+    // 각 상품별 임시 입력값을 관리하는 state
+    const [tempInputs, setTempInputs] = useState<{ [key: string]: string }>({});
 
     const formatPrice = (price: number) => {
         return `₩${price.toLocaleString()}`;
+    };
+
+    // 수량 직접 변경 핸들러
+    const handleQuantityChange = (productId: string, value: string) => {
+        // 임시 입력값 업데이트
+        setTempInputs(prev => ({
+            ...prev,
+            [productId]: value
+        }));
+    };
+
+    // 포커스 아웃시 또는 엔터키 입력시 실제 수량 업데이트
+    const handleQuantitySubmit = (productId: string, value: string) => {
+        const numValue = parseInt(value);
+
+        // 빈 값이거나 0 이하면 상품 삭제
+        if (!value || numValue <= 0) {
+            removeProduct(productId);
+        }
+        // 1 이상 9999 이하의 유효한 값이면 수량 업데이트
+        else if (numValue >= 1 && numValue <= 9999) {
+            updateQuantity?.(productId, numValue);
+        }
+        // 유효하지 않은 값이면 원래 수량으로 되돌리기
+        else {
+            const product = products.find(p => p.id === productId);
+            if (product) {
+                setTempInputs(prev => ({
+                    ...prev,
+                    [productId]: product.quantity.toString()
+                }));
+            }
+        }
+
+        // 임시 입력값 초기화
+        setTempInputs(prev => {
+            const newInputs = {...prev};
+            delete newInputs[productId];
+            return newInputs;
+        });
+    };
+
+    // 현재 표시할 수량값 (임시 입력값이 있으면 그것을, 없으면 실제 수량을)
+    const getDisplayQuantity = (productId: string, actualQuantity: number) => {
+        return tempInputs[productId] ?? actualQuantity.toString();
+    };
+
+    // + 버튼 클릭 핸들러
+    const handleIncrement = (productId: string) => {
+        const product = products.find(p => p.id === productId);
+        if (product && product.quantity < 9999) {
+            increment(productId);
+        }
+    };
+
+    // - 버튼 클릭 핸들러
+    const handleDecrement = (productId: string) => {
+        const product = products.find(p => p.id === productId);
+        if (product) {
+            if (product.quantity <= 1) {
+                removeProduct(productId);
+            } else {
+                decrement(productId);
+            }
+        }
     };
 
     return (
@@ -92,19 +160,38 @@ export default function CartDrawerSheet() {
                                                 {/* 수량 조절 */}
                                                 <div className="flex items-center gap-2">
                                                     <button
-                                                        onClick={() => decrement(product.id)}
+                                                        onClick={() => handleDecrement(product.id)}
                                                         className="w-7 h-7 flex items-center justify-center border border-gray-300 rounded-md hover:bg-gray-50 transition-colors"
                                                         aria-label="수량 감소"
                                                     >
                                                         <Minus className="h-3 w-3 text-gray-600"/>
                                                     </button>
-                                                    <span className="min-w-[2rem] text-center font-medium text-sm">
-                                                        {product.quantity}
-                                                    </span>
+
+                                                    {/* 수량 입력 필드 */}
+                                                    <input
+                                                        type="text"
+                                                        value={getDisplayQuantity(product.id, product.quantity)}
+                                                        onChange={(e) => {
+                                                            const value = e.target.value.replace(/[^0-9]/g, ''); // 숫자만 허용
+                                                            if (value.length <= 4) { // 최대 4자리
+                                                                handleQuantityChange(product.id, value);
+                                                            }
+                                                        }}
+                                                        onBlur={(e) => handleQuantitySubmit(product.id, e.target.value)}
+                                                        onKeyDown={(e) => {
+                                                            if (e.key === 'Enter') {
+                                                                e.currentTarget.blur();
+                                                            }
+                                                        }}
+                                                        className="w-12 h-7 text-center text-sm font-medium border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                                                        aria-label="수량 입력"
+                                                    />
+
                                                     <button
-                                                        onClick={() => increment(product.id)}
+                                                        onClick={() => handleIncrement(product.id)}
                                                         className="w-7 h-7 flex items-center justify-center border border-gray-300 rounded-md hover:bg-gray-50 transition-colors"
                                                         aria-label="수량 증가"
+                                                        disabled={product.quantity >= 9999}
                                                     >
                                                         <Plus className="h-3 w-3 text-gray-600"/>
                                                     </button>
