@@ -30,16 +30,9 @@ export interface CartClientState {
     // 장바구니 데이터
     products: CartProduct[]
 
-    // UI 상태
-    isOpen: boolean
-    isUpdating: boolean
-
     // 계산된 값들 (캐시)
     totalQuantity: number
     totalPrice: number
-
-    // 에러 상태
-    error: string | null
 }
 
 /**

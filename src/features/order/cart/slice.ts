@@ -6,11 +6,8 @@ import {AddToCartPayload, CartClientState, CartProduct, UpdateQuantityPayload} f
  */
 const initialState: CartClientState = {
     products: [],
-    isOpen: false,
-    isUpdating: false,
     totalQuantity: 0,
     totalPrice: 0,
-    error: null,
 }
 
 /**
@@ -59,9 +56,6 @@ export const cartSlice = createSlice({
             const totals = calculateTotals(state.products)
             state.totalQuantity = totals.totalQuantity
             state.totalPrice = totals.totalPrice
-
-            // 에러 초기화
-            state.error = null
         },
 
         /**
@@ -108,42 +102,6 @@ export const cartSlice = createSlice({
             state.products = []
             state.totalQuantity = 0
             state.totalPrice = 0
-            state.error = null
-        },
-
-        /**
-         * 장바구니 UI 토글
-         */
-        toggleCart: (state) => {
-            state.isOpen = !state.isOpen
-        },
-
-        /**
-         * 장바구니 열기
-         */
-        openCart: (state) => {
-            state.isOpen = true
-        },
-
-        /**
-         * 장바구니 닫기
-         */
-        closeCart: (state) => {
-            state.isOpen = false
-        },
-
-        /**
-         * 업데이트 상태 설정
-         */
-        setUpdating: (state, action: PayloadAction<boolean>) => {
-            state.isUpdating = action.payload
-        },
-
-        /**
-         * 에러 설정
-         */
-        setError: (state, action: PayloadAction<string | null>) => {
-            state.error = action.payload
         },
 
         /**
@@ -194,11 +152,6 @@ export const {
     updateQuantity,
     removeFromCart,
     clearCart,
-    toggleCart,
-    openCart,
-    closeCart,
-    setUpdating,
-    setError,
     incrementQuantity,
     decrementQuantity,
 } = cartSlice.actions
