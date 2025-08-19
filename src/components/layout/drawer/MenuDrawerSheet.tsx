@@ -3,49 +3,12 @@
 import React from "react";
 import {Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle,} from "@/components/ui/sheet";
 import {useDrawer} from "@/features/ui/drawer/hooks";
-import {CreditCard, Dot, HelpCircle, LogOut, LucideIcon, Package, ShoppingCart, User} from "lucide-react";
+import {CreditCard} from "lucide-react";
 import Link from "next/link";
-
-// 메뉴 아이템 타입 정의
-interface MenuItem {
-    icon: LucideIcon;
-    label: string;
-    href: string;
-    badge?: number;
-}
+import {mobileMenuItems, mobileMenuItems1} from "@/global/types/menu";
 
 export default function MenuDrawerSheet() {
     const {menuDrawerOpen, closeMenuDrawer} = useDrawer();
-
-    // 핀코인 대표몰 메뉴
-    const mainMenuItems: MenuItem[] = [
-        {icon: User, label: "마이페이지", href: "/my/profile"},
-        {icon: LogOut, label: "로그아웃", href: "/auth/logout"},
-        {icon: Package, label: "주문/발송", href: "/my/order"},
-        {icon: ShoppingCart, label: "장바구니", href: "/my/cart", badge: 0},
-        {icon: HelpCircle, label: "고객센터", href: "/support"},
-    ];
-
-    // 상품권 카테고리
-    const giftCardCategories: MenuItem[] = [
-        {icon: Dot, label: "넥슨카드", href: "/category/넥슨카드"},
-        {icon: Dot, label: "컬쳐랜드상품권", href: "/category/컬쳐랜드상품권"},
-        {icon: Dot, label: "도서문화상품권", href: "/category/도서문화상품권"},
-        {icon: Dot, label: "구글기프트카드", href: "/category/구글기프트카드"},
-        {icon: Dot, label: "에그머니", href: "/category/에그머니"},
-        {icon: Dot, label: "틴캐시", href: "/category/틴캐시"},
-        {icon: Dot, label: "스마트문화상품권", href: "/category/스마트문화상품권"},
-        {icon: Dot, label: "스타벅스", href: "/category/스타벅스"},
-        {icon: Dot, label: "아프리카별풍선", href: "/category/아프리카tv"},
-        {icon: Dot, label: "플레이스테이션", href: "/category/플레이스테이션-기프트카드-교환권"},
-        {icon: Dot, label: "와우캐시", href: "/category/와우캐시"},
-        {icon: Dot, label: "퍼니카드", href: "/category/퍼니카드"},
-        {icon: Dot, label: "N코인", href: "/category/엔코인"},
-        {icon: Dot, label: "요기요", href: "/category/요기요"},
-        {icon: Dot, label: "한게임 상품권", href: "/category/한게임-한코인"},
-        {icon: Dot, label: "메니아선불쿠폰", href: "/category/매니아선불쿠폰"},
-        {icon: Dot, label: "아이템베이선불쿠폰", href: "/category/아이템베이선불쿠폰"},
-    ];
 
     const handleLinkClick = () => {
         closeMenuDrawer();
@@ -68,7 +31,7 @@ export default function MenuDrawerSheet() {
                     {/* 핀코인 대표몰 섹션 */}
                     <div className="p-2">
                         <div className="space-y-3">
-                            {mainMenuItems.map((item, index) => (
+                            {mobileMenuItems.map((item, index) => (
                                 <Link
                                     key={index}
                                     href={item.href}
@@ -96,7 +59,7 @@ export default function MenuDrawerSheet() {
                         {/* 스크롤 가능한 상품권 목록 */}
                         <div className="flex-1 overflow-y-auto p-2 max-h-[calc(100vh-328px)]">
                             <div className="space-y-3">
-                                {giftCardCategories.map((item, index) => (
+                                {mobileMenuItems1.map((item, index) => (
                                     <Link
                                         key={index}
                                         href={item.href}
