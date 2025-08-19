@@ -1,4 +1,4 @@
-import {Dot, HelpCircle, LogOut, LucideIcon, Package, ShoppingCart, User} from "lucide-react";
+import {Dot, HelpCircle, LogOut, LucideIcon, Package, User} from "lucide-react";
 
 export const desktopMenuItems = [
     {
@@ -56,7 +56,6 @@ export const mobileMenuItems: MobileMenuItem[] = [
     {icon: User, label: "마이페이지", href: "/my/profile"},
     {icon: LogOut, label: "로그아웃", href: "/auth/logout"},
     {icon: Package, label: "주문/발송", href: "/my/order"},
-    {icon: ShoppingCart, label: "장바구니", href: "/my/cart", badge: 0},
     {icon: HelpCircle, label: "고객센터", href: "/support"},
 ];
 

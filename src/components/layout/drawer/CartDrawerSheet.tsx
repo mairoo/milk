@@ -12,7 +12,7 @@ export default function CartDrawerSheet() {
             open={cartDrawerOpen}
             onOpenChange={(open) => !open && closeCartDrawer()}
         >
-            <SheetContent side="right" className="w-80">
+            <SheetContent side="right" className="w-60">
                 <SheetHeader>
                     <SheetTitle>장바구니</SheetTitle>
                     <SheetDescription className="sr-only">
