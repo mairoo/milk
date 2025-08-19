@@ -24,7 +24,6 @@ export const useCart = () => {
         isEmpty: products.length === 0,
     }), [products.length, totalQuantity, totalPrice])
 
-    // 액션들 (간단하고 직관적)
     const actions = useMemo(() => ({
         // 기본 CRUD
         addProduct: (payload: AddToCartPayload) => dispatch(addToCart(payload)),
@@ -37,36 +36,15 @@ export const useCart = () => {
         decrement: (productId: string) => dispatch(decrementQuantity(productId)),
     }), [dispatch])
 
-    // 유틸리티 함수들
-    const utils = useMemo(() => ({
-        hasProduct: (productId: string) => products.some(p => p.id === productId),
-        getProduct: (productId: string) => products.find(p => p.id === productId),
-        getQuantity: (productId: string) => products.find(p => p.id === productId)?.quantity ?? 0,
-        formatTotalPrice: (locale = 'ko-KR', currency = 'KRW') =>
-            new Intl.NumberFormat(locale, {style: 'currency', currency}).format(totalPrice),
-    }), [products, totalPrice])
+    const formatTotalPrice = useMemo(() =>
+            (locale = 'ko-KR', currency = 'KRW') =>
+                new Intl.NumberFormat(locale, {style: 'currency', currency}).format(totalPrice)
+        , [totalPrice])
 
     return {
-        // 상태
         products,
         stats,
-
-        // 액션
         ...actions,
-
-        // 유틸리티
-        ...utils,
+        formatTotalPrice,
     }
-}
-
-/**
- * 장바구니 통계만 필요한 경우를 위한 경량 훅
- */
-export const useCartStats = (): CartStats => {
-    return useAppSelector(state => ({
-        totalQuantity: state.cart.totalQuantity,
-        totalPrice: state.cart.totalPrice,
-        productCount: state.cart.products.length,
-        isEmpty: state.cart.products.length === 0,
-    }))
 }

@@ -96,11 +96,6 @@ export default function CartDrawerSheet() {
                     <SheetTitle className="text-emerald-800 font-bold flex items-center gap-2">
                         <ShoppingCart className="w-5 h-5"/>
                         장바구니
-                        {stats.totalQuantity > 0 && (
-                            <span className="bg-orange-500 text-white text-xs px-2 py-1 rounded-full">
-                                {stats.totalQuantity}
-                            </span>
-                        )}
                     </SheetTitle>
                     <SheetDescription className="sr-only">
                         선택한 상품들을 확인하고 수량을 조절할 수 있습니다.
