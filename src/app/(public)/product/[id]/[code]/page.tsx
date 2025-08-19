@@ -141,7 +141,7 @@ export default function ProductDetailPage({params}: ProductDetailPageProps) {
                         <div className="flex flex-col sm:flex-row gap-2">
                             {/* 상품 이미지 */}
                             <div className="flex justify-center sm:justify-start">
-                                <div className="w-40 h-28 relative overflow-hidden rounded-lg border shadow-sm">
+                                <div className="w-40 h-28 relative overflow-hidden rounded-lg border">
                                     <Image
                                         src={imageUrl}
                                         alt={imageAlt}
@@ -263,7 +263,7 @@ export default function ProductDetailPage({params}: ProductDetailPageProps) {
             )}
 
             {/* 상품권 발송 안내 */}
-            <Card>
+            <Card className="shadow-none">
                 <CardContent>
                     <h2 className="font-bold mb-4">상품권 발송 안내</h2>
                     <div className="space-y-2 text-gray-700">
@@ -276,7 +276,7 @@ export default function ProductDetailPage({params}: ProductDetailPageProps) {
             </Card>
 
             {/* 교환 및 환불 안내 */}
-            <Card>
+            <Card className="shadow-none">
                 <CardContent>
                     <h2 className="font-bold mb-4">교환 및 환불 안내</h2>
                     <div className="space-y-2 text-gray-700">
@@ -289,7 +289,7 @@ export default function ProductDetailPage({params}: ProductDetailPageProps) {
             </Card>
 
             {/* 상품권 구매 한도 안내 */}
-            <Card>
+            <Card className="shadow-none">
                 <CardContent>
                     <h2 className="font-bold mb-4">상품권 구매 한도 안내</h2>
                     <div className="space-y-2 text-gray-700">

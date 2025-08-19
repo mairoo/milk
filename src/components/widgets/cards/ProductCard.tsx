@@ -49,7 +49,7 @@ export default function ProductCard({
     }
 
     return (
-        <Card className="w-full max-w-sm cursor-pointer p-0 gap-2" onClick={handleCardClick}>
+        <Card className="w-full max-w-sm cursor-pointer p-0 gap-2 shadow-none" onClick={handleCardClick}>
             {/* 이미지 섹션 */}
             <CardHeader className="p-0">
                 <div className="aspect-[156/100] w-full relative overflow-hidden rounded-t-xl">
