@@ -1,5 +1,4 @@
 import {useMemo} from 'react'
-import {useAppDispatch, useAppSelector} from '@/store/hooks'
 import {
     addToCart,
     clearCart,
@@ -14,6 +13,7 @@ import {
     updateQuantity,
 } from './slice'
 import {AddToCartPayload, CartProduct, CartStats, UpdateQuantityPayload} from './types'
+import {useAppDispatch, useAppSelector} from "@/global/store/hooks";
 
 /**
  * 장바구니 전용 훅
