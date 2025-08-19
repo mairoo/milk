@@ -6,7 +6,6 @@ import {useDrawer} from "@/features/ui/drawer/hooks";
 import {CreditCard, Dot, HelpCircle, LogOut, LucideIcon, Package, ShoppingCart, User} from "lucide-react";
 import Link from "next/link";
 import {Button} from "@/components/ui/button";
-import {Separator} from "@/components/ui/separator";
 
 // 메뉴 아이템 타입 정의
 interface MenuItem {
@@ -60,7 +59,7 @@ export default function MenuDrawerSheet() {
         >
             <SheetContent side="left" className="w-80 p-0 flex flex-col gap-0">
                 <SheetHeader className="p-4 bg-green-50">
-                    <SheetTitle className="text-green-800 text-lg font-bold">핀코인 대표몰</SheetTitle>
+                    <SheetTitle className="text-green-800 font-bold">핀코인 대표몰</SheetTitle>
                     <SheetDescription className="sr-only">
                         사이트 메뉴를 탐색할 수 있습니다.
                     </SheetDescription>
@@ -68,7 +67,7 @@ export default function MenuDrawerSheet() {
 
                 <div className="flex-1 flex flex-col">
                     {/* 핀코인 대표몰 섹션 */}
-                    <div className="px-4">
+                    <div className="p-2">
                         <div className="space-y-1">
                             {mainMenuItems.map((item, index) => (
                                 <Link
@@ -89,16 +88,14 @@ export default function MenuDrawerSheet() {
                         </div>
                     </div>
 
-                    <Separator/>
-
                     {/* 상품권 섹션 */}
                     <div className="flex-1 flex flex-col min-h-0">
-                        <div className="p-4 pb-2 bg-green-50">
-                            <h3 className="font-semibold text-green-700">상품권</h3>
+                        <div className="p-4 bg-green-50">
+                            <h3 className="font-bold text-green-700">상품권</h3>
                         </div>
 
                         {/* 스크롤 가능한 상품권 목록 */}
-                        <div className="flex-1 overflow-y-auto px-4 pb-4">
+                        <div className="flex-1 overflow-y-auto p-2">
                             <div className="space-y-1">
                                 {giftCardCategories.map((item, index) => (
                                     <Link
@@ -116,7 +113,7 @@ export default function MenuDrawerSheet() {
                     </div>
 
                     {/* 카드몰로 이동 버튼 (푸터) */}
-                    <div className="p-4 border-t bg-green-50">
+                    <div className="p-4 bg-green-50">
                         <Button
                             asChild
                             className="w-full bg-green-50 text-black"
