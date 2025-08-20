@@ -1,11 +1,11 @@
 export enum ProductStatus {
     ENABLED = 0,
-    DISABLED = 1
+    DISABLED = 1,
 }
 
 export enum ProductStock {
     SOLD_OUT = 0,
-    IN_STOCK = 1
+    IN_STOCK = 1,
 }
 
 export interface CategoryResponse {
