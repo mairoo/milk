@@ -335,18 +335,49 @@ export default function MyCartPage() {
                 <PurchaseAgreement/>
             </Section>
 
+            {/* 주문 완료 버튼 */}
+            <div className="w-full">
+                <Button
+                    className="w-full h-14 bg-sky-600 hover:bg-sky-700 text-white text-lg font-semibold"
+                    disabled={stats.isEmpty || !selectedPaymentMethod || !agreements.purchase || !agreements.personalUse || !agreements.googleGiftCard}
+                >
+                    주문 완료
+                </Button>
+            </div>
+
             <Section title="첫 주문 시 주의사항">
-                <h2 className="font-bold mb-2">휴대폰본인인증 필수</h2>
-                <ul className="space-y-1 mb-4">
-                    <li>단, 해외에서 페이팔 결제하시는 경우 서류본인인증을 대신 완료합니다.</li>
-                </ul>
-                <h2 className="font-bold mb-2">서류본인인증이 필요한 경우</h2>
-                <ul className="space-y-1">
-                    <li>문화상품권, 해피머니, 도서문화상품권, 구글기프트카드를 포함하고 일일 액면가 기준 누계 10만원 이상 첫 구매하는 경우</li>
-                    <li>계좌이체로 일일 액면가 기준 누계 30만원 이상 첫 구매하는 경우</li>
-                    <li>페이팔로 최근30일 이내 액면가 기준 누계 15만원 이상 구매하는 경우 (한국 신분증 필수)</li>
-                    <li>휴대폰의 명의가 다른 경우 (단, 가족 명의로라도 휴대폰본인인증은 완료해야 합니다.)</li>
-                </ul>
+                <div className="bg-white border border-gray-200 rounded-lg p-6">
+                    <div className="space-y-6">
+                        {/* 휴대폰본인인증 필수 */}
+                        <div className="pb-4 border-b border-gray-100">
+                            <h2 className="font-bold text-gray-900 mb-3">휴대폰본인인증 필수</h2>
+                            <ul className="space-y-2">
+                                <li className="text-sm text-gray-600">
+                                    단, 해외에서 페이팔 결제하시는 경우 서류본인인증을 대신 완료합니다.
+                                </li>
+                            </ul>
+                        </div>
+
+                        {/* 서류본인인증이 필요한 경우 */}
+                        <div>
+                            <h2 className="font-bold text-gray-900 mb-3">서류본인인증이 필요한 경우</h2>
+                            <ul className="space-y-3">
+                                <li className="text-sm text-gray-600">
+                                    문화상품권, 해피머니, 도서문화상품권, 구글기프트카드를 포함하고 일일 액면가 기준 누계 10만원 이상 첫 구매하는 경우
+                                </li>
+                                <li className="text-sm text-gray-600">
+                                    계좌이체로 일일 액면가 기준 누계 30만원 이상 첫 구매하는 경우
+                                </li>
+                                <li className="text-sm text-gray-600">
+                                    페이팔로 최근30일 이내 액면가 기준 누계 15만원 이상 구매하는 경우 (한국 신분증 필수)
+                                </li>
+                                <li className="text-sm text-gray-600">
+                                    휴대폰의 명의가 다른 경우 (단, 가족 명의로라도 휴대폰본인인증은 완료해야 합니다.)
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
             </Section>
         </div>
     );
