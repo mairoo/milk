@@ -3,7 +3,7 @@
 import React from "react";
 import {Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle,} from "@/components/ui/sheet";
 import {useDrawer} from "@/features/ui/drawer/hooks";
-import {useCart, useCartQuantityManager} from "@/features/order/cart/hooks";
+import {useCart} from "@/features/order/cart/hooks";
 import {Minus, Plus, ShoppingCart, Trash2} from "lucide-react";
 import {Button} from "@/components/ui/button";
 import {useRouter} from "next/navigation";
@@ -14,15 +14,17 @@ export default function CartDrawerSheet() {
 
     const {cartDrawerOpen, closeCartDrawer} = useDrawer();
 
-    const {products, stats, removeProduct, clear} = useCart();
-
     const {
+        products,
+        stats,
+        removeProduct,
+        clear,
         getDisplayQuantity,
         handleQuantityChange,
         handleQuantitySubmit,
         handleIncrement,
         handleDecrement,
-    } = useCartQuantityManager();
+    } = useCart();
 
     return (
         <Sheet

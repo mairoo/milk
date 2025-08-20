@@ -2,22 +2,24 @@
 
 import {useState} from 'react';
 import Section from "@/components/widgets/cards/Section";
-import {useCart, useCartQuantityManager} from "@/features/order/cart/hooks";
+import {useCart} from "@/features/order/cart/hooks";
 import {Minus, Plus, ShoppingCart, Trash2} from "lucide-react";
 import {Button} from "@/components/ui/button";
 import {OrderPaymentMethod} from "@/features/order/shared/types";
 import {formatPrice} from "@/features/order/cart/utils";
 
 export default function CartPage() {
-    const {products, stats, clear, removeProduct} = useCart();
-
     const {
+        products,
+        stats,
+        clear,
+        removeProduct,
         getDisplayQuantity,
         handleQuantityChange,
         handleQuantitySubmit,
         handleIncrement,
         handleDecrement,
-    } = useCartQuantityManager();
+    } = useCart();
 
     // 결제 수단 선택 state
     const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<OrderPaymentMethod | null>(null);
