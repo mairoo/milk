@@ -1,12 +1,65 @@
 'use client'
 
-import {useState} from 'react';
+import React from 'react';
+import {useForm} from 'react-hook-form';
+import {yupResolver} from '@hookform/resolvers/yup';
+import * as yup from 'yup';
 import Section from "@/components/widgets/cards/Section";
 import {useCart} from "@/features/order/cart/hooks";
 import {Minus, Plus, ShoppingCart, Trash2} from "lucide-react";
 import {Button} from "@/components/ui/button";
 import {OrderPaymentMethod} from "@/features/order/shared/types";
 import {formatPrice} from "@/features/order/cart/utils";
+import {CartStats} from "@/features/order/cart/types";
+
+// Form 데이터 타입 정의 - 더 명확한 타입 정의
+interface OrderFormData {
+    paymentMethod: OrderPaymentMethod;
+    agreements: {
+        purchase: boolean;
+        personalUse: boolean;
+        googleGiftCard: boolean;
+    };
+}
+
+// 유효한 결제 수단 값들을 명시적으로 정의
+const validPaymentMethods = [0, 1, 2, 3, 6] as const;
+
+// Yup 스키마 정의 - 타입 안전성 보장 (수정된 부분)
+const orderSchema = yup.object().shape({
+    paymentMethod: yup
+        .number()
+        .oneOf(validPaymentMethods, '결제 수단을 선택해주세요')
+        .required('결제 수단을 선택해주세요'),
+    agreements: yup.object().shape({
+        purchase: yup
+            .boolean()
+            .oneOf([true], '구매 동의는 필수입니다')
+            .required(),
+        personalUse: yup
+            .boolean()
+            .oneOf([true], '본인 사용 목적 동의는 필수입니다')
+            .required(),
+        googleGiftCard: yup
+            .boolean()
+            .oneOf([true], '구글기프트카드 환불불가 동의는 필수입니다')
+            .required()
+    }).required()
+}).required();
+
+// 장바구니 검증을 위한 별도 함수
+const validateCart = (cartStats: CartStats): string | null => {
+    if (cartStats.isEmpty) {
+        return '장바구니에 상품이 없습니다';
+    }
+    if (cartStats.totalPrice <= 0) {
+        return '올바르지 않은 주문 금액입니다';
+    }
+    if (cartStats.productCount <= 0) {
+        return '최소 1개 이상의 상품이 필요합니다';
+    }
+    return null;
+};
 
 export default function CartPage() {
     const {
@@ -21,22 +74,84 @@ export default function CartPage() {
         handleDecrement,
     } = useCart();
 
-    // 결제 수단 선택 state
-    const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<OrderPaymentMethod | null>(null);
+    // 장바구니 에러 상태
+    const [cartError, setCartError] = React.useState<string | null>(null);
 
-    // 구매 동의 체크박스 state
-    const [agreements, setAgreements] = useState({
-        purchase: false,
-        personalUse: false,
-        googleGiftCard: false
+    // React Hook Form 설정 - 정적 스키마 사용 (수정된 부분)
+    const {
+        register,
+        handleSubmit,
+        formState: {errors, isValid, isSubmitting}
+    } = useForm<OrderFormData>({
+        resolver: yupResolver(orderSchema),
+        mode: 'onChange',
+        defaultValues: {
+            // paymentMethod는 undefined로 시작 (사용자가 선택하도록)
+            agreements: {
+                purchase: false,
+                personalUse: false,
+                googleGiftCard: false
+            }
+        }
     });
+
+    // 장바구니 상태 변경시 검증
+    React.useEffect(() => {
+        const error = validateCart(stats);
+        setCartError(error);
+    }, [stats]);
+
+    // 전체 form이 유효한지 확인 (form validation + 장바구니 validation)
+    const isFormValid = isValid && !cartError && !stats.isEmpty;
+
+    // 주문 제출 핸들러
+    const onSubmit = async (data: OrderFormData) => {
+        // 제출 전 마지막 장바구니 검증
+        const cartValidationError = validateCart(stats);
+        if (cartValidationError) {
+            setCartError(cartValidationError);
+            return;
+        }
+
+        try {
+            // 디버깅용 로그
+            console.log('Form data:', data);
+            console.log('Payment method type:', typeof data.paymentMethod);
+            console.log('Payment method value:', data.paymentMethod);
+
+            console.log('주문 데이터:', {
+                ...data,
+                products,
+                totalAmount: stats.totalPrice,
+                productCount: stats.productCount
+            });
+
+            // 실제 주문 API 호출
+            // await orderService.createOrder({
+            //     products,
+            //     paymentMethod: data.paymentMethod,
+            //     totalAmount: stats.totalPrice,
+            //     agreements: data.agreements
+            // });
+
+            alert('주문이 완료되었습니다!');
+        } catch (error) {
+            console.error('주문 처리 중 오류:', error);
+            alert('주문 처리 중 오류가 발생했습니다.');
+        }
+    };
 
     const CartProductList = () => {
         if (stats.isEmpty) {
             return (
                 <div className="flex flex-col items-center justify-center text-gray-500 py-16">
                     <ShoppingCart className="w-24 h-24 mb-6 text-gray-300"/>
-                    <p className="text-lg text-center mb-2">장바구니가 비어있습니다</p>
+                    {/* 장바구니가 비어있을 때의 에러 메시지 */}
+                    {cartError && (
+                        <p className="text-lg text-red-600 text-center mb-2">
+                            {cartError}
+                        </p>
+                    )}
                     <p className="text-sm text-center text-gray-400">상품을 담아보세요!</p>
                 </div>
             );
@@ -150,7 +265,7 @@ export default function CartPage() {
         );
     };
 
-    // 결제 수단 선택 컴포넌트
+    // 결제 수단 선택 컴포넌트 (수정된 부분)
     const PaymentMethodSelector = () => {
         const paymentMethods = [
             {value: OrderPaymentMethod.BANK_TRANSFER, label: '무통장입금'},
@@ -172,29 +287,27 @@ export default function CartPage() {
                         >
                             <input
                                 type="radio"
-                                name="paymentMethod"
                                 value={method.value}
-                                checked={selectedPaymentMethod === method.value}
-                                onChange={(e) => setSelectedPaymentMethod(Number(e.target.value) as OrderPaymentMethod)}
+                                {...register('paymentMethod', {
+                                    valueAsNumber: true, // 자동으로 숫자로 변환
+                                })}
                                 className="w-4 h-4 text-emerald-600 border-gray-300 focus:ring-emerald-500"
                             />
                             <span className="text-gray-900 font-medium">{method.label}</span>
                         </label>
                     ))}
                 </div>
+                {errors.paymentMethod && (
+                    <p className="mt-2 text-sm text-red-600">
+                        {errors.paymentMethod.message}
+                    </p>
+                )}
             </div>
         );
     };
 
     // 구매동의 컴포넌트
     const PurchaseAgreement = () => {
-        const handleAgreementChange = (key: keyof typeof agreements) => {
-            setAgreements(prev => ({
-                ...prev,
-                [key]: !prev[key]
-            }));
-        };
-
         return (
             <div className="bg-white border border-gray-200 rounded-lg p-6">
                 <div className="space-y-6">
@@ -203,8 +316,7 @@ export default function CartPage() {
                         <label className="flex items-start gap-3 cursor-pointer">
                             <input
                                 type="checkbox"
-                                checked={agreements.purchase}
-                                onChange={() => handleAgreementChange('purchase')}
+                                {...register('agreements.purchase')}
                                 className="w-4 h-4 mt-1 text-emerald-600 border-gray-300 rounded focus:ring-emerald-500"
                             />
                             <div>
@@ -216,6 +328,11 @@ export default function CartPage() {
                                 </p>
                             </div>
                         </label>
+                        {errors.agreements?.purchase && (
+                            <p className="mt-2 text-sm text-red-600">
+                                {errors.agreements.purchase.message}
+                            </p>
+                        )}
                     </div>
 
                     {/* 본인 사용 목적 */}
@@ -223,8 +340,7 @@ export default function CartPage() {
                         <label className="flex items-start gap-3 cursor-pointer">
                             <input
                                 type="checkbox"
-                                checked={agreements.personalUse}
-                                onChange={() => handleAgreementChange('personalUse')}
+                                {...register('agreements.personalUse')}
                                 className="w-4 h-4 mt-1 text-emerald-600 border-gray-300 rounded focus:ring-emerald-500"
                             />
                             <div>
@@ -232,10 +348,15 @@ export default function CartPage() {
                                     본인 사용 목적으로 상품권을 구매합니다.
                                 </span>
                                 <p className="text-sm text-gray-600 mt-1">
-                                    대리구매 알바 또는 상품권 할인(페이백)을 미라로 다른 사람이 상품권 구매를 요구했다면 100% 사기입니다.
+                                    대리구매 알바 또는 상품권 할인(페이백)을 미끼로 다른 사람이 상품권 구매를 요구했다면 100% 사기입니다.
                                 </p>
                             </div>
                         </label>
+                        {errors.agreements?.personalUse && (
+                            <p className="mt-2 text-sm text-red-600">
+                                {errors.agreements.personalUse.message}
+                            </p>
+                        )}
                     </div>
 
                     {/* 구글기프트카드 환불불가 */}
@@ -243,8 +364,7 @@ export default function CartPage() {
                         <label className="flex items-start gap-3 cursor-pointer">
                             <input
                                 type="checkbox"
-                                checked={agreements.googleGiftCard}
-                                onChange={() => handleAgreementChange('googleGiftCard')}
+                                {...register('agreements.googleGiftCard')}
                                 className="w-4 h-4 mt-1 text-emerald-600 border-gray-300 rounded focus:ring-emerald-500"
                             />
                             <div>
@@ -256,6 +376,11 @@ export default function CartPage() {
                                 </p>
                             </div>
                         </label>
+                        {errors.agreements?.googleGiftCard && (
+                            <p className="mt-2 text-sm text-red-600">
+                                {errors.agreements.googleGiftCard.message}
+                            </p>
+                        )}
                     </div>
                 </div>
             </div>
@@ -263,7 +388,7 @@ export default function CartPage() {
     };
 
     return (
-        <div className="flex flex-col gap-y-6">
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-y-6">
             <Section title="장바구니 / 주문결제">
                 <CartProductList/>
             </Section>
@@ -279,11 +404,19 @@ export default function CartPage() {
             {/* 주문 완료 버튼 */}
             <div className="w-full">
                 <Button
-                    className="w-full h-14 bg-sky-600 hover:bg-sky-700 text-white text-lg font-semibold"
-                    disabled={stats.isEmpty || selectedPaymentMethod === null || !agreements.purchase || !agreements.personalUse || !agreements.googleGiftCard}
+                    type="submit"
+                    className="w-full h-14 bg-sky-600 hover:bg-sky-700 text-white text-lg font-semibold disabled:bg-gray-400"
+                    disabled={!isFormValid || isSubmitting}
                 >
-                    주문 완료
+                    {isSubmitting ? '주문 처리 중...' : '주문 완료'}
                 </Button>
+
+                {/* 장바구니 관련 에러 메시지 */}
+                {cartError && (
+                    <p className="mt-2 text-sm text-red-600 text-center">
+                        {cartError}
+                    </p>
+                )}
             </div>
 
             <Section title="첫 주문 시 주의사항">
@@ -320,6 +453,6 @@ export default function CartPage() {
                     </div>
                 </div>
             </Section>
-        </div>
+        </form>
     );
 }
