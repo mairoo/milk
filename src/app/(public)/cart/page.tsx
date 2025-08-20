@@ -363,7 +363,7 @@ export default function MyCartPage() {
                             <h2 className="font-bold text-gray-900 mb-3">서류본인인증이 필요한 경우</h2>
                             <ul className="space-y-3">
                                 <li className="text-sm text-gray-600">
-                                    문화상품권, 해피머니, 도서문화상품권, 구글기프트카드를 포함하고 일일 액면가 기준 누계 10만원 이상 첫 구매하는 경우
+                                    컬쳐랜드상품권, 도서문화상품권, 구글기프트카드를 포함하고 일일 액면가 기준 누계 10만원 이상 첫 구매하는 경우
                                 </li>
                                 <li className="text-sm text-gray-600">
                                     계좌이체로 일일 액면가 기준 누계 30만원 이상 첫 구매하는 경우
