@@ -2,16 +2,22 @@
 
 import {useState} from 'react';
 import Section from "@/components/widgets/cards/Section";
-import {useCart} from "@/features/order/cart/hooks";
+import {useCart, useCartQuantityManager} from "@/features/order/cart/hooks";
 import {Minus, Plus, ShoppingCart, Trash2} from "lucide-react";
 import {Button} from "@/components/ui/button";
 import {OrderPaymentMethod} from "@/features/order/shared/types";
+import {formatPrice} from "@/features/order/cart/utils";
 
-export default function MyCartPage() {
-    const {products, stats, increment, decrement, removeProduct, clear, updateQuantity} = useCart();
+export default function CartPage() {
+    const {products, stats, clear, removeProduct} = useCart();
 
-    // 각 상품별 임시 입력값을 관리하는 state
-    const [tempInputs, setTempInputs] = useState<{ [key: string]: string }>({});
+    const {
+        getDisplayQuantity,
+        handleQuantityChange,
+        handleQuantitySubmit,
+        handleIncrement,
+        handleDecrement,
+    } = useCartQuantityManager();
 
     // 결제 수단 선택 state
     const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<OrderPaymentMethod | null>(null);
@@ -22,68 +28,6 @@ export default function MyCartPage() {
         personalUse: false,
         googleGiftCard: false
     });
-
-    const formatPrice = (price: number) => {
-        return `₩${price.toLocaleString()}`;
-    };
-
-    // 수량 직접 변경 핸들러
-    const handleQuantityChange = (productId: string, value: string) => {
-        setTempInputs(prev => ({
-            ...prev,
-            [productId]: value
-        }));
-    };
-
-    // 포커스 아웃시 또는 엔터키 입력시 실제 수량 업데이트
-    const handleQuantitySubmit = (productId: string, value: string) => {
-        const numValue = parseInt(value);
-
-        if (!value || numValue <= 0) {
-            removeProduct(productId);
-        } else if (numValue >= 1 && numValue <= 9999) {
-            updateQuantity?.(productId, numValue);
-        } else {
-            const product = products.find(p => p.id === productId);
-            if (product) {
-                setTempInputs(prev => ({
-                    ...prev,
-                    [productId]: product.quantity.toString()
-                }));
-            }
-        }
-
-        setTempInputs(prev => {
-            const newInputs = {...prev};
-            delete newInputs[productId];
-            return newInputs;
-        });
-    };
-
-    // 현재 표시할 수량값
-    const getDisplayQuantity = (productId: string, actualQuantity: number) => {
-        return tempInputs[productId] ?? actualQuantity.toString();
-    };
-
-    // + 버튼 클릭 핸들러
-    const handleIncrement = (productId: string) => {
-        const product = products.find(p => p.id === productId);
-        if (product && product.quantity < 9999) {
-            increment(productId);
-        }
-    };
-
-    // - 버튼 클릭 핸들러
-    const handleDecrement = (productId: string) => {
-        const product = products.find(p => p.id === productId);
-        if (product) {
-            if (product.quantity <= 1) {
-                removeProduct(productId);
-            } else {
-                decrement(productId);
-            }
-        }
-    };
 
     const CartProductList = () => {
         if (stats.isEmpty) {
@@ -159,12 +103,7 @@ export default function MyCartPage() {
                                         <input
                                             type="text"
                                             value={getDisplayQuantity(product.id, product.quantity)}
-                                            onChange={(e) => {
-                                                const value = e.target.value.replace(/[^0-9]/g, '');
-                                                if (value.length <= 4) {
-                                                    handleQuantityChange(product.id, value);
-                                                }
-                                            }}
+                                            onChange={(e) => handleQuantityChange(product.id, e.target.value)}
                                             onBlur={(e) => handleQuantitySubmit(product.id, e.target.value)}
                                             onKeyDown={(e) => {
                                                 if (e.key === 'Enter') {
