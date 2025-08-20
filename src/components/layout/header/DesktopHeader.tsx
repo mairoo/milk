@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import {ChevronDown, LogIn, LogOut, MessageCircle, Package, Search, ShoppingCart, User, UserPlus} from "lucide-react";
-import React, {useEffect, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import {useSession} from "next-auth/react";
 import {NavLink} from "@/components/layout/navigation/NavLink";
 import {DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,} from "@/components/ui/dropdown-menu";
@@ -15,7 +15,7 @@ import {useCart} from "@/features/order/cart/hooks";
 import {NavButton} from "@/components/layout/navigation/NavButton";
 import {Button} from "@/components/ui/button";
 import {Input} from "@/components/ui/input";
-import {restoreFromStorage} from "@/features/order/cart/slice";
+import {clearCart, restoreFromStorage} from "@/features/order/cart/slice";
 import {useAppDispatch} from "@/global/store/hooks";
 
 interface DesktopHeaderProps {
@@ -45,6 +45,11 @@ export default function DesktopHeader({className}: DesktopHeaderProps) {
         // 하이드레이션 완료 표시
         setIsHydrated(true);
     }, [dispatch]);
+
+    const handleSignOut = useCallback(async () => {
+        dispatch(clearCart()); // Redux 상태 및 localStorage 모두 삭제
+        await signOut();
+    }, [dispatch, signOut]);
 
     // 로딩 중일 때는 기본 메뉴만 표시
     if (status === 'loading') {
@@ -133,7 +138,7 @@ export default function DesktopHeader({className}: DesktopHeaderProps) {
                                 <NavLink href="/my/profile" icon={User}>
                                     마이페이지
                                 </NavLink>
-                                <NavButton icon={LogOut} onClick={signOut}>
+                                <NavButton icon={LogOut} onClick={handleSignOut}>
                                     로그아웃
                                 </NavButton>
                             </>

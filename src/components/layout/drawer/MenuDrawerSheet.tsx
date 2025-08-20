@@ -1,6 +1,6 @@
 'use client'
 
-import React from "react";
+import React, {useCallback} from "react";
 import {Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle,} from "@/components/ui/sheet";
 import {useDrawer} from "@/features/ui/drawer/hooks";
 import {CreditCard, LogIn, UserPlus} from "lucide-react";
@@ -8,11 +8,14 @@ import Link from "next/link";
 import {mobileMenuItems, mobileMenuItems1} from "@/global/types/menu";
 import {useSession} from "next-auth/react";
 import {useAuth} from "@/features/auth/shared/hooks";
+import {useAppDispatch} from "@/global/store/hooks";
+import {clearCart} from "@/features/order/cart/slice";
 
 export default function MenuDrawerSheet() {
     const {menuDrawerOpen, closeMenuDrawer} = useDrawer();
     const {data: session, status} = useSession();
     const {signIn, signOut} = useAuth();
+    const dispatch = useAppDispatch();
 
     const handleLinkClick = () => {
         closeMenuDrawer();
@@ -22,6 +25,12 @@ export default function MenuDrawerSheet() {
         action();
         closeMenuDrawer();
     };
+
+    const handleSignOut = useCallback(async () => {
+        dispatch(clearCart()); // Redux 상태 및 localStorage 모두 삭제
+        await signOut();
+        closeMenuDrawer();
+    }, [dispatch, signOut, closeMenuDrawer]);
 
     return (
         <Sheet
@@ -91,7 +100,7 @@ export default function MenuDrawerSheet() {
                                                 return (
                                                     <button
                                                         key={index}
-                                                        onClick={() => handleAuthAction(signOut)}
+                                                        onClick={handleSignOut}
                                                         className="flex items-center gap-3 px-2 w-full text-left transition-colors"
                                                     >
                                                         <item.icon className="w-5 h-5 text-gray-600"/>
