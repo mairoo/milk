@@ -220,23 +220,27 @@ export default function MyCartPage() {
         ];
 
         return (
-            <div className="space-y-3">
-                {paymentMethods.map((method) => (
-                    <label
-                        key={method.value}
-                        className="flex items-center gap-3 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors"
-                    >
-                        <input
-                            type="radio"
-                            name="paymentMethod"
-                            value={method.value}
-                            checked={selectedPaymentMethod === method.value}
-                            onChange={(e) => setSelectedPaymentMethod(Number(e.target.value) as OrderPaymentMethod)}
-                            className="w-4 h-4 text-emerald-600 border-gray-300 focus:ring-emerald-500"
-                        />
-                        <span className="text-gray-900 font-medium">{method.label}</span>
-                    </label>
-                ))}
+            <div className="bg-white border border-gray-200 rounded-lg p-6">
+                <div className="space-y-4">
+                    {paymentMethods.map((method, index) => (
+                        <label
+                            key={method.value}
+                            className={`flex items-center gap-3 pb-4 cursor-pointer transition-colors rounded-md ${
+                                index !== paymentMethods.length - 1 ? 'border-b border-gray-100' : ''
+                            }`}
+                        >
+                            <input
+                                type="radio"
+                                name="paymentMethod"
+                                value={method.value}
+                                checked={selectedPaymentMethod === method.value}
+                                onChange={(e) => setSelectedPaymentMethod(Number(e.target.value) as OrderPaymentMethod)}
+                                className="w-4 h-4 text-emerald-600 border-gray-300 focus:ring-emerald-500"
+                            />
+                            <span className="text-gray-900 font-medium">{method.label}</span>
+                        </label>
+                    ))}
+                </div>
             </div>
         );
     };
@@ -251,65 +255,67 @@ export default function MyCartPage() {
         };
 
         return (
-            <div className="space-y-6">
-                {/* 구매 동의 */}
-                <div className="space-y-3">
-                    <label className="flex items-start gap-3 cursor-pointer">
-                        <input
-                            type="checkbox"
-                            checked={agreements.purchase}
-                            onChange={() => handleAgreementChange('purchase')}
-                            className="w-5 h-5 mt-0.5 text-emerald-600 border-gray-300 rounded focus:ring-emerald-500"
-                        />
-                        <div>
-                            <span className="text-gray-900 font-medium">
-                                구매를 동의합니다. (전자상거래법 제 8조 제2항)
-                            </span>
-                            <p className="text-sm text-gray-600 mt-1">
-                                주문하실 상품, 가격, 배송정보, 할인정보 등을 확인하였으며, 구매에 동의합니다.
-                            </p>
-                        </div>
-                    </label>
-                </div>
+            <div className="bg-white border border-gray-200 rounded-lg p-6">
+                <div className="space-y-6">
+                    {/* 구매 동의 */}
+                    <div className="pb-4 border-b border-gray-100">
+                        <label className="flex items-start gap-3 cursor-pointer">
+                            <input
+                                type="checkbox"
+                                checked={agreements.purchase}
+                                onChange={() => handleAgreementChange('purchase')}
+                                className="w-4 h-4 mt-1 text-emerald-600 border-gray-300 rounded focus:ring-emerald-500"
+                            />
+                            <div>
+                                <span className="text-sm font-bold text-gray-900">
+                                    구매를 동의합니다. (전자상거래법 제8조 제2항)
+                                </span>
+                                <p className="text-sm text-gray-600 mt-1">
+                                    주문하실 상품, 가격, 배송정보, 할인정보 등을 확인하였으며, 구매에 동의합니다.
+                                </p>
+                            </div>
+                        </label>
+                    </div>
 
-                {/* 본인 사용 목적 */}
-                <div className="space-y-3">
-                    <label className="flex items-start gap-3 cursor-pointer">
-                        <input
-                            type="checkbox"
-                            checked={agreements.personalUse}
-                            onChange={() => handleAgreementChange('personalUse')}
-                            className="w-5 h-5 mt-0.5 text-emerald-600 border-gray-300 rounded focus:ring-emerald-500"
-                        />
-                        <div>
-                            <span className="text-gray-900 font-medium">
-                                본인 사용 목적으로 상품권을 구매합니다.
-                            </span>
-                            <p className="text-sm text-gray-600 mt-1">
-                                대리구매 알바 또는 상품권 할인(페이백)을 미끼로 다른 사람이 상품권 구매를 요구했다면 100% 사기입니다.
-                            </p>
-                        </div>
-                    </label>
-                </div>
+                    {/* 본인 사용 목적 */}
+                    <div className="pb-4 border-b border-gray-100">
+                        <label className="flex items-start gap-3 cursor-pointer">
+                            <input
+                                type="checkbox"
+                                checked={agreements.personalUse}
+                                onChange={() => handleAgreementChange('personalUse')}
+                                className="w-4 h-4 mt-1 text-emerald-600 border-gray-300 rounded focus:ring-emerald-500"
+                            />
+                            <div>
+                                <span className="text-sm font-bold text-gray-900">
+                                    본인 사용 목적으로 상품권을 구매합니다.
+                                </span>
+                                <p className="text-sm text-gray-600 mt-1">
+                                    대리구매 알바 또는 상품권 할인(페이백)을 미라로 다른 사람이 상품권 구매를 요구했다면 100% 사기입니다.
+                                </p>
+                            </div>
+                        </label>
+                    </div>
 
-                {/* 구글기프트카드 환불불가 */}
-                <div className="space-y-3">
-                    <label className="flex items-start gap-3 cursor-pointer">
-                        <input
-                            type="checkbox"
-                            checked={agreements.googleGiftCard}
-                            onChange={() => handleAgreementChange('googleGiftCard')}
-                            className="w-5 h-5 mt-0.5 text-emerald-600 border-gray-300 rounded focus:ring-emerald-500"
-                        />
-                        <div>
-                            <span className="text-gray-900 font-medium">
-                                구글기프트카드는 절대 교환 및 환불불가 사실을 알고 구매합니다.
-                            </span>
-                            <p className="text-sm text-gray-600 mt-1">
-                                구글에서 사용 오류로 이의제기 거절이 되어도 핀코인에 책임을 묻지 않습니다.
-                            </p>
-                        </div>
-                    </label>
+                    {/* 구글기프트카드 환불불가 */}
+                    <div>
+                        <label className="flex items-start gap-3 cursor-pointer">
+                            <input
+                                type="checkbox"
+                                checked={agreements.googleGiftCard}
+                                onChange={() => handleAgreementChange('googleGiftCard')}
+                                className="w-4 h-4 mt-1 text-emerald-600 border-gray-300 rounded focus:ring-emerald-500"
+                            />
+                            <div>
+                                <span className="text-sm font-bold text-red-500">
+                                    구글기프트카드는 절대 교환 및 환불불가 사실을 알고 구매합니다.
+                                </span>
+                                <p className="text-sm text-gray-600 mt-1">
+                                    구글에서 사용 오류로 이의제기 거절이 되어도 핀코인에 책임을 묻지 않습니다.
+                                </p>
+                            </div>
+                        </label>
+                    </div>
                 </div>
             </div>
         );
