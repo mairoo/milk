@@ -339,7 +339,7 @@ export default function MyCartPage() {
             <div className="w-full">
                 <Button
                     className="w-full h-14 bg-sky-600 hover:bg-sky-700 text-white text-lg font-semibold"
-                    disabled={stats.isEmpty || !selectedPaymentMethod || !agreements.purchase || !agreements.personalUse || !agreements.googleGiftCard}
+                    disabled={stats.isEmpty || selectedPaymentMethod === null || !agreements.purchase || !agreements.personalUse || !agreements.googleGiftCard}
                 >
                     주문 완료
                 </Button>
