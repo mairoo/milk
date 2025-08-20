@@ -2,13 +2,44 @@ import {createSlice, PayloadAction} from '@reduxjs/toolkit'
 import {AddToCartPayload, CartClientState, CartProduct, UpdateQuantityPayload} from './types'
 
 /**
- * 초기 상태
+ * localStorage 키
  */
-const initialState: CartClientState = {
-    products: [],
-    totalQuantity: 0,
-    totalPrice: 0,
+const CART_STORAGE_KEY = 'cart_state'
+
+/**
+ * localStorage에서 상태 로드
+ */
+const loadFromStorage = (): CartClientState => {
+    try {
+        const stored = localStorage.getItem(CART_STORAGE_KEY)
+        if (stored) {
+            return JSON.parse(stored)
+        }
+    } catch (error) {
+        console.error('장바구니 상태 로드 실패:', error)
+    }
+    return {
+        products: [],
+        totalQuantity: 0,
+        totalPrice: 0,
+    }
 }
+
+/**
+ * localStorage에 상태 저장
+ */
+const saveToStorage = (state: CartClientState) => {
+    try {
+        localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(state))
+    } catch (error) {
+        console.error('장바구니 상태 저장 실패:', error)
+    }
+}
+
+/**
+ * 초기 상태 (localStorage에서 로드)
+ */
+const initialState: CartClientState = loadFromStorage()
 
 /**
  * 유틸리티 함수: 총합 계산
@@ -56,6 +87,9 @@ export const cartSlice = createSlice({
             const totals = calculateTotals(state.products)
             state.totalQuantity = totals.totalQuantity
             state.totalPrice = totals.totalPrice
+
+            // localStorage에 저장
+            saveToStorage(state)
         },
 
         /**
@@ -80,6 +114,9 @@ export const cartSlice = createSlice({
             const totals = calculateTotals(state.products)
             state.totalQuantity = totals.totalQuantity
             state.totalPrice = totals.totalPrice
+
+            // localStorage에 저장
+            saveToStorage(state)
         },
 
         /**
@@ -93,6 +130,9 @@ export const cartSlice = createSlice({
             const totals = calculateTotals(state.products)
             state.totalQuantity = totals.totalQuantity
             state.totalPrice = totals.totalPrice
+
+            // localStorage에 저장
+            saveToStorage(state)
         },
 
         /**
@@ -102,6 +142,9 @@ export const cartSlice = createSlice({
             state.products = []
             state.totalQuantity = 0
             state.totalPrice = 0
+
+            // localStorage에 저장
+            saveToStorage(state)
         },
 
         /**
@@ -118,6 +161,9 @@ export const cartSlice = createSlice({
                 const totals = calculateTotals(state.products)
                 state.totalQuantity = totals.totalQuantity
                 state.totalPrice = totals.totalPrice
+
+                // localStorage에 저장
+                saveToStorage(state)
             }
         },
 
@@ -141,6 +187,9 @@ export const cartSlice = createSlice({
                 const totals = calculateTotals(state.products)
                 state.totalQuantity = totals.totalQuantity
                 state.totalPrice = totals.totalPrice
+
+                // localStorage에 저장
+                saveToStorage(state)
             }
         },
     },
