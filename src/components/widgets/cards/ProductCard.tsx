@@ -67,12 +67,12 @@ export default function ProductCard({
 
             {/* 상품 정보 섹션 */}
             <CardContent className="px-4 space-y-1">
-                <h3 className="text-gray-900">
+                <h3 className="font-bold text-sm text-gray-900">
                     {product.name} {product.subtitle}
                 </h3>
 
                 <div className="flex items-center justify-between">
-                    <p className="text-lg font-bold text-gray-900">
+                    <p className="font-bold text-gray-900">
                         {formatPrice(product.sellingPrice)}
                     </p>
                     {discountRate > 0 && (
