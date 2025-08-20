@@ -6,8 +6,11 @@ import {useDrawer} from "@/features/ui/drawer/hooks";
 import {useCart} from "@/features/order/cart/hooks";
 import {Minus, Plus, ShoppingCart, Trash2} from "lucide-react";
 import {Button} from "@/components/ui/button";
+import {useRouter} from "next/navigation";
 
 export default function CartDrawerSheet() {
+    const router = useRouter()
+
     const {cartDrawerOpen, closeCartDrawer} = useDrawer();
     const {products, stats, increment, decrement, removeProduct, clear, updateQuantity} = useCart();
 
@@ -220,8 +223,12 @@ export default function CartDrawerSheet() {
 
                                 <Button
                                     className="w-full mt-3 bg-emerald-600 text-white"
+                                    onClick={() => {
+                                        closeCartDrawer(); // 서랍 닫기
+                                        router.push('/cart'); // 장바구니 페이지로 이동
+                                    }}
                                 >
-                                    주문하기 (준비중)
+                                    장바구니 보기
                                 </Button>
                             </div>
                         </>
