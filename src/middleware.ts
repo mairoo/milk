@@ -12,30 +12,10 @@ import {NextResponse} from "next/server"
  */
 export default withAuth(
     function middleware(req) {
-        const {token} = req.nextauth
         const {pathname} = req.nextUrl
 
         if (process.env.NODE_ENV === 'development') {
-            console.log(`🔐 [Middleware] ${pathname} - 역할: ${JSON.stringify(token?.roles || [])}`)
-        }
-
-        if (token?.error) {
-            console.error(`❌ 토큰 에러: ${token.error}`)
-            const signInUrl = new URL('/api/auth/signin', req.url)
-            signInUrl.searchParams.set('callbackUrl', pathname)
-            signInUrl.searchParams.set('error', token.error)
-            return NextResponse.redirect(signInUrl)
-        }
-
-        if (pathname.startsWith('/admin')) {
-            const userRoles = token?.roles as string[] || []
-            if (!userRoles.includes('ADMIN')) {
-                return NextResponse.redirect(new URL('/unauthorized', req.url))
-            }
-        }
-
-        if (process.env.NODE_ENV === 'development') {
-            console.log(`✅ [Middleware] 접근 허용: ${pathname}`)
+            console.log(`🔐 [Middleware] ${pathname} - 인증 통과`)
         }
 
         return NextResponse.next()
@@ -45,8 +25,7 @@ export default withAuth(
             /**
              * 인증 필요 여부 판단
              *
-             * config.matcher에 의해 실행된 모든 경로는
-             * 이미 "보호 대상"이므로 단순히 토큰 유효성만 체크
+             * 단순히 토큰 존재 여부만 체크
              */
             authorized: ({token, req}) => {
                 const isAuthorized = !!token && !token.error
@@ -59,47 +38,41 @@ export default withAuth(
             },
         },
         pages: {
-            signIn: '/api/auth/signin',
+            signIn: '/auth/sign-in',
         },
     }
 )
 
 /**
- * 🎯 보호할 경로만 명시 (핵심!)
+ * 보호할 경로만 명시
  *
- * 여기에 정의된 경로들만 미들웨어가 실행됩니다.
- * 공개 페이지(/, /products, /categories 등)는 자동으로 제외되어
- * 불필요한 인증 체크 없이 빠르게 접근 가능합니다.
+ * 여기에 정의된 경로들만 미들웨어가 실행
+ * 공개 페이지(/, /products, /categories 등)는 자동으로 제외되어 불필요한 인증 체크 없이 빠르게 접근 가능
  */
 export const config = {
     matcher: [
         // 📱 마이페이지 관련
-        '/my/:path*',           // /my/profile, /my/orders, /my/wishlist 등
+        '/my/:path*',
 
         // 👑 관리자 페이지
-        '/admin/:path*',        // /admin/users, /admin/products 등
+        '/admin/:path*',
 
         // 📦 주문 관련 (로그인 필요)
-        '/orders/:path*',       // /orders/history, /orders/detail/123 등
+        '/orders/:path*',
 
         // 🛒 장바구니/결제 (로그인 필요)
-        '/cart/checkout',       // 결제 페이지만 보호 (/cart는 공개)
-        '/payment/:path*',      // /payment/success, /payment/cancel 등
+        '/cart/checkout',
+        '/payment/:path*',
 
         // 👤 프로필 관련
-        '/profile/:path*',      // /profile/edit, /profile/security 등
+        '/profile/:path*',
 
         // 💳 포인트/쿠폰 관리
-        '/points/:path*',       // /points/history, /points/exchange 등
-        '/coupons/:path*',      // /coupons/my, /coupons/history 등
+        '/points/:path*',
+        '/coupons/:path*',
 
         // 📝 리뷰/문의 작성 (로그인 필요)
-        '/reviews/write',       // 리뷰 작성만 보호 (/reviews는 공개)
-        '/support/inquiry',     // 문의 작성만 보호 (/support는 공개)
-
-        // 🔒 보호된 API 엔드포인트 (선택사항)
-        // '/api/user/:path*',     // 사용자 관련 API
-        // '/api/orders/:path*',   // 주문 관련 API
-        // '/api/admin/:path*',    // 관리자 API
+        '/reviews/write',
+        '/support/inquiry',
     ]
 }

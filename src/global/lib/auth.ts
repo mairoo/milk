@@ -11,6 +11,10 @@ export const authOptions: NextAuthOptions = {
         })
     ],
 
+    pages: {
+        signIn: '/auth/sign-in', // 커스텀 로그인 페이지
+    },
+
     /**
      * NextAuth 세션 전략
      * 1. jwt
