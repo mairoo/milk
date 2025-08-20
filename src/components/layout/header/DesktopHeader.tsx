@@ -90,7 +90,7 @@ export default function DesktopHeader({className}: DesktopHeaderProps) {
                         </NavLink>
 
                         <div className="relative inline-flex">
-                            <NavLink href="/my/cart" icon={ShoppingCart}>
+                            <NavLink href="/cart" icon={ShoppingCart}>
                                 장바구니
                             </NavLink>
                             {stats.productCount > 0 && (
