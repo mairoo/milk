@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import {ChevronDown, LogIn, LogOut, MessageCircle, Package, Search, ShoppingCart, User, UserPlus} from "lucide-react";
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {useSession} from "next-auth/react";
 import {NavLink} from "@/components/layout/navigation/NavLink";
 import {DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,} from "@/components/ui/dropdown-menu";
@@ -15,6 +15,8 @@ import {useCart} from "@/features/order/cart/hooks";
 import {NavButton} from "@/components/layout/navigation/NavButton";
 import {Button} from "@/components/ui/button";
 import {Input} from "@/components/ui/input";
+import {restoreFromStorage} from "@/features/order/cart/slice";
+import {useAppDispatch} from "@/global/store/hooks";
 
 interface DesktopHeaderProps {
     className?: string;
@@ -24,6 +26,25 @@ export default function DesktopHeader({className}: DesktopHeaderProps) {
     const {data: session, status} = useSession();
     const {signIn, signOut} = useAuth();
     const {stats} = useCart();
+    const dispatch = useAppDispatch();
+
+    // 하이드레이션 완료 상태 추적
+    const [isHydrated, setIsHydrated] = useState(false);
+
+    /**
+     * 하이드레이션 이슈 해결을 위한 장바구니 복원 로직
+     *
+     * 1. SSR: 서버에서 Badge 없이 렌더링 (isHydrated: false)
+     * 2. 하이드레이션: 클라이언트에서 동일한 UI로 매칭
+     * 3. useEffect: localStorage 복원 + 하이드레이션 완료 표시
+     * 4. 리렌더링: 실제 장바구니 수량으로 Badge 표시
+     */
+    useEffect(() => {
+        // localStorage에서 장바구니 복원
+        dispatch(restoreFromStorage());
+        // 하이드레이션 완료 표시
+        setIsHydrated(true);
+    }, [dispatch]);
 
     // 로딩 중일 때는 기본 메뉴만 표시
     if (status === 'loading') {
@@ -93,7 +114,8 @@ export default function DesktopHeader({className}: DesktopHeaderProps) {
                             <NavLink href="/cart" icon={ShoppingCart}>
                                 장바구니
                             </NavLink>
-                            {stats.productCount > 0 && (
+                            {/* 하이드레이션 완료 후에만 Badge 표시 */}
+                            {isHydrated && stats.productCount > 0 && (
                                 <Badge
                                     variant="destructive"
                                     className="absolute -top-2 -right-2 h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs"

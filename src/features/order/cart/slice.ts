@@ -1,4 +1,6 @@
-import {createSlice, PayloadAction} from '@reduxjs/toolkit'
+/**
+ * 장바구니 비우기
+ */import {createSlice, PayloadAction} from '@reduxjs/toolkit'
 import {AddToCartPayload, CartClientState, CartProduct, UpdateQuantityPayload} from './types'
 
 /**
@@ -26,20 +28,35 @@ const loadFromStorage = (): CartClientState => {
 }
 
 /**
- * localStorage에 상태 저장
+ * localStorage에 상태 저장 (디바운싱)
  */
-const saveToStorage = (state: CartClientState) => {
-    try {
-        localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(state))
-    } catch (error) {
-        console.error('장바구니 상태 저장 실패:', error)
+let saveTimeout: NodeJS.Timeout | null = null
+
+const debouncedSaveToStorage = (state: CartClientState) => {
+    // Immer 프록시 문제 해결: 동기적으로 직렬화
+    const serializedState = JSON.stringify(state)
+
+    if (saveTimeout) {
+        clearTimeout(saveTimeout)
     }
+
+    saveTimeout = setTimeout(() => {
+        try {
+            localStorage.setItem(CART_STORAGE_KEY, serializedState)
+        } catch (error) {
+            console.error('장바구니 상태 저장 실패:', error)
+        }
+    }, 300) // 300ms 지연
 }
 
 /**
- * 초기 상태 (localStorage에서 로드)
+ * 초기 상태 (SSR 호환을 위해 빈 상태로 시작)
  */
-const initialState: CartClientState = loadFromStorage()
+const initialState: CartClientState = {
+    products: [],
+    totalQuantity: 0,
+    totalPrice: 0,
+}
 
 /**
  * 유틸리티 함수: 총합 계산
@@ -88,8 +105,8 @@ export const cartSlice = createSlice({
             state.totalQuantity = totals.totalQuantity
             state.totalPrice = totals.totalPrice
 
-            // localStorage에 저장
-            saveToStorage(state)
+            // localStorage에 저장 (디바운싱)
+            debouncedSaveToStorage(state)
         },
 
         /**
@@ -115,8 +132,8 @@ export const cartSlice = createSlice({
             state.totalQuantity = totals.totalQuantity
             state.totalPrice = totals.totalPrice
 
-            // localStorage에 저장
-            saveToStorage(state)
+            // localStorage에 저장 (디바운싱)
+            debouncedSaveToStorage(state)
         },
 
         /**
@@ -131,20 +148,26 @@ export const cartSlice = createSlice({
             state.totalQuantity = totals.totalQuantity
             state.totalPrice = totals.totalPrice
 
-            // localStorage에 저장
-            saveToStorage(state)
+            // localStorage에 저장 (디바운싱)
+            debouncedSaveToStorage(state)
         },
 
         /**
-         * 장바구니 비우기
+         * localStorage에서 상태 복원 (하이드레이션 후)
          */
+        restoreFromStorage: (state) => {
+            const restored = loadFromStorage()
+            state.products = restored.products
+            state.totalQuantity = restored.totalQuantity
+            state.totalPrice = restored.totalPrice
+        },
         clearCart: (state) => {
             state.products = []
             state.totalQuantity = 0
             state.totalPrice = 0
 
-            // localStorage에 저장
-            saveToStorage(state)
+            // localStorage에 저장 (디바운싱)
+            debouncedSaveToStorage(state)
         },
 
         /**
@@ -162,8 +185,8 @@ export const cartSlice = createSlice({
                 state.totalQuantity = totals.totalQuantity
                 state.totalPrice = totals.totalPrice
 
-                // localStorage에 저장
-                saveToStorage(state)
+                // localStorage에 저장 (디바운싱)
+                debouncedSaveToStorage(state)
             }
         },
 
@@ -188,8 +211,8 @@ export const cartSlice = createSlice({
                 state.totalQuantity = totals.totalQuantity
                 state.totalPrice = totals.totalPrice
 
-                // localStorage에 저장
-                saveToStorage(state)
+                // localStorage에 저장 (디바운싱)
+                debouncedSaveToStorage(state)
             }
         },
     },
@@ -203,6 +226,7 @@ export const {
     clearCart,
     incrementQuantity,
     decrementQuantity,
+    restoreFromStorage,
 } = cartSlice.actions
 
 // 리듀서 내보내기 (store에 등록용)
