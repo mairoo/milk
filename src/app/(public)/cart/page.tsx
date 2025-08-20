@@ -93,13 +93,13 @@ export default function MyCartPage() {
                         총 {stats.productCount}개 상품
                     </span>
                     <Button
-                        variant="ghost"
+                        variant="outline"
                         size="sm"
                         onClick={clear}
                         className="text-gray-500 hover:text-red-600"
                     >
                         <Trash2 className="w-4 h-4 mr-2"/>
-                        전체삭제
+                        비우기
                     </Button>
                 </div>
 
@@ -108,7 +108,7 @@ export default function MyCartPage() {
                     {products.map((product) => (
                         <div
                             key={product.id}
-                            className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow"
+                            className="bg-white border border-gray-200 rounded-lg p-6 shadow-none"
                         >
                             {/* 상품 정보 및 삭제 버튼 */}
                             <div className="flex justify-between items-start mb-4">
@@ -120,13 +120,15 @@ export default function MyCartPage() {
                                         단가: {formatPrice(product.price)}
                                     </p>
                                 </div>
-                                <button
+                                <Button
+                                    variant="outline"
+                                    size="sm"
                                     onClick={() => removeProduct(product.id)}
-                                    className="text-gray-400 hover:text-red-600 transition-colors p-2"
-                                    aria-label="상품 삭제"
+                                    className="text-gray-500 hover:text-red-600"
                                 >
-                                    <Trash2 className="w-5 h-5"/>
-                                </button>
+                                    <Trash2 className="w-4 h-4 mr-2"/>
+                                    삭제
+                                </Button>
                             </div>
 
                             {/* 수량 조절 및 가격 정보 */}
@@ -186,12 +188,10 @@ export default function MyCartPage() {
                 </div>
 
                 {/* 총 결제 금액 */}
-                <div className="bg-emerald-50 border-2 border-emerald-200 rounded-lg p-6">
-                    <div className="flex justify-between items-center">
-                        <span className="text-emerald-800 font-bold text-lg">총 결제금액</span>
-                        <span className="font-bold text-emerald-800">
-                            {formatPrice(stats.totalPrice)}
-                        </span>
+                <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-6">
+                    <div className="flex justify-between items-center font-bold text-emerald-800 text-lg">
+                        <span>총 결제금액</span>
+                        <span> {formatPrice(stats.totalPrice)}</span>
                     </div>
                 </div>
             </div>
