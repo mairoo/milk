@@ -117,7 +117,7 @@ export default function CartPage() {
                         variant="outline"
                         size="sm"
                         onClick={clear}
-                        className="text-gray-500 hover:text-red-600"
+                        className="text-gray-500 hover:text-red-600 cursor-pointer"
                     >
                         <Trash2 className="w-4 h-4 mr-2"/>
                         비우기
@@ -145,7 +145,7 @@ export default function CartPage() {
                                     variant="outline"
                                     size="sm"
                                     onClick={() => removeProduct(product.id)}
-                                    className="text-gray-500 hover:text-red-600"
+                                    className="text-gray-500 hover:text-red-600 cursor-pointer"
                                 >
                                     <Trash2 className="w-4 h-4 mr-2"/>
                                     삭제
@@ -160,10 +160,10 @@ export default function CartPage() {
                                     <div className="flex items-center gap-2">
                                         <button
                                             onClick={() => handleDecrement(product.id)}
-                                            className="w-10 h-10 flex items-center justify-center border border-gray-300 rounded-md hover:bg-gray-50 transition-colors"
+                                            className="w-10 h-10 flex items-center justify-center border border-gray-300 rounded-md hover:bg-gray-100 hover:text-red-800 transition-colors cursor-pointer"
                                             aria-label="수량 감소"
                                         >
-                                            <Minus className="h-4 w-4 text-gray-600"/>
+                                            <Minus className="h-4 w-4" />
                                         </button>
 
                                         <input
@@ -182,11 +182,11 @@ export default function CartPage() {
 
                                         <button
                                             onClick={() => handleIncrement(product.id)}
-                                            className="w-10 h-10 flex items-center justify-center border border-gray-300 rounded-md hover:bg-gray-50 transition-colors"
+                                            className="w-10 h-10 flex items-center justify-center border border-gray-300 rounded-md hover:bg-gray-100 hover:text-blue-800 transition-colors cursor-pointer"
                                             aria-label="수량 증가"
                                             disabled={product.quantity >= 9999}
                                         >
-                                            <Plus className="h-4 w-4 text-gray-600"/>
+                                            <Plus className="h-4 w-4" />
                                         </button>
                                     </div>
                                 </div>
