@@ -1,19 +1,19 @@
 import {useCallback} from 'react'
 import {useDispatch} from 'react-redux'
-import {orderMyApi, useLazyGetMyOrderQuery} from './api'
-import type {MyOrderSearchRequest} from './request'
+import {orderAdminApi, useLazyGetOrderQuery} from './api'
+import type {AdminOrderSearchRequest} from './request'
 import {getErrorMessage} from "@/global/lib/rtkQueryUtils"
 
-export const useMyOrder = () => {
+export const useAdminOrder = () => {
     const dispatch = useDispatch()
-    const [getMyOrderTrigger, result] = useLazyGetMyOrderQuery()
+    const [getOrderTrigger, result] = useLazyGetOrderQuery()
 
-    const getMyOrder = useCallback((orderId: number, params?: MyOrderSearchRequest) => {
-        return getMyOrderTrigger({orderId, params})
-    }, [getMyOrderTrigger])
+    const getOrder = useCallback((orderId: number, params?: AdminOrderSearchRequest) => {
+        return getOrderTrigger({orderId, params})
+    }, [getOrderTrigger])
 
     const reset = useCallback(() => {
-        dispatch(orderMyApi.util.resetApiState())
+        dispatch(orderAdminApi.util.resetApiState())
     }, [dispatch])
 
     return {
@@ -24,7 +24,7 @@ export const useMyOrder = () => {
         hasError: !!result.error,
 
         // 핵심 액션
-        getMyOrder,
+        getOrder,
         reset,
 
         // 추가 상태 (필요시)

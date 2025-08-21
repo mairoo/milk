@@ -137,6 +137,8 @@ export const baseApi = createApi({
         'HealthCheck',
         'Category',
         'Product',
+        'AdminOrder',
+        'MyOrder',
     ],
 
     /**
