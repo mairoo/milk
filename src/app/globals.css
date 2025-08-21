@@ -145,15 +145,26 @@ body[style*="overflow: hidden"] {
         overscroll-behavior: none;
         -webkit-overflow-scrolling: touch;
     }
+
+    /* iOS Safari sticky 전용 최적화 */
+    .sticky-header-stable {
+        /* GPU 레이어 생성으로 리페인트 최소화 */
+        transform: translate3d(0, 0, 0);
+        /* 백페이스 렌더링 최적화 */
+        backface-visibility: hidden;
+        /* 레이어 합성 힌트 */
+        will-change: transform;
+        /* 서브픽셀 렌더링 최적화 */
+        -webkit-font-smoothing: subpixel-antialiased;
+    }
 }
 
 /* ===== 유틸리티 클래스 ===== */
-/* 스티키 헤더 최적화 클래스 - 기존 sticky-header-stable 개선 */
+/* 일반 브라우저용 스티키 헤더 최적화 */
 .sticky-header-stable {
     will-change: transform;
     transform: translateZ(0);
     backface-visibility: hidden;
-    opacity: 0.999;
     contain: layout style paint;
     transition: none !important;
 }
