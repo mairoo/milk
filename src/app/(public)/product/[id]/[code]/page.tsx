@@ -11,13 +11,7 @@ import {ProductStock} from '@/features/inventory/public/response'
 import {StyledMarkdown} from "@/components/layout/containers/StyledMakrdown";
 import Image from 'next/image';
 import DeliveryGuideSection from "@/app/(public)/product/[id]/[code]/components/DeliveryGuideSection";
-
-interface ProductDetailPageProps {
-    params: Promise<{
-        id: string
-        code: string
-    }>
-}
+import {ProductDetailPageProps} from "@/app/(public)/product/[id]/[code]/types";
 
 export default function ProductDetailPage({params}: ProductDetailPageProps) {
     const [productId, setProductId] = useState<number>(0)

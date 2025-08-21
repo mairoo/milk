@@ -25,7 +25,7 @@ export default function CategoryCard({
     }, [router, href])
 
     return (
-        <Card className="w-full max-w-sm cursor-pointer p-0 gap-0 shadow-none hover:shadow-lg transition-shadow"
+        <Card className="w-full max-w-sm cursor-pointer p-0 gap-0 shadow-none hover:shadow-xl transition-shadow"
               onClick={handleCardClick}>
             {/* 이미지 섹션 */}
             <CardHeader className="p-0">

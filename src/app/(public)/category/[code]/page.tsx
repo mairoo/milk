@@ -9,12 +9,7 @@ import {useToast} from '@/features/ui/toast/hooks'
 import {Alert} from '@/components/layout/containers/Alert'
 import ProductCard from '@/components/widgets/cards/ProductCard'
 import {StyledMarkdown} from "@/components/layout/containers/StyledMakrdown"
-
-interface CategoryPageProps {
-    params: Promise<{
-        code: string
-    }>
-}
+import {CategoryPageProps} from "@/app/(public)/category/[code]/types";
 
 export default function CategoryPage({params}: CategoryPageProps) {
     const router = useRouter()
