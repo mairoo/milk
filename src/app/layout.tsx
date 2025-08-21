@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     },
 
     other: {
-        'theme-color': '#87b842', // 브라우저 UI 테마 색상
+        'theme-color': '#f0fdf4', // 브라우저 UI 테마 색상
     },
 
     robots: {

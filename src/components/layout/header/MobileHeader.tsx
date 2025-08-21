@@ -17,7 +17,7 @@ export default function MobileHeader({className}: MobileHeaderProps) {
 
     return (
         <header className={cn(
-            "bg-white shadow-md",
+            "bg-green-50 shadow-none",
             className,
         )}>
             <div className="flex items-center p-2">
