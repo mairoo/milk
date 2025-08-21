@@ -1,65 +1,16 @@
 'use client'
 
-import React from 'react';
+import React, {useEffect} from 'react';
 import {useForm} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
-import * as yup from 'yup';
+
 import Section from "@/components/widgets/cards/Section";
 import {useCart} from "@/features/order/cart/hooks";
 import {Minus, Plus, ShoppingCart, Trash2} from "lucide-react";
 import {Button} from "@/components/ui/button";
-import {OrderPaymentMethod} from "@/features/order/shared/types";
-import {formatPrice} from "@/features/order/cart/utils";
-import {CartStats} from "@/features/order/cart/types";
-
-// Form 데이터 타입 정의 - 더 명확한 타입 정의
-interface OrderFormData {
-    paymentMethod: OrderPaymentMethod;
-    agreements: {
-        purchase: boolean;
-        personalUse: boolean;
-        googleGiftCard: boolean;
-    };
-}
-
-// 유효한 결제 수단 값들을 명시적으로 정의
-const validPaymentMethods = [0, 1, 2, 3, 6] as const;
-
-// Yup 스키마 정의 - 타입 안전성 보장 (수정된 부분)
-const orderSchema = yup.object().shape({
-    paymentMethod: yup
-        .number()
-        .oneOf(validPaymentMethods, '결제 수단을 선택해주세요')
-        .required('결제 수단을 선택해주세요'),
-    agreements: yup.object().shape({
-        purchase: yup
-            .boolean()
-            .oneOf([true], '구매 동의는 필수입니다')
-            .required(),
-        personalUse: yup
-            .boolean()
-            .oneOf([true], '본인 사용 목적 동의는 필수입니다')
-            .required(),
-        googleGiftCard: yup
-            .boolean()
-            .oneOf([true], '구글기프트카드 환불불가 동의는 필수입니다')
-            .required()
-    }).required()
-}).required();
-
-// 장바구니 검증을 위한 별도 함수
-const validateCart = (cartStats: CartStats): string | null => {
-    if (cartStats.isEmpty) {
-        return '장바구니에 상품이 없습니다';
-    }
-    if (cartStats.totalPrice <= 0) {
-        return '올바르지 않은 주문 금액입니다';
-    }
-    if (cartStats.productCount <= 0) {
-        return '최소 1개 이상의 상품이 필요합니다';
-    }
-    return null;
-};
+import {formatPrice, validateCart} from "@/features/order/cart/utils";
+import {OrderFormData} from "@/app/(public)/cart/types";
+import {orderSchema, PAYMENT_METHOD_OPTIONS} from "@/app/(public)/cart/constants";
 
 export default function CartPage() {
     const {
@@ -74,10 +25,6 @@ export default function CartPage() {
         handleDecrement,
     } = useCart();
 
-    // 장바구니 에러 상태
-    const [cartError, setCartError] = React.useState<string | null>(null);
-
-    // React Hook Form 설정 - 정적 스키마 사용 (수정된 부분)
     const {
         register,
         handleSubmit,
@@ -95,8 +42,10 @@ export default function CartPage() {
         }
     });
 
+    const [cartError, setCartError] = React.useState<string | null>(null);
+
     // 장바구니 상태 변경시 검증
-    React.useEffect(() => {
+    useEffect(() => {
         const error = validateCart(stats);
         setCartError(error);
     }, [stats]);
@@ -265,24 +214,16 @@ export default function CartPage() {
         );
     };
 
-    // 결제 수단 선택 컴포넌트 (수정된 부분)
+    // 결제 수단 선택 컴포넌트
     const PaymentMethodSelector = () => {
-        const paymentMethods = [
-            {value: OrderPaymentMethod.BANK_TRANSFER, label: '무통장입금'},
-            {value: OrderPaymentMethod.ESCROW, label: '에스크로 (KB)'},
-            {value: OrderPaymentMethod.PAYPAL, label: '페이팔 (PayPal)'},
-            {value: OrderPaymentMethod.CREDIT_CARD, label: '신용카드'},
-            {value: OrderPaymentMethod.PHONE_BILLS, label: '휴대폰결제'},
-        ];
-
         return (
             <div className="bg-white border border-gray-200 rounded-lg p-6">
                 <div className="space-y-4">
-                    {paymentMethods.map((method, index) => (
+                    {PAYMENT_METHOD_OPTIONS.map((method, index) => (
                         <label
                             key={method.value}
                             className={`flex items-center gap-3 pb-4 cursor-pointer transition-colors rounded-md ${
-                                index !== paymentMethods.length - 1 ? 'border-b border-gray-100' : ''
+                                index !== PAYMENT_METHOD_OPTIONS.length - 1 ? 'border-b border-gray-100' : ''
                             }`}
                         >
                             <input
@@ -419,7 +360,7 @@ export default function CartPage() {
                 )}
             </div>
 
-            <Section title="첫 주문 시 주의사항">
+            <Section title="주문 시 주의사항">
                 <div className="bg-white border border-gray-200 rounded-lg p-6">
                     <div className="space-y-6">
                         {/* 휴대폰본인인증 필수 */}
