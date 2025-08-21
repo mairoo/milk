@@ -346,7 +346,7 @@ export default function CartPage() {
             <div className="w-full">
                 <Button
                     type="submit"
-                    className="w-full h-14 bg-sky-600 hover:bg-sky-700 text-white text-lg font-semibold disabled:bg-gray-400"
+                    className="w-full h-14 bg-sky-600 hover:bg-sky-700 text-white text-lg font-semibold disabled:bg-gray-400 cursor-pointer"
                     disabled={!isFormValid || isSubmitting}
                 >
                     {isSubmitting ? '주문 처리 중...' : '주문 완료'}
