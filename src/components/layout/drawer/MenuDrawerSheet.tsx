@@ -41,7 +41,7 @@ export default function MenuDrawerSheet() {
                 side="left"
                 className="w-60 p-0 flex flex-col gap-0 [&>button]:!border-0 [&>button]:!border-none [&>button]:!rounded-none [&>button]:!ring-0 [&>button]:!ring-offset-0 [&>button]:focus:!outline-none [&>button]:focus-visible:!outline-none [&>button]:focus:!ring-0 [&>button]:focus-visible:!ring-0 [&>button]:hover:!opacity-70"
             >
-                <SheetHeader className="p-3 bg-green-50 border-l-orange-400 border-l-4">
+                <SheetHeader className="p-3 bg-green-100 border-l-orange-400 border-l-4">
                     <SheetTitle className="text-green-800 font-bold">핀코인 대표몰</SheetTitle>
                     <SheetDescription className="sr-only">
                         사이트 메뉴를 탐색할 수 있습니다.
@@ -127,7 +127,7 @@ export default function MenuDrawerSheet() {
 
                     {/* 상품권 섹션 */}
                     <div className="flex-1 flex flex-col min-h-0">
-                        <div className="p-3 bg-green-50 border-l-orange-400 border-l-4">
+                        <div className="p-3 bg-green-100 border-l-orange-400 border-l-4">
                             <h3 className="font-bold text-green-800">상품권</h3>
                         </div>
 
@@ -150,7 +150,7 @@ export default function MenuDrawerSheet() {
                     </div>
 
                     {/* 카드몰로 이동 링크 (푸터) */}
-                    <div className="p-3 bg-green-50 text-green-800 font-bold border-l-orange-400 border-l-4">
+                    <div className="p-3 bg-green-100 text-green-800 font-bold border-l-orange-400 border-l-4">
                         <Link
                             href="/"
                             onClick={handleLinkClick}

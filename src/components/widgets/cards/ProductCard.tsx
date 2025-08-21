@@ -86,7 +86,7 @@ export default function ProductCard({
             {/* 액션 버튼 섹션 */}
             <CardFooter className="p-2">
                 <Button
-                    className="w-full flex items-center gap-2 bg-emerald-100 text-green-950 hover:bg-emerald-600 hover:text-white cursor-pointer"
+                    className="w-full flex items-center gap-2 bg-sky-200 text-black hover:bg-sky-600 hover:text-white cursor-pointer"
                     onClick={handleAddToCart}
                     disabled={isLoading || isSoldOut}
                     variant={isSoldOut ? "secondary" : "default"}

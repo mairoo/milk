@@ -213,7 +213,7 @@ export default function ProductDetailPage({params}: ProductDetailPageProps) {
                                     <div className="flex items-center space-x-3">
                                         <button
                                             onClick={decreaseQuantity}
-                                            className="w-8 h-8 flex items-center justify-center border border-gray-300 rounded-md hover:bg-white hover:border-gray-400 disabled:opacity-50 disabled:hover:bg-gray-50 disabled:hover:border-gray-300 transition-colors"
+                                            className="w-8 h-8 flex items-center justify-center border border-gray-300 rounded-md hover:bg-white hover:border-gray-400 disabled:opacity-50 disabled:hover:bg-gray-50 disabled:hover:border-gray-300 transition-colors cursor-pointer"
                                             disabled={quantity <= 1}
                                             aria-label="수량 감소"
                                         >
@@ -224,7 +224,7 @@ export default function ProductDetailPage({params}: ProductDetailPageProps) {
                                         </span>
                                         <button
                                             onClick={increaseQuantity}
-                                            className="w-8 h-8 flex items-center justify-center border border-gray-300 rounded-md hover:bg-white hover:border-gray-400 transition-colors"
+                                            className="w-8 h-8 flex items-center justify-center border border-gray-300 rounded-md hover:bg-white hover:border-gray-400 transition-colors cursor-pointer"
                                             aria-label="수량 증가"
                                         >
                                             <Plus className="h-4 w-4 text-gray-600"/>
@@ -245,7 +245,7 @@ export default function ProductDetailPage({params}: ProductDetailPageProps) {
 
                         {/* 구매 버튼 */}
                         <Button
-                            className="w-full h-12 bg-emerald-600 hover:bg-emerald-700 text-white flex items-center justify-center gap-2 disabled:bg-gray-400"
+                            className="w-full h-12 bg-sky-200 text-black hover:bg-sky-600 hover:text-white flex items-center justify-center gap-2 disabled:bg-gray-400 cursor-pointer"
                             disabled={isSoldOut}
                             onClick={addToCart}
                         >

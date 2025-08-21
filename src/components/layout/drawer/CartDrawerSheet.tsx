@@ -35,7 +35,7 @@ export default function CartDrawerSheet() {
                 side="right"
                 className="w-80 p-0 flex flex-col gap-0 [&>button]:!border-0 [&>button]:!border-none [&>button]:!rounded-none [&>button]:!ring-0 [&>button]:!ring-offset-0 [&>button]:focus:!outline-none [&>button]:focus-visible:!outline-none [&>button]:focus:!ring-0 [&>button]:focus-visible:!ring-0 [&>button]:hover:!opacity-70 border-l-0"
             >
-                <SheetHeader className="p-3 bg-emerald-50 border-l-orange-400 border-l-4">
+                <SheetHeader className="p-3 bg-green-100 border-l-orange-400 border-l-4">
                     <SheetTitle className="text-emerald-800 font-bold flex items-center gap-2">
                         <ShoppingCart className="w-5 h-5"/>
                         장바구니
@@ -148,7 +148,7 @@ export default function CartDrawerSheet() {
                             </div>
 
                             {/* 합계 섹션 */}
-                            <div className="p-3 bg-emerald-50 border-t-4 border-orange-400">
+                            <div className="p-3 bg-green-100 border-t-4 border-orange-400">
                                 <div className="flex justify-between items-center">
                                     <span className="font-bold text-emerald-800">총 결제금액</span>
                                     <span className="font-bold text-lg text-emerald-800">

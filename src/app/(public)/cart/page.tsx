@@ -134,7 +134,7 @@ export default function CartPage() {
                     {products.map((product) => (
                         <div
                             key={product.id}
-                            className="bg-white border border-gray-200 rounded-lg p-6 shadow-none"
+                            className="bg-white border border-gray-200 rounded-lg p-6 shadow-none hover:shadow-md"
                         >
                             {/* 상품 정보 및 삭제 버튼 */}
                             <div className="flex justify-between items-start mb-4">
