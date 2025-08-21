@@ -17,18 +17,7 @@ export default function MobileHeader({className}: MobileHeaderProps) {
 
     return (
         <header className={cn(
-            // Sticky 포지셔닝과 Z-index
-            "sticky top-0 z-10",
-
-            // 배경과 그림자
-            "bg-green-50 shadow-sm",
-
-            // 성능 최적화를 위한 CSS 속성들
-            "sticky-header-stable",
-
-            // 레이아웃 시프트 방지
-            "will-change-transform",
-
+            "sticky top-0 z-10 bg-green-50 shadow-none sticky-header-stable",
             className,
         )}>
             <div className="flex items-center p-2">

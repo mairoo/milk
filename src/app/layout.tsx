@@ -106,8 +106,7 @@ export default async function RootLayout({children}: RootLayoutProps) {
             페이지 전환 안정화:
             - page-transition-stable: Next.js 페이지 전환 시 헤더 안정화
         */}
-        <body
-            className={`${nanumGothic.className} font-sans antialiased min-h-screen grid grid-rows-[auto_1fr_auto] page-transition-stable`}>
+        <body className={`${nanumGothic.className} font-sans antialiased min-h-screen grid grid-rows-[auto_1fr_auto]`}>
         <SessionProvider session={session}>
             <ReduxProvider>
                 {/*
@@ -123,7 +122,7 @@ export default async function RootLayout({children}: RootLayoutProps) {
                     - sticky-header-stable: 성능 최적화 클래스 자동 적용
                     - enhanced 클래스: 필요 시 추가 안정화 (문제 발생 시에만 사용)
                 */}
-                <DesktopHeader className="hidden md:block sticky top-0 z-10"/>
+                <DesktopHeader className="hidden md:block"/>
                 <MobileHeader className="block md:hidden"/>
 
                 {/*

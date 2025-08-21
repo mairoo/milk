@@ -148,42 +148,14 @@ body[style*="overflow: hidden"] {
 }
 
 /* ===== 유틸리티 클래스 ===== */
-/* 스티키 헤더 최적화 클래스 */
+/* 스티키 헤더 최적화 클래스 - 기존 sticky-header-stable 개선 */
 .sticky-header-stable {
-    /* GPU 가속 활용 */
     will-change: transform;
     transform: translateZ(0);
     backface-visibility: hidden;
-
-    /* 미세한 렌더링 최적화 */
     opacity: 0.999;
-
-    /* 레이아웃 최적화 */
     contain: layout style paint;
-
-    /* 애니메이션 제거 (깜박임 방지) */
     transition: none !important;
-}
-
-/* 스티키 헤더 추가 안정화 (필요 시 사용) */
-.sticky-header-enhanced {
-    /* 포지션 강제 지정 */
-    position: sticky !important;
-
-    /* 완전 고정 */
-    top: 0;
-
-    /* Z-index 명시적 지정 */
-    z-index: 10;
-
-    /* 레이아웃 격리 */
-    isolation: isolate;
-
-    /* 스크롤 성능 향상 */
-    overflow: hidden;
-
-    /* 하드웨어 가속 */
-    transform: translate3d(0, 0, 0);
 }
 
 /* 노치 대응 (필요 시) */
@@ -191,13 +163,6 @@ body[style*="overflow: hidden"] {
     padding-top: env(safe-area-inset-top, 0);
     padding-left: env(safe-area-inset-left, 0);
     padding-right: env(safe-area-inset-right, 0);
-}
-
-/* Next.js 페이지 전환 시 헤더 안정화 */
-.page-transition-stable {
-    /* 페이지 전환 중에도 헤더 위치 고정 */
-    position: relative;
-    z-index: 999;
 }
 
 /* ===== Tailwind 베이스 레이어 ===== */
@@ -208,33 +173,5 @@ body[style*="overflow: hidden"] {
 
     body {
         @apply bg-background text-foreground;
-    }
-
-    /* 스티키 헤더를 위한 기본 설정 */
-    header[class*="sticky"] {
-        /* 기본 성능 최적화 적용 */
-        @apply sticky-header-stable;
-    }
-}
-
-/* ===== 브라우저별 호환성 ===== */
-/* Safari 전용 sticky 최적화 */
-@supports (-webkit-overflow-scrolling: touch) {
-    .sticky-header-stable {
-        transform: translate3d(0, 0, 0);
-    }
-}
-
-/* Firefox 전용 최적화 */
-@supports (scrollbar-width: thin) {
-    .sticky-header-stable {
-        transform: translateZ(0);
-    }
-}
-
-/* Chrome/Edge 전용 최적화 */
-@supports (backdrop-filter: blur(0)) {
-    .sticky-header-stable {
-        backdrop-filter: blur(0);
     }
 }
