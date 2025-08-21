@@ -1,6 +1,6 @@
 'use client'
 
-import React, {useEffect} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {useForm} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 
@@ -26,14 +26,15 @@ export default function CartPage() {
     } = useCart();
 
     const {
-        register,
         handleSubmit,
+        watch,
+        setValue,
         formState: {errors, isValid, isSubmitting}
     } = useForm<OrderFormData>({
         resolver: yupResolver(orderSchema),
         mode: 'onChange',
         defaultValues: {
-            // paymentMethod는 undefined로 시작 (사용자가 선택하도록)
+            paymentMethod: undefined, // 명시적으로 undefined 설정
             agreements: {
                 purchase: false,
                 personalUse: false,
@@ -41,6 +42,10 @@ export default function CartPage() {
             }
         }
     });
+
+    // 현재 선택된 값들을 watch로 관찰
+    const watchedPaymentMethod = watch('paymentMethod');
+    const watchedAgreements = watch('agreements');
 
     const [cartError, setCartError] = React.useState<string | null>(null);
 
@@ -163,7 +168,7 @@ export default function CartPage() {
                                             className="w-10 h-10 flex items-center justify-center border border-gray-300 rounded-md hover:bg-gray-100 hover:text-red-800 transition-colors cursor-pointer"
                                             aria-label="수량 감소"
                                         >
-                                            <Minus className="h-4 w-4" />
+                                            <Minus className="h-4 w-4"/>
                                         </button>
 
                                         <input
@@ -186,7 +191,7 @@ export default function CartPage() {
                                             aria-label="수량 증가"
                                             disabled={product.quantity >= 9999}
                                         >
-                                            <Plus className="h-4 w-4" />
+                                            <Plus className="h-4 w-4"/>
                                         </button>
                                     </div>
                                 </div>
@@ -214,8 +219,8 @@ export default function CartPage() {
         );
     };
 
-    // 결제 수단 선택 컴포넌트
-    const PaymentMethodSelector = () => {
+    // 결제 수단 선택 컴포넌트 - useCallback으로 메모이제이션
+    const PaymentMethodSelector = useCallback(() => {
         return (
             <div className="bg-white border border-gray-200 rounded-lg p-6">
                 <div className="space-y-4">
@@ -229,9 +234,13 @@ export default function CartPage() {
                             <input
                                 type="radio"
                                 value={method.value}
-                                {...register('paymentMethod', {
-                                    valueAsNumber: true, // 자동으로 숫자로 변환
-                                })}
+                                checked={watchedPaymentMethod === method.value}
+                                onChange={(e) => {
+                                    setValue('paymentMethod', Number(e.target.value), {
+                                        shouldValidate: true,
+                                        shouldDirty: true
+                                    });
+                                }}
                                 className="w-4 h-4 text-emerald-600 border-gray-300 focus:ring-emerald-500"
                             />
                             <span className="text-gray-900 font-medium">{method.label}</span>
@@ -245,10 +254,10 @@ export default function CartPage() {
                 )}
             </div>
         );
-    };
+    }, [watchedPaymentMethod, setValue, errors.paymentMethod]);
 
-    // 구매동의 컴포넌트
-    const PurchaseAgreement = () => {
+    // 구매동의 컴포넌트 - useCallback으로 메모이제이션
+    const PurchaseAgreement = useCallback(() => {
         return (
             <div className="bg-white border border-gray-200 rounded-lg p-6">
                 <div className="space-y-6">
@@ -257,7 +266,13 @@ export default function CartPage() {
                         <label className="flex items-start gap-3 cursor-pointer">
                             <input
                                 type="checkbox"
-                                {...register('agreements.purchase')}
+                                checked={watchedAgreements.purchase}
+                                onChange={(e) => {
+                                    setValue('agreements.purchase', e.target.checked, {
+                                        shouldValidate: true,
+                                        shouldDirty: true
+                                    });
+                                }}
                                 className="w-4 h-4 mt-1 text-emerald-600 border-gray-300 rounded focus:ring-emerald-500"
                             />
                             <div>
@@ -281,7 +296,13 @@ export default function CartPage() {
                         <label className="flex items-start gap-3 cursor-pointer">
                             <input
                                 type="checkbox"
-                                {...register('agreements.personalUse')}
+                                checked={watchedAgreements.personalUse}
+                                onChange={(e) => {
+                                    setValue('agreements.personalUse', e.target.checked, {
+                                        shouldValidate: true,
+                                        shouldDirty: true
+                                    });
+                                }}
                                 className="w-4 h-4 mt-1 text-emerald-600 border-gray-300 rounded focus:ring-emerald-500"
                             />
                             <div>
@@ -289,7 +310,7 @@ export default function CartPage() {
                                     본인 사용 목적으로 상품권을 구매합니다.
                                 </span>
                                 <p className="text-sm text-gray-600 mt-1">
-                                    대리구매 알바 또는 상품권 할인(페이백)을 미끼로 다른 사람이 상품권 구매를 요구했다면 100% 사기입니다.
+                                    대리구매 알바 또는 상품권 할인(페이백)을 미라로 다른 사람이 상품권 구매를 요구했다면 100% 사기입니다.
                                 </p>
                             </div>
                         </label>
@@ -305,7 +326,13 @@ export default function CartPage() {
                         <label className="flex items-start gap-3 cursor-pointer">
                             <input
                                 type="checkbox"
-                                {...register('agreements.googleGiftCard')}
+                                checked={watchedAgreements.googleGiftCard}
+                                onChange={(e) => {
+                                    setValue('agreements.googleGiftCard', e.target.checked, {
+                                        shouldValidate: true,
+                                        shouldDirty: true
+                                    });
+                                }}
                                 className="w-4 h-4 mt-1 text-emerald-600 border-gray-300 rounded focus:ring-emerald-500"
                             />
                             <div>
@@ -326,7 +353,7 @@ export default function CartPage() {
                 </div>
             </div>
         );
-    };
+    }, [watchedAgreements, setValue, errors.agreements]);
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-y-6">
@@ -378,7 +405,7 @@ export default function CartPage() {
                             <h2 className="font-bold text-gray-900 mb-3">서류본인인증이 필요한 경우</h2>
                             <ul className="space-y-3">
                                 <li className="text-sm text-gray-600">
-                                    컬쳐랜드상품권, 도서문화상품권, 구글기프트카드를 포함하고 일일 액면가 기준 누계 10만원 이상 첫 구매하는 경우
+                                    컬처랜드상품권, 도서문화상품권, 구글기프트카드를 포함하고 일일 액면가 기준 누계 10만원 이상 첫 구매하는 경우
                                 </li>
                                 <li className="text-sm text-gray-600">
                                     계좌이체로 일일 액면가 기준 누계 30만원 이상 첫 구매하는 경우
