@@ -57,7 +57,8 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
     width: 'device-width',
     initialScale: 1,
-    // maximumScale: 1, - 접근성을 위해 사용자 확대/축소 허용
+    maximumScale: 1, // iOS Safari 줌 방지로 뷰포트 변화 최소화
+    viewportFit: 'cover',
 }
 
 /**
