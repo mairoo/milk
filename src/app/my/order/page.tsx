@@ -1,55 +1,21 @@
 'use client'
 
 import React, {useEffect, useMemo, useState} from 'react'
-import {OrderPaymentMethod, OrderStatus} from '@/features/order/shared/types'
 import {formatPrice} from '@/features/order/cart/utils'
 import Section from "@/components/widgets/cards/Section"
 import {Button} from "@/components/ui/button"
 import {ChevronLeft, ChevronRight, RefreshCw, Search} from "lucide-react"
 import {useMyOrderList} from "@/features/order/my/hooks";
 import {MyOrderResponse} from "@/features/s3/user/response";
+import {
+    getPaymentMethodLabel,
+    getPaymentMethodStyle,
+    getStatusLabel,
+    getStatusStyle,
+} from "@/components/utils/orderDisplay"
 
 // 페이지네이션 설정
 const PAGE_SIZE = 10
-
-// 상태별 스타일링
-const getStatusStyle = (status: OrderStatus) => {
-    switch (status) {
-        case 'PAYMENT_PENDING':
-            return 'bg-yellow-100 text-yellow-800 border-yellow-300'
-        case 'PAYMENT_COMPLETED':
-            return 'bg-green-100 text-green-800 border-green-300'
-        default:
-            return 'bg-gray-100 text-gray-800 border-gray-300'
-    }
-}
-
-// 상태별 한글 표시
-const getStatusLabel = (status: OrderStatus) => {
-    switch (status) {
-        case 'PAYMENT_PENDING':
-            return '결제대기'
-        case 'PAYMENT_COMPLETED':
-            return '결제완료'
-        default:
-            return status
-    }
-}
-
-// 결제수단별 한글 표시
-const getPaymentMethodLabel = (method: OrderPaymentMethod) => {
-    switch (method) {
-        case 'BANK_TRANSFER':
-            return '계좌이체'
-        case 'PAYPAL':
-            return '페이팔'
-        case 'CREDIT_CARD':
-            return '신용카드'
-        default:
-            return method
-    }
-}
-
 export default function MyOrderListPage() {
     const [currentPage, setCurrentPage] = useState(0)
     const [searchOrderNo, setSearchOrderNo] = useState('')
@@ -244,7 +210,8 @@ export default function MyOrderListPage() {
                                         )}
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap">
-                                        <div className="text-sm text-gray-900">
+                                        <div
+                                            className={`text-sm font-medium ${getPaymentMethodStyle(order.paymentMethod)}`}>
                                             {getPaymentMethodLabel(order.paymentMethod)}
                                         </div>
                                     </td>
@@ -298,7 +265,8 @@ export default function MyOrderListPage() {
                                 </div>
 
                                 <div className="flex justify-between items-center">
-                                    <div className="text-sm text-gray-600">
+                                    <div
+                                        className={`text-sm font-medium ${getPaymentMethodStyle(order.paymentMethod)}`}>
                                         {getPaymentMethodLabel(order.paymentMethod)}
                                     </div>
                                     <div className="text-right">
