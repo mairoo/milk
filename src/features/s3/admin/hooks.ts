@@ -1,5 +1,4 @@
 import {useCallback} from 'react'
-import {useSession} from 'next-auth/react'
 import {useDispatch} from 'react-redux'
 import {s3AdminApi, useLazyFullHealthCheckQuery, useLazyQuickHealthCheckQuery,} from '@/features/s3/admin/api'
 import {getErrorMessage} from "@/global/lib/rtkQueryUtils";
@@ -8,9 +7,7 @@ import {getErrorMessage} from "@/global/lib/rtkQueryUtils";
  * S3 헬스체크 비즈니스 로직 hook (RTK Query 전용)
  */
 export const useS3HealthCheck = () => {
-    const {data: session} = useSession()
     const dispatch = useDispatch()
-    const token = session?.accessToken as string | undefined
 
     // Lazy 훅 사용 (수동 실행)
     const [quickCheckTrigger, quickCheckResult] = useLazyQuickHealthCheckQuery()
@@ -20,15 +17,15 @@ export const useS3HealthCheck = () => {
      * 빠른 헬스체크 실행
      */
     const quickCheck = useCallback(() => {
-        return quickCheckTrigger(token)
-    }, [quickCheckTrigger, token])
+        return quickCheckTrigger()
+    }, [quickCheckTrigger])
 
     /**
      * 전체 헬스체크 실행
      */
     const fullCheck = useCallback(() => {
-        return fullCheckTrigger(token)
-    }, [fullCheckTrigger, token])
+        return fullCheckTrigger()
+    }, [fullCheckTrigger])
 
     /**
      * 헬스체크 캐시 초기화

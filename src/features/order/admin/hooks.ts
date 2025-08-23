@@ -45,7 +45,6 @@ export const useAdminOrderList = () => {
     const getOrderList = useCallback((params?: AdminOrderSearchRequest & {
         page?: number;
         size?: number;
-        sort?: string[];
     }) => {
         return getOrderListTrigger(params || {})
     }, [getOrderListTrigger])

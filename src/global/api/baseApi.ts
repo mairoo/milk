@@ -2,6 +2,7 @@ import {createApi} from '@reduxjs/toolkit/query/react'
 import axios, {AxiosError, AxiosRequestConfig} from 'axios'
 import type {BaseQueryFn} from '@reduxjs/toolkit/query'
 import {ErrorResponse} from "@/global/types/dto";
+import {getSession} from 'next-auth/react'
 
 /// Axios 인스턴스 생성
 const axiosInstance = axios.create({
@@ -12,12 +13,33 @@ const axiosInstance = axios.create({
     },
 })
 
-// 요청 인터셉터
+// 요청 인터셉터 - 토큰 자동 추가
 axiosInstance.interceptors.request.use(
-    (config) => {
+    async (config) => {
+        try {
+            const session = await getSession()
+            const token = session?.accessToken as string | undefined
+
+            if (token) {
+                config.headers.Authorization = `Bearer ${token}`
+            }
+        } catch (error) {
+            console.error('Failed to get session token:', error)
+        }
+
         // 요청 로깅 (개발 환경에서만)
         if (process.env.NODE_ENV === 'development') {
             console.log(`API Request: ${config.method?.toUpperCase()} ${config.url}`)
+
+            // Authorization 헤더 로깅
+            const authHeader = config.headers?.['Authorization'] ||
+                config.headers?.get?.('Authorization')
+
+            if (authHeader && typeof authHeader === 'string') {
+                console.log('Authorization header:', authHeader.substring(0, 30) + '...')
+            } else if (authHeader) {
+                console.log('Authorization header: [present]')
+            }
         }
         return config
     },
@@ -45,6 +67,12 @@ axiosInstance.interceptors.response.use(
             })
         }
 
+        // CORS 에러 특별 처리
+        if (!error.response && error.code === 'ERR_NETWORK') {
+            console.error('CORS Error detected:', error.message)
+            return Promise.reject(new Error('CORS 오류: 서버 연결을 확인해주세요'))
+        }
+
         // 네트워크 에러 처리
         if (!error.response) {
             return Promise.reject(new Error('네트워크 연결을 확인해주세요'))
@@ -53,6 +81,7 @@ axiosInstance.interceptors.response.use(
         // HTTP 상태 코드별 에러 처리
         switch (error.response.status) {
             case 401:
+                console.error('Authentication failed - token might be invalid')
                 return Promise.reject(new Error('인증이 필요합니다'))
             case 403:
                 return Promise.reject(new Error('접근 권한이 없습니다'))
@@ -104,6 +133,11 @@ const axiosBaseQuery =
             } catch (axiosError) {
                 const error = axiosError as AxiosError<ErrorResponse>
 
+                // CORS 에러인지 확인
+                if (!error.response && error.code === 'ERR_NETWORK') {
+                    console.error('CORS Error in baseQuery:', error)
+                }
+
                 return {
                     error: {
                         status: error.response?.status,
@@ -114,25 +148,9 @@ const axiosBaseQuery =
             }
         }
 
-
-/**
- * Axios 기반 RTK Query API 설정
- *
- * 토큰 관리 및 재인증은 NextAuth에서 처리하므로
- * 별도의 re-authorization 로직을 구현하지 않음
- *
- * NextAuth가 제공하는 유효한 토큰을 각 endpoint에서 개별적으로 사용
- */
 export const baseApi = createApi({
     reducerPath: 'api',
     baseQuery: axiosBaseQuery(),
-
-    /**
-     * tagTypes 사용법:
-     * - provideTags: 쿼리가 제공하는 데이터 태그 (예: ['User', { type: 'User', id: 1 }])
-     * - invalidatesTags: 뮤테이션 후 무효화할 캐시 태그 (예: ['User'] - 모든 User 캐시 삭제)
-     * - 자동 refetch: invalidatesTags로 지정된 태그의 모든 쿼리가 자동으로 다시 실행됨
-     */
     tagTypes: [
         'HealthCheck',
         'Category',
@@ -140,21 +158,7 @@ export const baseApi = createApi({
         'AdminOrder',
         'MyOrder',
     ],
-
-    /**
-     * keepUnusedDataFor 옵션:
-     * - 숫자(초): 구독자가 없어진 후 지정된 시간만큼 캐시 보관 (디폴트 60초)
-     * - false: 즉시 삭제 (메모리 절약)
-     * - true: 무제한 보관 (메모리 누수 위험)
-     */
-    keepUnusedDataFor: 300, // 미사용 데이터 유지 (디폴트 60초 → 5분)
-
-    /**
-     * refetchOnMountOrArgChange 옵션:
-     * - false: 캐시된 데이터가 있으면 사용, 없으면 새로 요청 (디폴트, 네트워크 요청 최소화)
-     * - true: 컴포넌트 마운트시 항상 새로 요청 (데이터 신선도 우선)
-     * - 숫자(초): 캐시 데이터가 지정된 시간보다 오래되었을 때만 새로 요청 (예: 60)
-     */
+    keepUnusedDataFor: 300,
     refetchOnMountOrArgChange: false,
     endpoints: () => ({}),
 })

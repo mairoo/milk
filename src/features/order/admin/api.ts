@@ -10,7 +10,7 @@ import type {AdminOrderSearchRequest} from './request'
  * - 서버 응답을 있는 그대로 반환 (최소한의 변환만)
  * - 비즈니스 로직 없음
  * - 캐싱 태그만 설정
- * - 에러 처리는 baseApi에서 담당
+ * - 에러 처리 및 토큰 처리는 baseApi에서 담당
  */
 export const orderAdminApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
@@ -35,7 +35,6 @@ export const orderAdminApi = baseApi.injectEndpoints({
         getOrderList: builder.query<PageResponse<AdminOrderResponse>, AdminOrderSearchRequest & {
             page?: number;
             size?: number;
-            sort?: string[];
         }>({
             query: (params = {}) => ({
                 url: '/admin/orders',

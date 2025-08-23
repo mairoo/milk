@@ -45,7 +45,6 @@ export const useMyOrderList = () => {
     const getMyOrderList = useCallback((params?: MyOrderSearchRequest & {
         page?: number;
         size?: number;
-        sort?: string[];
     }) => {
         return getMyOrderListTrigger(params || {})
     }, [getMyOrderListTrigger])

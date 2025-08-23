@@ -10,7 +10,7 @@ import type {MyOrderSearchRequest} from './request'
  * - 서버 응답을 있는 그대로 반환 (최소한의 변환만)
  * - 비즈니스 로직 없음
  * - 캐싱 태그만 설정
- * - 에러 처리는 baseApi에서 담당
+ * - 에러 처리 및 토큰 처리는 baseApi에서 담당
  */
 export const myOrderApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
@@ -35,7 +35,6 @@ export const myOrderApi = baseApi.injectEndpoints({
         getMyOrderList: builder.query<PageResponse<MyOrderResponse>, MyOrderSearchRequest & {
             page?: number;
             size?: number;
-            sort?: string[];
         }>({
             query: (params = {}) => ({
                 url: '/my/orders',
@@ -43,7 +42,7 @@ export const myOrderApi = baseApi.injectEndpoints({
                 params,
             }),
             transformResponse: (response: ApiResponse<PageResponse<MyOrderResponse>>) => response.data,
-            providesTags: (result, _error, params) => [
+            providesTags: (result, error, params) => [
                 {type: 'MyOrder' as const, id: 'LIST'},
                 // 각 주문에 대한 개별 태그도 추가 (목록에서 개별 주문이 무효화될 때 목록도 갱신)
                 ...(result?.content?.map((order) => ({
