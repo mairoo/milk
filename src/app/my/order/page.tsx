@@ -16,6 +16,13 @@ import {
 
 // 페이지네이션 설정
 const PAGE_SIZE = 10
+
+// 주문번호를 UUID 첫 8자로 축약하는 함수
+const formatOrderNo = (orderNo: string) => {
+    if (!orderNo) return ''
+    return orderNo.length > 8 ? `${orderNo.substring(0, 8)}...` : orderNo
+}
+
 export default function MyOrderListPage() {
     const [currentPage, setCurrentPage] = useState(0)
     const [searchOrderNo, setSearchOrderNo] = useState('')
@@ -180,6 +187,9 @@ export default function MyOrderListPage() {
                                     주문번호
                                 </th>
                                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    주문일시
+                                </th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     결제수단
                                 </th>
                                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -194,11 +204,13 @@ export default function MyOrderListPage() {
                             {orders.map((order: MyOrderResponse) => (
                                 <tr key={order.id} className="hover:bg-gray-50">
                                     <td className="px-6 py-4 whitespace-nowrap">
-                                        <div className="text-sm font-medium text-gray-900">
-                                            {order.orderNo}
+                                        <div className="text-sm font-medium text-gray-900" title={order.orderNo}>
+                                            {formatOrderNo(order.orderNo)}
                                         </div>
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap">
                                         {order.created && (
-                                            <div className="text-sm text-gray-500">
+                                            <div className="text-sm text-gray-900">
                                                 {new Date(order.created).toLocaleDateString('ko-KR', {
                                                     year: 'numeric',
                                                     month: '2-digit',
@@ -225,9 +237,6 @@ export default function MyOrderListPage() {
                                         <div className="text-sm font-medium text-gray-900">
                                             {formatPrice(order.totalSellingPrice)}
                                         </div>
-                                        <div className="text-sm text-gray-500">
-                                            {order.currency}
-                                        </div>
                                     </td>
                                 </tr>
                             ))}
@@ -243,8 +252,8 @@ export default function MyOrderListPage() {
                             <div key={order.id} className="p-4">
                                 <div className="flex justify-between items-start mb-3">
                                     <div className="flex-1">
-                                        <div className="text-sm font-medium text-gray-900 mb-1">
-                                            {order.orderNo}
+                                        <div className="text-sm font-medium text-gray-900 mb-1" title={order.orderNo}>
+                                            {formatOrderNo(order.orderNo)}
                                         </div>
                                         {order.created && (
                                             <div className="text-xs text-gray-500">
@@ -272,9 +281,6 @@ export default function MyOrderListPage() {
                                     <div className="text-right">
                                         <div className="text-sm font-medium text-gray-900">
                                             {formatPrice(order.totalSellingPrice)}
-                                        </div>
-                                        <div className="text-xs text-gray-500">
-                                            {order.currency}
                                         </div>
                                     </div>
                                 </div>

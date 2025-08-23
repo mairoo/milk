@@ -58,7 +58,7 @@ export const getStatusLabel = (status: OrderStatus) => {
 export const getPaymentMethodLabel = (method: OrderPaymentMethod) => {
     switch (method) {
         case 'BANK_TRANSFER':
-            return '계좌이체'
+            return '계좌이체 / 무통장입금'
         case 'ESCROW':
             return '에스크로(KB)'
         case 'PAYPAL':
