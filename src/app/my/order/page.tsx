@@ -138,7 +138,7 @@ export default function MyOrderListPage() {
                             </thead>
                             <tbody className="bg-white divide-y divide-gray-200">
                             {orders.map((order: MyOrderResponse) => (
-                                <tr key={order.id} className="hover:bg-gray-50">
+                                <tr key={order.id} className="hover:bg-gray-50 hover:cursor-pointer">
                                     <td className="px-6 py-4 whitespace-nowrap">
                                         <div className="text-sm font-medium text-gray-900" title={order.orderNo}>
                                             {formatOrderNo(order.orderNo)}
