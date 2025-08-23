@@ -11,13 +11,7 @@ import {NextResponse} from "next/server"
  * - 공개 페이지는 미들웨어 실행 안됨 (성능 향상)
  */
 export default withAuth(
-    function middleware(req) {
-        const {pathname} = req.nextUrl
-
-        if (process.env.NODE_ENV === 'development') {
-            console.log(`🔐 [Middleware] ${pathname} - 인증 통과`)
-        }
-
+    function middleware() {
         return NextResponse.next()
     },
     {
@@ -27,14 +21,8 @@ export default withAuth(
              *
              * 단순히 토큰 존재 여부만 체크
              */
-            authorized: ({token, req}) => {
-                const isAuthorized = !!token && !token.error
-
-                if (process.env.NODE_ENV === 'development') {
-                    console.log(`🔍 [Auth Check] ${req.nextUrl.pathname} - 인증: ${isAuthorized}`)
-                }
-
-                return isAuthorized
+            authorized: ({token}) => {
+                return !!token && !token.error
             },
         },
         pages: {
@@ -51,28 +39,11 @@ export default withAuth(
  */
 export const config = {
     matcher: [
-        // 📱 마이페이지 관련
         '/my/:path*',
 
-        // 👑 관리자 페이지
         '/admin/:path*',
 
-        // 📦 주문 관련 (로그인 필요)
-        '/orders/:path*',
-
-        // 🛒 장바구니/결제 (로그인 필요)
-        '/cart/checkout',
-        '/payment/:path*',
-
-        // 👤 프로필 관련
-        '/profile/:path*',
-
-        // 💳 포인트/쿠폰 관리
-        '/points/:path*',
-        '/coupons/:path*',
-
-        // 📝 리뷰/문의 작성 (로그인 필요)
-        '/reviews/write',
+        '/testimonials/write',
         '/support/inquiry',
     ]
 }
