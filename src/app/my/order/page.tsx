@@ -5,8 +5,8 @@ import {formatPrice} from '@/features/order/cart/utils'
 import Section from "@/components/widgets/cards/Section"
 import {Button} from "@/components/ui/button"
 import {ChevronLeft, ChevronRight, RefreshCw} from "lucide-react"
-import {useMyOrderList} from "@/features/order/my/hooks";
-import {MyOrderResponse} from "@/features/s3/user/response";
+import {useMyOrderList} from "@/features/order/my/hooks"
+import {MyOrderResponse} from "@/features/s3/user/response"
 import {
     getPaymentMethodLabel,
     getPaymentMethodStyle,
@@ -122,17 +122,17 @@ export default function MyOrderListPage() {
                                 <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
                                     주문번호
                                 </th>
+                                <th className="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider">
+                                    합계금액
+                                </th>
+                                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                                    주문상태
+                                </th>
+                                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                                    입금/결제수단
+                                </th>
                                 <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
                                     주문일시
-                                </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
-                                    결제수단
-                                </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
-                                    상태
-                                </th>
-                                <th className="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider">
-                                    결제금액
                                 </th>
                             </tr>
                             </thead>
@@ -142,6 +142,23 @@ export default function MyOrderListPage() {
                                     <td className="px-6 py-4 whitespace-nowrap">
                                         <div className="text-sm font-medium text-gray-900" title={order.orderNo}>
                                             {formatOrderNo(order.orderNo)}
+                                        </div>
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-right">
+                                        <div className="text-sm font-medium text-gray-900">
+                                            {formatPrice(order.totalSellingPrice)}
+                                        </div>
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap">
+                                        <span
+                                            className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full border ${getStatusStyle(order.status)}`}>
+                                            {getStatusLabel(order.status)}
+                                        </span>
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap">
+                                        <div
+                                            className={`text-sm font-medium ${getPaymentMethodStyle(order.paymentMethod)}`}>
+                                            {getPaymentMethodLabel(order.paymentMethod)}
                                         </div>
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap">
@@ -157,23 +174,6 @@ export default function MyOrderListPage() {
                                             </div>
                                         )}
                                     </td>
-                                    <td className="px-6 py-4 whitespace-nowrap">
-                                        <div
-                                            className={`text-sm font-medium ${getPaymentMethodStyle(order.paymentMethod)}`}>
-                                            {getPaymentMethodLabel(order.paymentMethod)}
-                                        </div>
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span
-                          className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full border ${getStatusStyle(order.status)}`}>
-                        {getStatusLabel(order.status)}
-                      </span>
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-right">
-                                        <div className="text-sm font-medium text-gray-900">
-                                            {formatPrice(order.totalSellingPrice)}
-                                        </div>
-                                    </td>
                                 </tr>
                             ))}
                             </tbody>
@@ -181,44 +181,48 @@ export default function MyOrderListPage() {
                     </div>
                 </div>
 
+                {/* 태블릿 테이블 - 제거 */}
+
                 {/* 모바일 카드 */}
                 <div className="md:hidden">
                     <div className="divide-y divide-gray-200">
                         {orders.map((order: MyOrderResponse) => (
                             <div key={order.id} className="p-4">
-                                <div className="flex justify-between items-start mb-3">
-                                    <div className="flex-1">
-                                        <div className="text-sm font-medium text-gray-900 mb-1" title={order.orderNo}>
-                                            {formatOrderNo(order.orderNo)}
-                                        </div>
-                                        {order.created && (
-                                            <div className="text-xs text-gray-500">
-                                                {new Date(order.created).toLocaleDateString('ko-KR', {
-                                                    year: 'numeric',
-                                                    month: '2-digit',
-                                                    day: '2-digit',
-                                                    hour: '2-digit',
-                                                    minute: '2-digit'
-                                                })}
-                                            </div>
-                                        )}
+                                {/* 주문번호 <-> 합계금액 */}
+                                <div className="flex justify-between items-start mb-2">
+                                    <div className="text-sm font-medium text-gray-900" title={order.orderNo}>
+                                        {formatOrderNo(order.orderNo)}
                                     </div>
-                                    <span
-                                        className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full border ${getStatusStyle(order.status)}`}>
-                    {getStatusLabel(order.status)}
-                  </span>
+                                    <div className="text-sm font-medium text-gray-900">
+                                        {formatPrice(order.totalSellingPrice)}
+                                    </div>
                                 </div>
 
-                                <div className="flex justify-between items-center">
+                                {/* 입금결제수단 <-> 주문상태 */}
+                                <div className="flex justify-between items-center mb-2">
                                     <div
                                         className={`text-sm font-medium ${getPaymentMethodStyle(order.paymentMethod)}`}>
                                         {getPaymentMethodLabel(order.paymentMethod)}
                                     </div>
-                                    <div className="text-right">
-                                        <div className="text-sm font-medium text-gray-900">
-                                            {formatPrice(order.totalSellingPrice)}
+                                    <span
+                                        className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full border ${getStatusStyle(order.status)}`}>
+                                        {getStatusLabel(order.status)}
+                                    </span>
+                                </div>
+
+                                {/* 주문일시 (왼쪽 정렬) */}
+                                <div className="flex justify-start">
+                                    {order.created && (
+                                        <div className="text-xs text-gray-500">
+                                            {new Date(order.created).toLocaleDateString('ko-KR', {
+                                                year: 'numeric',
+                                                month: '2-digit',
+                                                day: '2-digit',
+                                                hour: '2-digit',
+                                                minute: '2-digit'
+                                            })}
                                         </div>
-                                    </div>
+                                    )}
                                 </div>
                             </div>
                         ))}

@@ -122,20 +122,20 @@ export default function AdminOrderListPage() {
                                 <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">
                                     주문번호
                                 </th>
+                                <th className="px-4 py-3 text-right text-xs font-medium uppercase tracking-wider">
+                                    합계금액
+                                </th>
                                 <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">
                                     주문자
                                 </th>
                                 <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                                    주문상태
+                                </th>
+                                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                                    입금/결제수단
+                                </th>
+                                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">
                                     주문일시
-                                </th>
-                                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">
-                                    결제수단
-                                </th>
-                                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">
-                                    상태
-                                </th>
-                                <th className="px-4 py-3 text-right text-xs font-medium uppercase tracking-wider">
-                                    결제금액
                                 </th>
                             </tr>
                             </thead>
@@ -147,9 +147,26 @@ export default function AdminOrderListPage() {
                                             {formatOrderNo(order.orderNo)}
                                         </div>
                                     </td>
+                                    <td className="px-4 py-4 whitespace-nowrap text-right">
+                                        <div className="text-sm font-medium text-gray-900">
+                                            {formatPrice(order.totalSellingPrice)}
+                                        </div>
+                                    </td>
                                     <td className="px-4 py-4 whitespace-nowrap">
                                         <div className="text-sm text-gray-900">
                                             {order.fullname}
+                                        </div>
+                                    </td>
+                                    <td className="px-4 py-4 whitespace-nowrap">
+                                        <span
+                                            className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full border ${getStatusStyle(order.status)}`}>
+                                            {getStatusLabel(order.status)}
+                                        </span>
+                                    </td>
+                                    <td className="px-4 py-4 whitespace-nowrap">
+                                        <div
+                                            className={`text-sm font-medium ${getPaymentMethodStyle(order.paymentMethod)}`}>
+                                            {getPaymentMethodLabel(order.paymentMethod)}
                                         </div>
                                     </td>
                                     <td className="px-4 py-4 whitespace-nowrap">
@@ -164,23 +181,6 @@ export default function AdminOrderListPage() {
                                                 })}
                                             </div>
                                         )}
-                                    </td>
-                                    <td className="px-4 py-4 whitespace-nowrap">
-                                        <div
-                                            className={`text-sm font-medium ${getPaymentMethodStyle(order.paymentMethod)}`}>
-                                            {getPaymentMethodLabel(order.paymentMethod)}
-                                        </div>
-                                    </td>
-                                    <td className="px-4 py-4 whitespace-nowrap">
-                      <span
-                          className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full border ${getStatusStyle(order.status)}`}>
-                        {getStatusLabel(order.status)}
-                      </span>
-                                    </td>
-                                    <td className="px-4 py-4 whitespace-nowrap text-right">
-                                        <div className="text-sm font-medium text-gray-900">
-                                            {formatPrice(order.totalSellingPrice)}
-                                        </div>
                                     </td>
                                 </tr>
                             ))}
@@ -199,10 +199,10 @@ export default function AdminOrderListPage() {
                                     주문정보
                                 </th>
                                 <th className="px-3 py-3 text-left text-xs font-medium uppercase tracking-wider">
-                                    결제수단
+                                    상태
                                 </th>
                                 <th className="px-3 py-3 text-left text-xs font-medium uppercase tracking-wider">
-                                    상태
+                                    결제수단
                                 </th>
                                 <th className="px-3 py-3 text-right text-xs font-medium uppercase tracking-wider">
                                     금액
@@ -232,16 +232,16 @@ export default function AdminOrderListPage() {
                                         )}
                                     </td>
                                     <td className="px-3 py-4 whitespace-nowrap">
+                                        <span
+                                            className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full border ${getStatusStyle(order.status)}`}>
+                                            {getStatusLabel(order.status)}
+                                        </span>
+                                    </td>
+                                    <td className="px-3 py-4 whitespace-nowrap">
                                         <div
                                             className={`text-sm font-medium ${getPaymentMethodStyle(order.paymentMethod)}`}>
                                             {getPaymentMethodLabel(order.paymentMethod)}
                                         </div>
-                                    </td>
-                                    <td className="px-3 py-4 whitespace-nowrap">
-                      <span
-                          className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full border ${getStatusStyle(order.status)}`}>
-                        {getStatusLabel(order.status)}
-                      </span>
                                     </td>
                                     <td className="px-3 py-4 whitespace-nowrap text-right">
                                         <div className="text-sm font-medium text-gray-900">
@@ -260,41 +260,43 @@ export default function AdminOrderListPage() {
                     <div className="divide-y divide-gray-200">
                         {orders.map((order: AdminOrderResponse) => (
                             <div key={order.id} className="p-4">
-                                <div className="flex justify-between items-start mb-3">
-                                    <div className="flex-1">
-                                        <div className="text-sm font-medium text-gray-900 mb-1" title={order.orderNo}>
-                                            {formatOrderNo(order.orderNo)}
-                                        </div>
-                                        <div className="text-sm text-gray-600 mb-1">
-                                            {order.fullname}
-                                        </div>
-                                        {order.created && (
-                                            <div className="text-xs text-gray-500">
-                                                {new Date(order.created).toLocaleDateString('ko-KR', {
-                                                    year: 'numeric',
-                                                    month: '2-digit',
-                                                    day: '2-digit',
-                                                    hour: '2-digit',
-                                                    minute: '2-digit'
-                                                })}
-                                            </div>
-                                        )}
+                                {/* 이름 <-> 주문번호 */}
+                                <div className="flex justify-between items-start mb-2">
+                                    <div className="text-sm text-gray-900 font-medium">
+                                        {order.fullname}
                                     </div>
-                                    <span
-                                        className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full border ${getStatusStyle(order.status)}`}>
-                    {getStatusLabel(order.status)}
-                  </span>
+                                    <div className="text-sm font-medium text-gray-900" title={order.orderNo}>
+                                        {formatOrderNo(order.orderNo)}
+                                    </div>
                                 </div>
 
-                                <div className="flex justify-between items-center">
+                                {/* 입금결제수단 <-> 주문상태 */}
+                                <div className="flex justify-between items-center mb-2">
                                     <div
                                         className={`text-sm font-medium ${getPaymentMethodStyle(order.paymentMethod)}`}>
                                         {getPaymentMethodLabel(order.paymentMethod)}
                                     </div>
-                                    <div className="text-right">
-                                        <div className="text-sm font-medium text-gray-900">
-                                            {formatPrice(order.totalSellingPrice)}
+                                    <span
+                                        className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full border ${getStatusStyle(order.status)}`}>
+                                        {getStatusLabel(order.status)}
+                                    </span>
+                                </div>
+
+                                {/* 주문일시 <-> 합계금액 */}
+                                <div className="flex justify-between items-center">
+                                    {order.created && (
+                                        <div className="text-xs text-gray-500">
+                                            {new Date(order.created).toLocaleDateString('ko-KR', {
+                                                year: 'numeric',
+                                                month: '2-digit',
+                                                day: '2-digit',
+                                                hour: '2-digit',
+                                                minute: '2-digit'
+                                            })}
                                         </div>
+                                    )}
+                                    <div className="text-sm font-medium text-gray-900">
+                                        {formatPrice(order.totalSellingPrice)}
                                     </div>
                                 </div>
                             </div>
