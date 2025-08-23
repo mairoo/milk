@@ -11,6 +11,7 @@ import {Button} from "@/components/ui/button";
 import {formatPrice, validateCart} from "@/features/order/cart/utils";
 import {OrderFormData} from "@/app/(public)/cart/types";
 import {orderSchema, PAYMENT_METHOD_OPTIONS} from "@/app/(public)/cart/constants";
+import {OrderPaymentMethod} from "@/features/order/shared/types";
 
 export default function CartPage() {
     const {
@@ -236,9 +237,9 @@ export default function CartPage() {
                                 value={method.value}
                                 checked={watchedPaymentMethod === method.value}
                                 onChange={(e) => {
-                                    setValue('paymentMethod', Number(e.target.value), {
+                                    setValue('paymentMethod', e.target.value as OrderPaymentMethod, {
                                         shouldValidate: true,
-                                        shouldDirty: true
+                                        shouldDirty: true,
                                     });
                                 }}
                                 className="w-4 h-4 text-emerald-600 border-gray-300 focus:ring-emerald-500"

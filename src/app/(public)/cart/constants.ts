@@ -2,18 +2,18 @@ import * as yup from 'yup';
 import {OrderPaymentMethod} from "@/features/order/shared/types";
 
 export const PAYMENT_METHOD_OPTIONS = [
-    {value: OrderPaymentMethod.BANK_TRANSFER, label: '무통장입금'},
-    {value: OrderPaymentMethod.ESCROW, label: '에스크로 (KB)'},
-    {value: OrderPaymentMethod.PAYPAL, label: '페이팔 (PayPal)'},
-    {value: OrderPaymentMethod.CREDIT_CARD, label: '신용카드'},
-    {value: OrderPaymentMethod.PHONE_BILLS, label: '휴대폰결제'},
-];
+    {value: 'BANK_TRANSFER' as const, label: '무통장입금'},
+    {value: 'ESCROW' as const, label: '에스크로 (KB)'},
+    {value: 'PAYPAL' as const, label: '페이팔 (PayPal)'},
+    {value: 'CREDIT_CARD' as const, label: '신용카드'},
+    {value: 'PHONE_BILLS' as const, label: '휴대폰결제'},
+] as const;
 
-export const VALID_PAYMENT_METHODS = PAYMENT_METHOD_OPTIONS.map(option => option.value);
+export const VALID_PAYMENT_METHODS: OrderPaymentMethod[] = PAYMENT_METHOD_OPTIONS.map(option => option.value);
 
 export const orderSchema = yup.object().shape({
     paymentMethod: yup
-        .number()
+        .string()
         .oneOf(VALID_PAYMENT_METHODS, '결제 수단을 선택해주세요')
         .required('결제 수단을 선택해주세요'),
     agreements: yup.object().shape({

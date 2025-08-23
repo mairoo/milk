@@ -1,9 +1,11 @@
+import {OrderPaymentMethod, OrderStatus} from "@/features/order/shared/types";
+
 export interface AdminOrderSearchRequest {
     // Order 필드
     orderId?: number
     orderNumber?: string
-    status?: string
-    paymentMethod?: string
+    status?: OrderStatus
+    paymentMethod?: OrderPaymentMethod
     paymentStatus?: string
     startDateTime?: string
     endDateTime?: string
