@@ -1,5 +1,5 @@
 import {baseApi} from '@/global/api/baseApi'
-import type {ApiResponse} from '@/global/types/dto'
+import type {ApiResponse, PageResponse} from '@/global/types/dto'
 import type {AdminOrderResponse} from './response'
 import type {AdminOrderSearchRequest} from './request'
 
@@ -14,6 +14,9 @@ import type {AdminOrderSearchRequest} from './request'
  */
 export const orderAdminApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
+        /**
+         * 단일 주문 조회
+         */
         getOrder: builder.query<AdminOrderResponse, { orderId: number; params?: AdminOrderSearchRequest }>({
             query: ({orderId, params = {}}) => ({
                 url: `/admin/orders/${orderId}`,
@@ -25,10 +28,36 @@ export const orderAdminApi = baseApi.injectEndpoints({
                 {type: 'AdminOrder' as const, id: orderId}
             ],
         }),
+
+        /**
+         * 주문 목록 조회 (페이징)
+         */
+        getOrderList: builder.query<PageResponse<AdminOrderResponse>, AdminOrderSearchRequest & {
+            page?: number;
+            size?: number;
+            sort?: string[];
+        }>({
+            query: (params = {}) => ({
+                url: '/admin/orders',
+                method: 'GET',
+                params,
+            }),
+            transformResponse: (response: ApiResponse<PageResponse<AdminOrderResponse>>) => response.data,
+            providesTags: (result, error, params) => [
+                {type: 'AdminOrder' as const, id: 'LIST'},
+                // 각 주문에 대한 개별 태그도 추가 (목록에서 개별 주문이 무효화될 때 목록도 갱신)
+                ...(result?.content?.map((order) => ({
+                    type: 'AdminOrder' as const,
+                    id: order.id
+                })) ?? [])
+            ],
+        }),
     }),
 })
 
 export const {
     useGetOrderQuery,
     useLazyGetOrderQuery,
+    useGetOrderListQuery,
+    useLazyGetOrderListQuery,
 } = orderAdminApi

@@ -1,22 +1,22 @@
 import {useCallback} from 'react'
 import {useDispatch} from 'react-redux'
-import {orderAdminApi, useLazyGetOrderListQuery, useLazyGetOrderQuery} from './api'
-import type {AdminOrderSearchRequest} from './request'
+import {myOrderApi, useLazyGetMyOrderListQuery, useLazyGetMyOrderQuery} from './api'
+import type {MyOrderSearchRequest} from './request'
 import {getErrorMessage} from "@/global/lib/rtkQueryUtils"
 
 /**
  * 단일 주문 조회 훅
  */
-export const useAdminOrder = () => {
+export const useMyOrder = () => {
     const dispatch = useDispatch()
-    const [getOrderTrigger, result] = useLazyGetOrderQuery()
+    const [getMyOrderTrigger, result] = useLazyGetMyOrderQuery()
 
-    const getOrder = useCallback((orderId: number, params?: AdminOrderSearchRequest) => {
-        return getOrderTrigger({orderId, params})
-    }, [getOrderTrigger])
+    const getMyOrder = useCallback((orderId: number, params?: MyOrderSearchRequest) => {
+        return getMyOrderTrigger({orderId, params})
+    }, [getMyOrderTrigger])
 
     const reset = useCallback(() => {
-        dispatch(orderAdminApi.util.resetApiState())
+        dispatch(myOrderApi.util.resetApiState())
     }, [dispatch])
 
     return {
@@ -27,7 +27,7 @@ export const useAdminOrder = () => {
         hasError: !!result.error,
 
         // 핵심 액션
-        getOrder,
+        getMyOrder,
         reset,
 
         // 추가 상태 (필요시)
@@ -36,22 +36,22 @@ export const useAdminOrder = () => {
 }
 
 /**
- * 주문 목록 조회 훅
+ * 내 주문 목록 조회 훅
  */
-export const useAdminOrderList = () => {
+export const useMyOrderList = () => {
     const dispatch = useDispatch()
-    const [getOrderListTrigger, result] = useLazyGetOrderListQuery()
+    const [getMyOrderListTrigger, result] = useLazyGetMyOrderListQuery()
 
-    const getOrderList = useCallback((params?: AdminOrderSearchRequest & {
+    const getMyOrderList = useCallback((params?: MyOrderSearchRequest & {
         page?: number;
         size?: number;
         sort?: string[];
     }) => {
-        return getOrderListTrigger(params || {})
-    }, [getOrderListTrigger])
+        return getMyOrderListTrigger(params || {})
+    }, [getMyOrderListTrigger])
 
     const reset = useCallback(() => {
-        dispatch(orderAdminApi.util.resetApiState())
+        dispatch(myOrderApi.util.resetApiState())
     }, [dispatch])
 
     return {
@@ -62,7 +62,7 @@ export const useAdminOrderList = () => {
         hasError: !!result.error,
 
         // 핵심 액션
-        getOrderList,
+        getMyOrderList,
         reset,
 
         // 추가 상태 (필요시)
