@@ -38,7 +38,6 @@ export default function MyOrderListPage() {
         isLastPage,
     } = useMyOrderList()
 
-    // 주문 목록 로드 함수를 useCallback으로 메모이제이션
     const loadOrders = useCallback((page: number) => {
         const params = {
             page,
@@ -113,26 +112,26 @@ export default function MyOrderListPage() {
         }
 
         return (
-            <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
+            <div className="bg-white border border-gray-300 rounded-lg overflow-hidden">
                 {/* 데스크톱 테이블 */}
                 <div className="hidden md:block">
                     <div className="overflow-x-auto">
                         <table className="w-full">
-                            <thead className="bg-gray-50">
+                            <thead className="bg-gray-200">
                             <tr>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
                                     주문번호
                                 </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
                                     주문일시
                                 </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
                                     결제수단
                                 </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
                                     상태
                                 </th>
-                                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th className="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider">
                                     결제금액
                                 </th>
                             </tr>
@@ -241,17 +240,19 @@ export default function MyOrderListPage() {
                         disabled={isFirstPage}
                         variant="outline"
                         size="sm"
+                        className="cursor-pointer"
                     >
                         이전
                     </Button>
-                    <span className="text-sm text-gray-700">
-            {currentPage + 1} / {totalPages}
-          </span>
+                    <span className="text-sm text-gray-700 flex items-center">
+                        {currentPage + 1} / {totalPages}
+                    </span>
                     <Button
                         onClick={() => handlePageChange(currentPage + 1)}
                         disabled={isLastPage}
                         variant="outline"
                         size="sm"
+                        className="cursor-pointer"
                     >
                         다음
                     </Button>
@@ -263,8 +264,8 @@ export default function MyOrderListPage() {
                             전체 <span className="font-medium">{totalElements}</span>개 중{' '}
                             <span className="font-medium">{currentPage * PAGE_SIZE + 1}</span>-
                             <span className="font-medium">
-                {Math.min((currentPage + 1) * PAGE_SIZE, totalElements)}
-              </span>개 표시
+                                {Math.min((currentPage + 1) * PAGE_SIZE, totalElements)}
+                            </span>개 표시
                         </p>
                     </div>
                     <div>
@@ -274,6 +275,7 @@ export default function MyOrderListPage() {
                                 disabled={isFirstPage}
                                 variant="outline"
                                 size="sm"
+                                className="cursor-pointer"
                             >
                                 <ChevronLeft className="h-4 w-4"/>
                                 이전
@@ -285,7 +287,7 @@ export default function MyOrderListPage() {
                                     onClick={() => handlePageChange(page)}
                                     variant={page === currentPage ? "default" : "outline"}
                                     size="sm"
-                                    className={page === currentPage ? "bg-sky-600 hover:bg-sky-700" : ""}
+                                    className={page === currentPage ? "bg-sky-600 hover:bg-sky-700 cursor-pointer" : "cursor-pointer"}
                                 >
                                     {page + 1}
                                 </Button>
@@ -296,6 +298,7 @@ export default function MyOrderListPage() {
                                 disabled={isLastPage}
                                 variant="outline"
                                 size="sm"
+                                className="cursor-pointer"
                             >
                                 다음
                                 <ChevronRight className="h-4 w-4"/>
@@ -316,6 +319,7 @@ export default function MyOrderListPage() {
                     onClick={handleRefresh}
                     variant="outline"
                     disabled={loading}
+                    className="cursor-pointer"
                 >
                     <RefreshCw className={`w-4 h-4 mr-2 ${loading ? 'animate-spin' : ''}`}/>
                     새로고침
