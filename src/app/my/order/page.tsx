@@ -1,6 +1,6 @@
 'use client'
 
-import React, {useEffect, useMemo, useState} from 'react'
+import React, {useCallback, useEffect, useMemo, useState} from 'react'
 import {formatPrice} from '@/features/order/cart/utils'
 import Section from "@/components/widgets/cards/Section"
 import {Button} from "@/components/ui/button"
@@ -33,13 +33,8 @@ export default function MyOrderListPage() {
         isLastPage,
     } = useMyOrderList()
 
-    // 초기 데이터 로드
-    useEffect(() => {
-        loadOrders(0)
-    }, [])
-
-    // 주문 목록 로드 함수
-    const loadOrders = (page: number, orderNo?: string) => {
+    // 주문 목록 로드 함수를 useCallback으로 메모이제이션
+    const loadOrders = useCallback((page: number, orderNo?: string) => {
         const params = {
             page,
             size: PAGE_SIZE,
@@ -48,7 +43,12 @@ export default function MyOrderListPage() {
 
         getMyOrderList(params)
         setCurrentPage(page)
-    }
+    }, [getMyOrderList])
+
+    // 초기 데이터 로드
+    useEffect(() => {
+        loadOrders(0)
+    }, [loadOrders])
 
     // 검색 핸들러
     const handleSearch = () => {

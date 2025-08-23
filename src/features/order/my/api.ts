@@ -24,7 +24,7 @@ export const myOrderApi = baseApi.injectEndpoints({
                 params,
             }),
             transformResponse: (response: ApiResponse<MyOrderResponse>) => response.data,
-            providesTags: (result, _error, {orderId}) => [
+            providesTags: (_, __, {orderId}) => [
                 {type: 'MyOrder' as const, id: orderId}
             ],
         }),
@@ -42,7 +42,7 @@ export const myOrderApi = baseApi.injectEndpoints({
                 params,
             }),
             transformResponse: (response: ApiResponse<PageResponse<MyOrderResponse>>) => response.data,
-            providesTags: (result, error, params) => [
+            providesTags: (result) => [
                 {type: 'MyOrder' as const, id: 'LIST'},
                 // 각 주문에 대한 개별 태그도 추가 (목록에서 개별 주문이 무효화될 때 목록도 갱신)
                 ...(result?.content?.map((order) => ({

@@ -21,7 +21,7 @@ export const orderMyApi = baseApi.injectEndpoints({
                 params,
             }),
             transformResponse: (response: ApiResponse<MyOrderResponse>) => response.data,
-            providesTags: (result, error, {orderId}) => [
+            providesTags: (_, __, {orderId}) => [
                 {type: 'MyOrder' as const, id: orderId}
             ],
         }),

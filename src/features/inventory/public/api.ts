@@ -20,7 +20,7 @@ export const inventoryPublicApi = baseApi.injectEndpoints({
                 method: 'GET',
             }),
             transformResponse: (response: ApiResponse<CategoryResponse>) => response.data,
-            providesTags: (result, error, slug) => [
+            providesTags: (_, __, slug) => [
                 {type: 'Category' as const, id: slug}
             ],
         }),
@@ -31,7 +31,7 @@ export const inventoryPublicApi = baseApi.injectEndpoints({
                 method: 'GET',
             }),
             transformResponse: (response: ApiResponse<CategoryResponse>) => response.data,
-            providesTags: (result, error, categoryId) => [
+            providesTags: (_, __, categoryId) => [
                 {type: 'Category' as const, id: categoryId}
             ],
         }),
@@ -43,7 +43,7 @@ export const inventoryPublicApi = baseApi.injectEndpoints({
                 params,
             }),
             transformResponse: (response: ApiResponse<ProductResponse[]>) => response.data,
-            providesTags: (result, error, {categoryId}) => [
+            providesTags: (_, __, {categoryId}) => [
                 {type: 'Product' as const, id: `category-${categoryId}`}
             ],
         }),
@@ -53,7 +53,7 @@ export const inventoryPublicApi = baseApi.injectEndpoints({
                 method: 'GET',
             }),
             transformResponse: (response: ApiResponse<ProductResponse>) => response.data,
-            providesTags: (result, error, productId) => [
+            providesTags: (_, __, productId) => [
                 {type: 'Product' as const, id: productId}
             ],
         }),
