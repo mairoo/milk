@@ -4,7 +4,7 @@ import React, {useCallback, useEffect, useMemo, useState} from 'react'
 import {formatPrice} from '@/features/order/cart/utils'
 import Section from "@/components/widgets/cards/Section"
 import {Button} from "@/components/ui/button"
-import {ChevronLeft, ChevronRight, RefreshCw, Search} from "lucide-react"
+import {ChevronLeft, ChevronRight, RefreshCw} from "lucide-react"
 import {useMyOrderList} from "@/features/order/my/hooks";
 import {MyOrderResponse} from "@/features/s3/user/response";
 import {
@@ -25,8 +25,6 @@ const formatOrderNo = (orderNo: string) => {
 
 export default function MyOrderListPage() {
     const [currentPage, setCurrentPage] = useState(0)
-    const [searchOrderNo, setSearchOrderNo] = useState('')
-    const [appliedSearchOrderNo, setAppliedSearchOrderNo] = useState('')
 
     const {
         loading,
@@ -41,11 +39,10 @@ export default function MyOrderListPage() {
     } = useMyOrderList()
 
     // 주문 목록 로드 함수를 useCallback으로 메모이제이션
-    const loadOrders = useCallback((page: number, orderNo?: string) => {
+    const loadOrders = useCallback((page: number) => {
         const params = {
             page,
             size: PAGE_SIZE,
-            ...(orderNo && {orderNumber: orderNo})
         }
 
         getMyOrderList(params)
@@ -57,27 +54,14 @@ export default function MyOrderListPage() {
         loadOrders(0)
     }, [loadOrders])
 
-    // 검색 핸들러
-    const handleSearch = () => {
-        setAppliedSearchOrderNo(searchOrderNo)
-        loadOrders(0, searchOrderNo)
-    }
-
-    // 검색 초기화
-    const handleResetSearch = () => {
-        setSearchOrderNo('')
-        setAppliedSearchOrderNo('')
-        loadOrders(0)
-    }
-
     // 페이지 변경
     const handlePageChange = (page: number) => {
-        loadOrders(page, appliedSearchOrderNo)
+        loadOrders(page)
     }
 
     // 새로고침
     const handleRefresh = () => {
-        loadOrders(currentPage, appliedSearchOrderNo)
+        loadOrders(currentPage)
     }
 
     // 페이지네이션 버튼 생성
@@ -94,48 +78,6 @@ export default function MyOrderListPage() {
 
         return buttons
     }, [currentPage, totalPages])
-
-    // 검색 영역 컴포넌트
-    const SearchSection = () => (
-        <div className="bg-white border border-gray-200 rounded-lg p-6">
-            <div className="flex flex-col sm:flex-row gap-4 items-end">
-                <div className="flex-1">
-                    <label htmlFor="orderNoSearch" className="block text-sm font-medium text-gray-700 mb-2">
-                        주문번호 검색
-                    </label>
-                    <input
-                        id="orderNoSearch"
-                        type="text"
-                        value={searchOrderNo}
-                        onChange={(e) => setSearchOrderNo(e.target.value)}
-                        onKeyDown={(e) => {
-                            if (e.key === 'Enter') {
-                                handleSearch()
-                            }
-                        }}
-                        placeholder="주문번호를 입력하세요"
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
-                    />
-                </div>
-                <div className="flex gap-2">
-                    <Button
-                        onClick={handleSearch}
-                        className="bg-sky-600 hover:bg-sky-700 text-white px-4 py-2"
-                    >
-                        <Search className="w-4 h-4 mr-2"/>
-                        검색
-                    </Button>
-                    <Button
-                        onClick={handleResetSearch}
-                        variant="outline"
-                        className="px-4 py-2"
-                    >
-                        초기화
-                    </Button>
-                </div>
-            </div>
-        </div>
-    )
 
     // 주문 목록 테이블 컴포넌트
     const OrderTable = () => {
@@ -166,11 +108,6 @@ export default function MyOrderListPage() {
             return (
                 <div className="flex flex-col items-center justify-center py-16 text-gray-500">
                     <p className="text-lg mb-4">주문 내역이 없습니다.</p>
-                    {appliedSearchOrderNo && (
-                        <p className="text-sm text-gray-400 mb-4">
-                            {appliedSearchOrderNo}에 대한 검색 결과가 없습니다.
-                        </p>
-                    )}
                 </div>
             )
         }
@@ -384,11 +321,6 @@ export default function MyOrderListPage() {
                     새로고침
                 </Button>
             </div>
-
-            {/* 검색 섹션 */}
-            <Section title="검색">
-                <SearchSection/>
-            </Section>
 
             {/* 주문 목록 섹션 */}
             <Section title="주문 목록">
