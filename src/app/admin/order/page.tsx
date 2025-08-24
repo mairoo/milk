@@ -1,6 +1,7 @@
 'use client'
 
 import React, {useCallback, useEffect, useMemo, useState} from 'react'
+import Link from 'next/link'
 import {formatPrice} from '@/features/order/cart/utils'
 import Section from "@/components/widgets/cards/Section"
 import {Button} from "@/components/ui/button"
@@ -141,46 +142,58 @@ export default function AdminOrderListPage() {
                             </thead>
                             <tbody className="bg-white divide-y divide-gray-200">
                             {orders.map((order: AdminOrderResponse) => (
-                                <tr key={order.id} className="hover:bg-gray-50 hover:cursor-pointer">
+                                <tr key={order.id} className="hover:bg-gray-50 cursor-pointer">
                                     <td className="px-4 py-4 whitespace-nowrap">
-                                        <div className="text-sm font-medium text-gray-900" title={order.orderNo}>
-                                            {formatOrderNo(order.orderNo)}
-                                        </div>
+                                        <Link href={`/admin/orders/${order.id}`}>
+                                            <div className="text-sm font-medium text-gray-900" title={order.orderNo}>
+                                                {formatOrderNo(order.orderNo)}
+                                            </div>
+                                        </Link>
                                     </td>
                                     <td className="px-4 py-4 whitespace-nowrap text-right">
-                                        <div className="text-sm font-medium text-gray-900">
-                                            {formatPrice(order.totalSellingPrice)}
-                                        </div>
-                                    </td>
-                                    <td className="px-4 py-4 whitespace-nowrap">
-                                        <div className="text-sm text-gray-900">
-                                            {order.fullname}
-                                        </div>
-                                    </td>
-                                    <td className="px-4 py-4 whitespace-nowrap">
-                                        <span
-                                            className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full border ${getStatusStyle(order.status)}`}>
-                                            {getStatusLabel(order.status)}
-                                        </span>
-                                    </td>
-                                    <td className="px-4 py-4 whitespace-nowrap">
-                                        <div
-                                            className={`text-sm font-medium ${getPaymentMethodStyle(order.paymentMethod)}`}>
-                                            {getPaymentMethodLabel(order.paymentMethod)}
-                                        </div>
-                                    </td>
-                                    <td className="px-4 py-4 whitespace-nowrap">
-                                        {order.created && (
-                                            <div className="text-sm text-gray-900">
-                                                {new Date(order.created).toLocaleDateString('ko-KR', {
-                                                    year: 'numeric',
-                                                    month: '2-digit',
-                                                    day: '2-digit',
-                                                    hour: '2-digit',
-                                                    minute: '2-digit'
-                                                })}
+                                        <Link href={`/admin/orders/${order.id}`}>
+                                            <div className="text-sm font-medium text-gray-900">
+                                                {formatPrice(order.totalSellingPrice)}
                                             </div>
-                                        )}
+                                        </Link>
+                                    </td>
+                                    <td className="px-4 py-4 whitespace-nowrap">
+                                        <Link href={`/admin/order/${order.id}`}>
+                                            <div className="text-sm text-gray-900">
+                                                {order.fullname}
+                                            </div>
+                                        </Link>
+                                    </td>
+                                    <td className="px-4 py-4 whitespace-nowrap">
+                                        <Link href={`/admin/order/${order.id}`}>
+                                            <span
+                                                className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full border ${getStatusStyle(order.status)}`}>
+                                                {getStatusLabel(order.status)}
+                                            </span>
+                                        </Link>
+                                    </td>
+                                    <td className="px-4 py-4 whitespace-nowrap">
+                                        <Link href={`/admin/order/${order.id}`}>
+                                            <div
+                                                className={`text-sm font-medium ${getPaymentMethodStyle(order.paymentMethod)}`}>
+                                                {getPaymentMethodLabel(order.paymentMethod)}
+                                            </div>
+                                        </Link>
+                                    </td>
+                                    <td className="px-4 py-4 whitespace-nowrap">
+                                        <Link href={`/admin/order/${order.id}`}>
+                                            {order.created && (
+                                                <div className="text-sm text-gray-900">
+                                                    {new Date(order.created).toLocaleDateString('ko-KR', {
+                                                        year: 'numeric',
+                                                        month: '2-digit',
+                                                        day: '2-digit',
+                                                        hour: '2-digit',
+                                                        minute: '2-digit'
+                                                    })}
+                                                </div>
+                                            )}
+                                        </Link>
                                     </td>
                                 </tr>
                             ))}
@@ -211,42 +224,50 @@ export default function AdminOrderListPage() {
                             </thead>
                             <tbody className="bg-white divide-y divide-gray-200">
                             {orders.map((order: AdminOrderResponse) => (
-                                <tr key={order.id} className="hover:bg-gray-50 hover:cursor-pointer">
+                                <tr key={order.id} className="hover:bg-gray-50 cursor-pointer">
                                     <td className="px-3 py-4">
-                                        <div className="text-sm font-medium text-gray-900 mb-1" title={order.orderNo}>
-                                            {formatOrderNo(order.orderNo)}
-                                        </div>
-                                        <div className="text-sm text-gray-600 mb-1">
-                                            {order.fullname}
-                                        </div>
-                                        {order.created && (
-                                            <div className="text-xs text-gray-500">
-                                                {new Date(order.created).toLocaleDateString('ko-KR', {
-                                                    year: 'numeric',
-                                                    month: '2-digit',
-                                                    day: '2-digit',
-                                                    hour: '2-digit',
-                                                    minute: '2-digit'
-                                                })}
+                                        <Link href={`/admin/order/${order.id}`}>
+                                            <div className="text-sm font-medium text-gray-900 mb-1" title={order.orderNo}>
+                                                {formatOrderNo(order.orderNo)}
                                             </div>
-                                        )}
+                                            <div className="text-sm text-gray-600 mb-1">
+                                                {order.fullname}
+                                            </div>
+                                            {order.created && (
+                                                <div className="text-xs text-gray-500">
+                                                    {new Date(order.created).toLocaleDateString('ko-KR', {
+                                                        year: 'numeric',
+                                                        month: '2-digit',
+                                                        day: '2-digit',
+                                                        hour: '2-digit',
+                                                        minute: '2-digit'
+                                                    })}
+                                                </div>
+                                            )}
+                                        </Link>
                                     </td>
                                     <td className="px-3 py-4 whitespace-nowrap">
-                                        <span
-                                            className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full border ${getStatusStyle(order.status)}`}>
-                                            {getStatusLabel(order.status)}
-                                        </span>
+                                        <Link href={`/admin/order/${order.id}`}>
+                                            <span
+                                                className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full border ${getStatusStyle(order.status)}`}>
+                                                {getStatusLabel(order.status)}
+                                            </span>
+                                        </Link>
                                     </td>
                                     <td className="px-3 py-4 whitespace-nowrap">
-                                        <div
-                                            className={`text-sm font-medium ${getPaymentMethodStyle(order.paymentMethod)}`}>
-                                            {getPaymentMethodLabel(order.paymentMethod)}
-                                        </div>
+                                        <Link href={`/admin/order/${order.id}`}>
+                                            <div
+                                                className={`text-sm font-medium ${getPaymentMethodStyle(order.paymentMethod)}`}>
+                                                {getPaymentMethodLabel(order.paymentMethod)}
+                                            </div>
+                                        </Link>
                                     </td>
                                     <td className="px-3 py-4 whitespace-nowrap text-right">
-                                        <div className="text-sm font-medium text-gray-900">
-                                            {formatPrice(order.totalSellingPrice)}
-                                        </div>
+                                        <Link href={`/admin/order/${order.id}`}>
+                                            <div className="text-sm font-medium text-gray-900">
+                                                {formatPrice(order.totalSellingPrice)}
+                                            </div>
+                                        </Link>
                                     </td>
                                 </tr>
                             ))}
@@ -259,7 +280,11 @@ export default function AdminOrderListPage() {
                 <div className="md:hidden">
                     <div className="divide-y divide-gray-200">
                         {orders.map((order: AdminOrderResponse) => (
-                            <div key={order.id} className="p-4">
+                            <Link
+                                key={order.id}
+                                href={`/admin/order/${order.id}`}
+                                className="block p-4 hover:bg-gray-50 transition-colors"
+                            >
                                 {/* 이름 <-> 주문번호 */}
                                 <div className="flex justify-between items-start mb-2">
                                     <div className="text-sm text-gray-900 font-medium">
@@ -299,7 +324,7 @@ export default function AdminOrderListPage() {
                                         {formatPrice(order.totalSellingPrice)}
                                     </div>
                                 </div>
-                            </div>
+                            </Link>
                         ))}
                     </div>
                 </div>
