@@ -30,7 +30,7 @@ export default function AdminOrderListPage() {
         loading,
         error,
         hasError,
-        getOrderList,
+        getAdminOrderList,
         orders,
         totalElements,
         totalPages,
@@ -44,9 +44,9 @@ export default function AdminOrderListPage() {
             size: PAGE_SIZE,
         }
 
-        getOrderList(params)
+        getAdminOrderList(params)
         setCurrentPage(page)
-    }, [getOrderList])
+    }, [getAdminOrderList])
 
     // 초기 데이터 로드
     useEffect(() => {

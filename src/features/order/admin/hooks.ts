@@ -1,6 +1,6 @@
 import {useCallback} from 'react'
 import {useDispatch} from 'react-redux'
-import {orderAdminApi, useLazyGetOrderListQuery, useLazyGetOrderQuery} from './api'
+import {adminOrderApi, useLazyGetAdminOrderListQuery, useLazyGetAdminOrderQuery} from './api'
 import type {AdminOrderSearchRequest} from './request'
 import {getErrorMessage} from "@/global/lib/rtkQueryUtils"
 
@@ -9,14 +9,14 @@ import {getErrorMessage} from "@/global/lib/rtkQueryUtils"
  */
 export const useAdminOrder = () => {
     const dispatch = useDispatch()
-    const [getOrderTrigger, result] = useLazyGetOrderQuery()
+    const [getOrderTrigger, result] = useLazyGetAdminOrderQuery()
 
-    const getOrder = useCallback((orderId: number, params?: AdminOrderSearchRequest) => {
+    const getAdminOrder = useCallback((orderId: number, params?: AdminOrderSearchRequest) => {
         return getOrderTrigger({orderId, params})
     }, [getOrderTrigger])
 
     const reset = useCallback(() => {
-        dispatch(orderAdminApi.util.resetApiState())
+        dispatch(adminOrderApi.util.resetApiState())
     }, [dispatch])
 
     return {
@@ -27,7 +27,7 @@ export const useAdminOrder = () => {
         hasError: !!result.error,
 
         // 핵심 액션
-        getOrder,
+        getAdminOrder,
         reset,
 
         // 추가 상태 (필요시)
@@ -40,17 +40,17 @@ export const useAdminOrder = () => {
  */
 export const useAdminOrderList = () => {
     const dispatch = useDispatch()
-    const [getOrderListTrigger, result] = useLazyGetOrderListQuery()
+    const [getAdminOrderListTrigger, result] = useLazyGetAdminOrderListQuery()
 
-    const getOrderList = useCallback((params?: AdminOrderSearchRequest & {
+    const getAdminOrderList = useCallback((params?: AdminOrderSearchRequest & {
         page?: number;
         size?: number;
     }) => {
-        return getOrderListTrigger(params || {})
-    }, [getOrderListTrigger])
+        return getAdminOrderListTrigger(params || {})
+    }, [getAdminOrderListTrigger])
 
     const reset = useCallback(() => {
-        dispatch(orderAdminApi.util.resetApiState())
+        dispatch(adminOrderApi.util.resetApiState())
     }, [dispatch])
 
     return {
@@ -61,7 +61,7 @@ export const useAdminOrderList = () => {
         hasError: !!result.error,
 
         // 핵심 액션
-        getOrderList,
+        getAdminOrderList,
         reset,
 
         // 추가 상태 (필요시)

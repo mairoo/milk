@@ -12,12 +12,12 @@ import type {AdminOrderSearchRequest} from './request'
  * - 캐싱 태그만 설정
  * - 에러 처리 및 토큰 처리는 baseApi에서 담당
  */
-export const orderAdminApi = baseApi.injectEndpoints({
+export const adminOrderApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
         /**
          * 단일 주문 조회
          */
-        getOrder: builder.query<AdminOrderResponse, { orderId: number; params?: AdminOrderSearchRequest }>({
+        getAdminOrder: builder.query<AdminOrderResponse, { orderId: number; params?: AdminOrderSearchRequest }>({
             query: ({orderId, params = {}}) => ({
                 url: `/admin/orders/${orderId}`,
                 method: 'GET',
@@ -32,7 +32,7 @@ export const orderAdminApi = baseApi.injectEndpoints({
         /**
          * 주문 목록 조회 (페이징)
          */
-        getOrderList: builder.query<PageResponse<AdminOrderResponse>, AdminOrderSearchRequest & {
+        getAdminOrderList: builder.query<PageResponse<AdminOrderResponse>, AdminOrderSearchRequest & {
             page?: number;
             size?: number;
         }>({
@@ -55,8 +55,8 @@ export const orderAdminApi = baseApi.injectEndpoints({
 })
 
 export const {
-    useGetOrderQuery,
-    useLazyGetOrderQuery,
-    useGetOrderListQuery,
-    useLazyGetOrderListQuery,
-} = orderAdminApi
+    useGetAdminOrderQuery,
+    useLazyGetAdminOrderQuery,
+    useGetAdminOrderListQuery,
+    useLazyGetAdminOrderListQuery,
+} = adminOrderApi
