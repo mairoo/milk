@@ -363,7 +363,7 @@ export default function MyOrderListPage() {
             </div>
 
             {/* 주문 목록 섹션 */}
-            <Section title="주문 목록">
+            <Section>
                 <OrderTable/>
             </Section>
 

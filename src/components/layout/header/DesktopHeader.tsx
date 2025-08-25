@@ -55,7 +55,7 @@ export default function DesktopHeader({className}: DesktopHeaderProps) {
     if (status === 'loading') {
         return (
             <header className={cn(
-                "sticky top-0 z-10 bg-white shadow-md",
+                "sticky top-0 z-10 bg-white shadow-sm",
                 "sticky-header-stable safe-area-inset",
                 className,
             )}>
@@ -83,7 +83,7 @@ export default function DesktopHeader({className}: DesktopHeaderProps) {
 
     return (
         <header className={cn(
-            "sticky top-0 z-10 bg-white shadow-md",
+            "sticky top-0 z-10 bg-white shadow-sm text-sm",
             "sticky-header-stable safe-area-inset",
             className,
         )}>
@@ -147,7 +147,7 @@ export default function DesktopHeader({className}: DesktopHeaderProps) {
                 </div>
             </div>
             <div className="bg-green-50 text-green-950">
-                <div className="mx-auto container flex justify-between items-center py-2">
+                <div className="mx-auto container flex justify-between items-center py-1">
                     <div className="flex items-center gap-x-12">
                         {desktopMenuItems.map((category, index) => (
                             <DropdownMenu key={index} modal={false}>
@@ -159,7 +159,7 @@ export default function DesktopHeader({className}: DesktopHeaderProps) {
                                 <DropdownMenuContent className="w-48 p-0 rounded-sm" align="start">
                                     {category.items.map((item, itemIndex) => (
                                         <DropdownMenuItem key={itemIndex} asChild
-                                                          className="px-4 py-2 rounded-none text-base hover:!bg-green-950 hover:!text-white">
+                                                          className="p-2 rounded-none text-sm hover:!bg-green-950 hover:!text-white">
                                             <Link href={item.href} className="cursor-pointer">
                                                 {item.name}
                                             </Link>
@@ -174,7 +174,7 @@ export default function DesktopHeader({className}: DesktopHeaderProps) {
                             <Input
                                 type="text"
                                 placeholder="상품을 검색하세요"
-                                className="w-64 h-9 bg-white border-gray-200 focus:border-green-500 focus:ring-green-200"
+                                className="w-64 h-9 text-sm bg-white border-gray-200 focus:border-green-500"
                             />
                             <Button
                                 size="sm"

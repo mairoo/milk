@@ -5,7 +5,7 @@ import Link from 'next/link'
 import {formatPrice} from '@/features/order/cart/utils'
 import Section from "@/components/widgets/cards/Section"
 import {Button} from "@/components/ui/button"
-import {ChevronLeft, ChevronRight, RefreshCw} from "lucide-react"
+import {ChevronLeft, ChevronRight, Home, RefreshCw} from "lucide-react"
 import {useAdminOrderList} from "@/features/order/admin/hooks"
 import {AdminOrderResponse} from "@/features/order/admin/response"
 import {
@@ -14,6 +14,13 @@ import {
     getStatusLabel,
     getStatusStyle,
 } from "@/components/utils/orderDisplay"
+import {
+    Breadcrumb,
+    BreadcrumbItem,
+    BreadcrumbList,
+    BreadcrumbPage,
+    BreadcrumbSeparator
+} from "@/components/ui/breadcrumb";
 
 // 페이지네이션 설정
 const PAGE_SIZE = 10
@@ -415,23 +422,35 @@ export default function AdminOrderListPage() {
     }
 
     return (
-        <div className="space-y-6">
-            {/* 페이지 헤더 */}
+        <div className="space-y-2">
+            {/* 페이지 헤더 with Breadcrumb */}
             <div className="flex items-center justify-between">
-                <h1 className="text-2xl font-bold text-gray-900">주문 관리</h1>
-                <Button
-                    onClick={handleRefresh}
-                    variant="outline"
-                    disabled={loading}
-                    className="cursor-pointer"
-                >
-                    <RefreshCw className={`w-4 h-4 mr-2 ${loading ? 'animate-spin' : ''}`}/>
-                    새로고침
-                </Button>
+                <Breadcrumb>
+                    <BreadcrumbList>
+                        <BreadcrumbItem>
+                            <Home className="h-4 w-4"/>
+                        </BreadcrumbItem>
+                        <BreadcrumbSeparator/>
+                        <BreadcrumbItem>
+                            <BreadcrumbPage>주문/발송 내역</BreadcrumbPage>
+                        </BreadcrumbItem>
+                    </BreadcrumbList>
+                </Breadcrumb>
+                <div className="flex items-center gap-2">
+                    <Button
+                        onClick={handleRefresh}
+                        variant="outline"
+                        disabled={loading}
+                        className="cursor-pointer"
+                    >
+                        <RefreshCw className={`w-4 h-4 mr-2 ${loading ? 'animate-spin' : ''}`}/>
+                        새로고침
+                    </Button>
+                </div>
             </div>
 
             {/* 주문 목록 섹션 */}
-            <Section title="주문 목록">
+            <Section>
                 <OrderTable/>
             </Section>
 

@@ -14,7 +14,7 @@ export function NavLink({href, icon: Icon, children, onClick}: NavLinkProps) {
         <Link
             href={href}
             onClick={onClick}
-            className="inline-flex items-center gap-2 px-3 py-2 border rounded-md hover:bg-gray-100 hover:text-gray-900 hover:font-bold transition-colors"
+            className="inline-flex items-center gap-2 px-3 py-2 border rounded-md text-sm hover:bg-gray-100 hover:text-gray-900 hover:font-bold transition-colors"
         >
             <Icon className="h-4 w-4"/>
             {children}
