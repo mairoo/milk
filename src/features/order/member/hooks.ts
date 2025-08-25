@@ -17,14 +17,14 @@ export const useMemberOrder = () => {
                 data: response,
                 error: null
             }
-        } catch (error) {
+        } catch {
             return {
                 success: false,
                 data: null,
                 error: getErrorMessage(result.error)
             }
         }
-    }, [createMemberOrderTrigger])
+    }, [createMemberOrderTrigger, result.error])
 
     return {
         // 핵심 상태

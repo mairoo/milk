@@ -21,7 +21,7 @@ export const memberOrderApi = baseApi.injectEndpoints({
             query: (request) => ({
                 url: '/member/orders',
                 method: 'POST',
-                body: request,
+                data: request,
             }),
             transformResponse: (response: ApiResponse<MemberOrderCreateResponse>) => response.data,
             invalidatesTags: [

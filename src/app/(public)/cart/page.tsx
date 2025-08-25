@@ -12,8 +12,12 @@ import {formatPrice, validateCart} from "@/features/order/cart/utils";
 import {OrderFormData} from "@/app/(public)/cart/types";
 import {orderSchema, PAYMENT_METHOD_OPTIONS} from "@/app/(public)/cart/constants";
 import {OrderPaymentMethod} from "@/features/order/shared/types";
+import {useMemberOrder} from "@/features/order/member/hooks";
+import {useRouter} from "next/navigation";
 
 export default function CartPage() {
+    const router = useRouter()
+
     const {
         products,
         stats,
@@ -26,6 +30,14 @@ export default function CartPage() {
         handleDecrement,
     } = useCart();
 
+    // 주문 API 훅 추가
+    const {
+        createOrder,
+        loading: orderLoading,
+        error: orderError,
+        isSuccess: orderSuccess
+    } = useMemberOrder();
+
     const {
         handleSubmit,
         watch,
@@ -35,7 +47,7 @@ export default function CartPage() {
         resolver: yupResolver(orderSchema),
         mode: 'onChange',
         defaultValues: {
-            paymentMethod: undefined, // 명시적으로 undefined 설정
+            paymentMethod: undefined,
             agreements: {
                 purchase: false,
                 personalUse: false,
@@ -56,6 +68,16 @@ export default function CartPage() {
         setCartError(error);
     }, [stats]);
 
+    // 주문 성공시 처리
+    useEffect(() => {
+        if (orderSuccess) {
+            // 장바구니 비우기
+            clear();
+            // 필요시 주문 완료 페이지로 리다이렉트
+            router.push('/my/order');
+        }
+    }, [orderSuccess, clear, router]);
+
     // 전체 form이 유효한지 확인 (form validation + 장바구니 validation)
     const isFormValid = isValid && !cartError && !stats.isEmpty;
 
@@ -68,31 +90,33 @@ export default function CartPage() {
             return;
         }
 
-        try {
-            // 디버깅용 로그
-            console.log('Form data:', data);
-            console.log('Payment method type:', typeof data.paymentMethod);
-            console.log('Payment method value:', data.paymentMethod);
+        // 주문 요청 데이터 구성
+        const orderRequest = {
+            paymentMethod: data.paymentMethod,
+            products: products.map(product => ({
+                id: product.id,
+                title: product.title,
+                subtitle: product.subtitle,
+                quantity: product.quantity,
+                price: product.price
+            })),
+            totalAmount: stats.totalPrice,
+            productCount: stats.productCount
+        };
 
-            console.log('주문 데이터:', {
-                ...data,
-                products,
-                totalAmount: stats.totalPrice,
-                productCount: stats.productCount
-            });
+        // 디버깅용 로그 - 요청 데이터 확인
+        console.log('🚀 주문 요청 데이터:', orderRequest);
+        console.log('📝 JSON 직렬화 테스트:', JSON.stringify(orderRequest, null, 2));
+        console.log('💳 동의 정보:', data.agreements);
 
-            // 실제 주문 API 호출
-            // await orderService.createOrder({
-            //     products,
-            //     paymentMethod: data.paymentMethod,
-            //     totalAmount: stats.totalPrice,
-            //     agreements: data.agreements
-            // });
+        // 실제 주문 API 호출
+        const result = await createOrder(orderRequest);
 
-            alert('주문이 완료되었습니다!');
-        } catch (error) {
-            console.error('주문 처리 중 오류:', error);
-            alert('주문 처리 중 오류가 발생했습니다.');
+        if (result.success) {
+            console.log('✅ 주문 완료:', result.data);
+        } else {
+            console.error('❌ 주문 처리 실패:', result.error);
+            alert(result.error || '주문 처리 중 오류가 발생했습니다.');
         }
     };
 
@@ -375,15 +399,20 @@ export default function CartPage() {
                 <Button
                     type="submit"
                     className="w-full h-14 bg-sky-600 hover:bg-sky-700 text-white text-lg font-semibold disabled:bg-gray-400 cursor-pointer"
-                    disabled={!isFormValid || isSubmitting}
+                    disabled={!isFormValid || isSubmitting || orderLoading}
                 >
-                    {isSubmitting ? '주문 처리 중...' : '주문 완료'}
+                    {orderLoading || isSubmitting ? '주문 처리 중...' : '주문 완료'}
                 </Button>
 
-                {/* 장바구니 관련 에러 메시지 */}
+                {/* 에러 메시지 표시 */}
                 {cartError && (
                     <p className="mt-2 text-sm text-red-600 text-center">
                         {cartError}
+                    </p>
+                )}
+                {orderError && (
+                    <p className="mt-2 text-sm text-red-600 text-center">
+                        {orderError}
                     </p>
                 )}
             </div>
