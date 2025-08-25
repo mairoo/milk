@@ -358,7 +358,7 @@ export default function CartPage() {
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-y-6">
-            <Section title="장바구니 / 주문결제">
+            <Section title="장바구니">
                 <CartProductList/>
             </Section>
 
