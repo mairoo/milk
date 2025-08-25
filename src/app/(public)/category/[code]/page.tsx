@@ -1,6 +1,6 @@
 'use client'
 
-import {useCallback, useEffect, useState} from 'react'
+import React, {useCallback, useEffect, useState} from 'react'
 import {useRouter} from 'next/navigation'
 import {decode} from '@/global/lib/url'
 import {useCategoryBySlug, useProducts} from '@/features/inventory/public/hooks'
@@ -10,6 +10,15 @@ import {Alert} from '@/components/layout/containers/Alert'
 import ProductCard from '@/components/widgets/cards/ProductCard'
 import {StyledMarkdown} from "@/components/layout/containers/StyledMakrdown"
 import {CategoryPageProps} from "@/app/(public)/category/[code]/types";
+import {
+    Breadcrumb,
+    BreadcrumbItem,
+    BreadcrumbLink,
+    BreadcrumbList,
+    BreadcrumbPage,
+    BreadcrumbSeparator
+} from "@/components/ui/breadcrumb";
+import {Home} from "lucide-react";
 
 export default function CategoryPage({params}: CategoryPageProps) {
     const router = useRouter()
@@ -127,7 +136,23 @@ export default function CategoryPage({params}: CategoryPageProps) {
     }
 
     return (
-        <div className="flex flex-col gap-y-2">
+        <div className="space-y-2">
+            {/* 페이지 헤더 with Breadcrumb */}
+            <div className="flex items-center justify-between">
+                <Breadcrumb>
+                    <BreadcrumbList>
+                        <BreadcrumbItem>
+                            <BreadcrumbLink href="/">
+                                <Home className="h-4 w-4"/>
+                            </BreadcrumbLink>
+                        </BreadcrumbItem>
+                        <BreadcrumbSeparator/>
+                        <BreadcrumbItem>
+                            <BreadcrumbPage>{categoryData.title}</BreadcrumbPage>
+                        </BreadcrumbItem>
+                    </BreadcrumbList>
+                </Breadcrumb>
+            </div>
             {/* 카테고리 설명 */}
             <Alert>
                 <StyledMarkdown variant="compact">

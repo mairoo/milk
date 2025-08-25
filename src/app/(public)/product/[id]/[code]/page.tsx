@@ -1,7 +1,7 @@
 'use client'
 
-import {useCallback, useEffect, useMemo, useState} from 'react'
-import {Minus, Plus, ShoppingCart} from 'lucide-react'
+import React, {useCallback, useEffect, useMemo, useState} from 'react'
+import {Home, Minus, Plus, ShoppingCart} from 'lucide-react'
 import {useCategoryById, useProduct} from '@/features/inventory/public/hooks'
 import {useCart} from '@/features/order/cart/hooks'
 import {useToast} from '@/features/ui/toast/hooks'
@@ -12,6 +12,13 @@ import {StyledMarkdown} from "@/components/layout/containers/StyledMakrdown";
 import Image from 'next/image';
 import DeliveryGuideSection from "@/app/(public)/product/[id]/[code]/components/DeliveryGuideSection";
 import {ProductDetailPageProps} from "@/app/(public)/product/[id]/[code]/types";
+import {
+    Breadcrumb,
+    BreadcrumbItem,
+    BreadcrumbLink,
+    BreadcrumbList,
+    BreadcrumbSeparator
+} from "@/components/ui/breadcrumb";
 
 export default function ProductDetailPage({params}: ProductDetailPageProps) {
     const [productId, setProductId] = useState<number>(0)
@@ -159,7 +166,25 @@ export default function ProductDetailPage({params}: ProductDetailPageProps) {
     }
 
     return (
-        <div className="w-full space-y-3">
+        <div className="w-full space-y-2">
+            {/* 페이지 헤더 with Breadcrumb */}
+            <div className="flex items-center justify-between">
+                <Breadcrumb>
+                    <BreadcrumbList>
+                        <BreadcrumbItem>
+                            <BreadcrumbLink href="/">
+                                <Home className="h-4 w-4"/>
+                            </BreadcrumbLink>
+                        </BreadcrumbItem>
+                        <BreadcrumbSeparator/>
+                        <BreadcrumbItem>
+                            <BreadcrumbLink href={`/category/${categoryData?.slug}`}>
+                                {categoryData?.title}
+                            </BreadcrumbLink>
+                        </BreadcrumbItem>
+                    </BreadcrumbList>
+                </Breadcrumb>
+            </div>
             {/* 상품 기본 정보 섹션 */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
                 {/* 좌측: 상품 정보 및 구매 옵션 */}
