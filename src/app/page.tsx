@@ -43,7 +43,7 @@ export default function Home() {
             </Section>
             <div className="flex flex-col md:flex-row gap-6">
                 <Section title="상품권 금융사기 예방 수칙">
-                    <ul className="space-y-2 mb-2">
+                    <ul className="space-y-2 mb-2 text-sm">
                         <li>다른 사람으로부터 상품권 구매로 일부 또는 전체 금액을 입금 받기로 했습니까?</li>
                         <li>상품권 일부 또는 전체를 <strong className="text-red-600">대리구매</strong> 하여 카카오톡 등 메신저로 다른 사람에게 주기로
                             했습니까?
@@ -51,7 +51,7 @@ export default function Home() {
                         <li>네이트온/카카오톡 등 메신저에서 지인이 급한 돈이 필요하다고 상품권을 요구했습니까?</li>
                         <li>중고나라 또는 번개장터에서 물품대금을 현금 대신 상품권으로 요구 받았습니까?</li>
                     </ul>
-                    <p className="text-red-600">위 질문 중 하나라도 해당하면 사기꾼과 메신저 또는 전화 연락을 끊고 바로 경찰서에 연락하시기 바랍니다.</p>
+                    <p className="text-sm text-red-600">위 질문 중 하나라도 해당하면 사기꾼과 메신저 또는 전화 연락을 끊고 바로 경찰서에 연락하시기 바랍니다.</p>
                 </Section>
                 <Section>
                     광고
