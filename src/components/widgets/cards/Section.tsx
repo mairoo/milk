@@ -16,10 +16,10 @@ export default function Section({
                                     ...props
                                 }: SectionProps) {
     return (
-        <section className={cn("space-y-2", className)} {...props}>
+        <section className={cn("space-y-2 text-sm", className)} {...props}>
             {title && (
                 <div>
-                    <h2 className="text-xl font-semibold text-orange-400 tracking-tight">{title}</h2>
+                    <h2 className="font-semibold text-orange-400 tracking-tight">{title}</h2>
                     {description && (
                         <p className="text-muted-foreground">{description}</p>
                     )}
