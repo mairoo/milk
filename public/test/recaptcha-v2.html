@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>reCAPTCHA v2 검증 테스트</title>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        input[type="text"], input[type="email"], input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+        }
+
+        .recaptcha-container {
+            margin: 20px 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            background-color: #007bff;
+            color: white;
+        }
+
+        .submit-btn:hover:not(:disabled) {
+            background-color: #0056b3;
+        }
+
+        .submit-btn:disabled {
+            background-color: #6c757d;
+            cursor: not-allowed;
+        }
+
+        .info-box {
+            background-color: #e9f4ff;
+            border: 1px solid #b3d9ff;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 20px 0;
+            font-size: 14px;
+        }
+
+        .result-box {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 4px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+
+        .token-display {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            color: #495057;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>reCAPTCHA v2 검증 테스트</h1>
+
+    <div class="info-box">
+        <strong>사용법:</strong><br/>
+        1. reCAPTCHA Site Key를 입력하세요<br/>
+        2. "reCAPTCHA v2 시작" 버튼을 클릭하세요<br/>
+        3. reCAPTCHA v2 체크박스를 완료하세요<br/>
+        4. 자동으로 백엔드 API 검증이 진행됩니다<br/><br/>
+        <strong>테스트 엔드포인트:</strong> /open/recaptcha/v2/verify
+    </div>
+
+    <form id="configForm">
+        <div class="form-group">
+            <label for="siteKey">reCAPTCHA Site Key *</label>
+            <input type="text" id="siteKey" placeholder="백엔드에서 설정한 Site Key를 입력하세요">
+        </div>
+
+        <button type="submit" class="submit-btn" id="submitBtn">
+            reCAPTCHA v2 시작
+        </button>
+    </form>
+
+    <div id="recaptchaContainer" style="display: none;">
+        <div class="recaptcha-container">
+            <div id="recaptcha-element"></div>
+        </div>
+    </div>
+
+    <div style="margin-top: 20px;">
+        <button type="button" class="submit-btn" id="statusBtn" style="background-color: #28a745;">
+            reCAPTCHA 상태 확인
+        </button>
+    </div>
+
+    <div id="tokenDisplay" class="result-box token-display" style="display: none;">
+        <strong>reCAPTCHA 토큰:</strong><br/>
+        <span id="tokenValue"></span>
+    </div>
+
+    <div id="resultDisplay" style="display: none;"></div>
+</div>
+
+<script>
+    const API_BASE_URL = 'http://localhost:8080'; // 백엔드 서버 URL
+    let recaptchaToken = null;
+    let recaptchaWidgetId = null;
+    let recaptchaLoaded = false;
+
+    // reCAPTCHA v2 API 동적 로드
+    function loadRecaptchaAPI() {
+        return new Promise((resolve, reject) => {
+            // 기존 스크립트 제거
+            const existingScript = document.querySelector('script[src*="recaptcha"]');
+            if (existingScript) {
+                existingScript.remove();
+                recaptchaLoaded = false;
+            }
+
+            // 새 스크립트 로드 (v2는 render 파라미터 없이)
+            const script = document.createElement('script');
+            script.src = 'https://www.google.com/recaptcha/api.js';
+            script.onload = () => {
+                recaptchaLoaded = true;
+                console.log('reCAPTCHA v2 API 로드 완료');
+                resolve();
+            };
+            script.onerror = () => {
+                reject(new Error('reCAPTCHA API 로드 실패'));
+            };
+            document.head.appendChild(script);
+        });
+    }
+
+    // reCAPTCHA v2 위젯 렌더링
+    async function renderRecaptcha(siteKey) {
+        try {
+            if (!recaptchaLoaded) {
+                await loadRecaptchaAPI();
+                // API 로드 후 잠시 대기
+                await new Promise(resolve => setTimeout(resolve, 100));
+            }
+
+            // 기존 위젯 제거
+            if (recaptchaWidgetId !== null) {
+                grecaptcha.reset(recaptchaWidgetId);
+            }
+
+            // reCAPTCHA 위젯 렌더링
+            recaptchaWidgetId = grecaptcha.render('recaptcha-element', {
+                'sitekey': siteKey,
+                'callback': onRecaptchaSuccess,
+                'expired-callback': onRecaptchaExpired
+            });
+
+            // reCAPTCHA 컨테이너 표시
+            document.getElementById('recaptchaContainer').style.display = 'block';
+
+            console.log('reCAPTCHA v2 위젯 렌더링 완료');
+            return true;
+        } catch (error) {
+            console.error('reCAPTCHA v2 위젯 렌더링 실패:', error);
+            showResult('error', `❌ reCAPTCHA v2 위젯 렌더링 실패\n\n오류: ${error.message}\n\nSite Key가 올바른지 확인하세요.`);
+            return false;
+        }
+    }
+
+    // reCAPTCHA 성공 콜백 (자동으로 API 검증 실행)
+    async function onRecaptchaSuccess(token) {
+        recaptchaToken = token;
+
+        // 토큰 표시
+        document.getElementById('tokenValue').textContent = token;
+        document.getElementById('tokenDisplay').style.display = 'block';
+
+        console.log('reCAPTCHA v2 토큰 생성:', token);
+
+        // 자동으로 API 검증 실행
+        await verifyRecaptcha(token);
+    }
+
+    // reCAPTCHA 만료 콜백
+    function onRecaptchaExpired() {
+        recaptchaToken = null;
+        document.getElementById('tokenDisplay').style.display = 'none';
+        console.log('reCAPTCHA v2 토큰 만료');
+    }
+
+    // reCAPTCHA 검증 실행
+    async function verifyRecaptcha(token) {
+        const requestData = {token: token};
+
+        showResult('token-display', `요청 데이터:\n${JSON.stringify(requestData, null, 2)}`);
+
+        try {
+            const response = await fetch(`${API_BASE_URL}/open/recaptcha/v2/verify`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(requestData)
+            });
+
+            const responseText = await response.text();
+            let responseData;
+
+            try {
+                responseData = JSON.parse(responseText);
+            } catch (e) {
+                responseData = responseText;
+            }
+
+            if (response.ok) {
+                showResult('success', `✅ 성공 (${response.status})\n\n응답 데이터:\n${JSON.stringify(responseData, null, 2)}`);
+            } else {
+                showResult('error', `❌ 실패 (${response.status})\n\n오류 내용:\n${JSON.stringify(responseData, null, 2)}`);
+            }
+
+        } catch (error) {
+            showResult('error', `❌ 네트워크 오류\n\n오류 내용:\n${error.message}\n\n백엔드 서버(${API_BASE_URL})가 실행 중인지 확인하세요.`);
+        }
+    }
+
+    // 폼 제출 처리 (reCAPTCHA v2 시작)
+    document.getElementById('configForm').addEventListener('submit', async function (e) {
+        e.preventDefault();
+
+        const siteKey = document.getElementById('siteKey').value.trim();
+        if (!siteKey) {
+            showResult('error', 'Site Key를 입력해주세요.');
+            return;
+        }
+
+        // 버튼 비활성화
+        const submitBtn = document.getElementById('submitBtn');
+        const originalText = submitBtn.textContent;
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'reCAPTCHA v2 로드 중...';
+
+        try {
+            const success = await renderRecaptcha(siteKey);
+            if (success) {
+                submitBtn.textContent = 'reCAPTCHA v2 체크박스를 완료하세요';
+                showResult('success', '✅ reCAPTCHA v2가 로드되었습니다.\n\n아래 체크박스를 완료하면 자동으로 검증이 진행됩니다.');
+            }
+        } catch (error) {
+            showResult('error', `❌ reCAPTCHA v2 로드 실패\n\n오류: ${error.message}`);
+            submitBtn.disabled = false;
+            submitBtn.textContent = originalText;
+        }
+    });
+
+    // 상태 확인 버튼 처리
+    document.getElementById('statusBtn').addEventListener('click', async function () {
+        try {
+            const response = await fetch(`${API_BASE_URL}/open/recaptcha/status`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            const responseText = await response.text();
+            let responseData;
+
+            try {
+                responseData = JSON.parse(responseText);
+            } catch (e) {
+                responseData = responseText;
+            }
+
+            if (response.ok) {
+                showResult('success', `✅ reCAPTCHA 상태 조회 성공 (${response.status})\n\n응답 데이터:\n${JSON.stringify(responseData, null, 2)}`);
+            } else {
+                showResult('error', `❌ reCAPTCHA 상태 조회 실패 (${response.status})\n\n오류 내용:\n${JSON.stringify(responseData, null, 2)}`);
+            }
+
+        } catch (error) {
+            showResult('error', `❌ 네트워크 오류\n\n오류 내용:\n${error.message}\n\n백엔드 서버(${API_BASE_URL})가 실행 중인지 확인하세요.`);
+        }
+    });
+
+    // 결과 표시 함수
+    function showResult(type, message) {
+        const resultDiv = document.getElementById('resultDisplay');
+        resultDiv.className = `result-box ${type}`;
+        resultDiv.textContent = message;
+        resultDiv.style.display = 'block';
+
+        // 결과 영역으로 스크롤
+        resultDiv.scrollIntoView({behavior: 'smooth', block: 'nearest'});
+    }
+
+    // 페이지 로드 시 초기화
+    document.addEventListener('DOMContentLoaded', function () {
+        console.log('reCAPTCHA v2 테스트 페이지 로드됨');
+
+        // CORS 에러 방지를 위한 안내
+        if (window.location.protocol === 'file:') {
+            showResult('error', '⚠️ 이 페이지는 로컬 서버에서 실행해야 합니다.\n\nCORS 정책으로 인해 file:// 프로토콜에서는 API 요청이 차단됩니다.\n\n간단한 HTTP 서버 실행 방법:\n• Python: python -m http.server 8000\n• Node.js: npx serve .\n• PHP: php -S localhost:8000');
+        }
+    });
+</script>
+</body>
+</html>
